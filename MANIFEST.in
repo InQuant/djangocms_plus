@@ -1,0 +1,5 @@
+include LICENSE
+include README.md
+recursive-include djangocms_plus/migrations *.py
+recursive-include djangocms_plus/locale *.po
+recursive-include djangocms_plus/locale *.mo

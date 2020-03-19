@@ -1,0 +1,8 @@
+djangorestframework
+django-jsonfield
+asgiref==3.2.5
+Django==3.0.4
+pkg-resources==0.0.0
+pytz==2019.3
+sqlparse==0.3.1
+django-cms
