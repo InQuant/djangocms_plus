@@ -8,7 +8,7 @@ from djangocms_plus.plugin_base import PlusCMSPluginBase
 
 
 class TestForm(PlusPluginBaseForm):
-    test = forms.CharField()
+    test = forms.EmailField()
     test2 = PlusModelMultipleChoiceField(queryset=Test.objects.all())
 
 

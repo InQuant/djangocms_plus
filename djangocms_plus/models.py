@@ -6,12 +6,18 @@ from djangocms_plus.utils import JSONEncoder
 
 
 class PlusPlugin(CMSPlugin):
+    """
+    BaseModel for plugins including the important json field.
+    """
+
     _json = jsonfield.JSONField(encoder_class=JSONEncoder)
 
-    def get_json(self):
+    @property
+    def json(self):
         return self._json
 
-    def set_json(self, value):
+    @json.setter
+    def json(self, value):
         self._json = value
 
 
