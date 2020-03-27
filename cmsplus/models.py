@@ -1,8 +1,7 @@
 import jsonfield
 from cms.models import CMSPlugin
-from django.db import models
 
-from djangocms_plus.utils import JSONEncoder
+from cmsplus.utils import JSONEncoder
 
 
 class PlusPlugin(CMSPlugin):
@@ -19,7 +18,3 @@ class PlusPlugin(CMSPlugin):
     @json.setter
     def json(self, value):
         self._json = value
-
-
-class Test(models.Model):
-    test_feld = models.CharField(default="test", max_length=200)

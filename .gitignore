@@ -218,3 +218,4 @@ example/
 /templates/
 *.scssc
 build.sh
+manage.py

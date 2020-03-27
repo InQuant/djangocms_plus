@@ -1,9 +1,7 @@
 from collections import OrderedDict
-
 from django import forms
-from django.forms.utils import ErrorList
 
-from djangocms_plus.models import PlusPlugin
+from cmsplus.models import PlusPlugin
 import logging
 
 logger = logging.getLogger(__name__)

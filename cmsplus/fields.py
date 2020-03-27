@@ -1,5 +1,4 @@
 from abc import abstractmethod, ABC
-
 from django import forms
 
 

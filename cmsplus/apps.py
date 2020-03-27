@@ -4,6 +4,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class DjangocmsPlusConfig(AppConfig):
-    name = 'djangocms_plus'
+class DjangoCmsPlusConfig(AppConfig):
+    name = 'cmsplus'
     verbose_name = _('DjangoCMS Plus')

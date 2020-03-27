@@ -1,19 +1,20 @@
-from cms.plugin_base import CMSPluginBase
+from typing import Any
 
-from djangocms_plus.forms import PlusPluginBaseForm
-from djangocms_plus.models import PlusPlugin
+from cms.plugin_base import CMSPluginBase
+from cmsplus.forms import PlusPluginBaseForm
+from cmsplus.models import PlusPlugin
 
 
 class PlusCMSPluginBase(CMSPluginBase):
-    model = PlusPlugin
     form = PlusPluginBaseForm
     template_data_label = "data"
 
-    def __init__(self, *args, **kwargs):
-        assert issubclass(self.form, PlusPluginBaseForm), "%s should have %s as subclass" % (
-            self.form.__name__, PlusPluginBaseForm.__name__
+    def __new__(cls):
+        cls.model = PlusPlugin  # overwrite model attr
+        assert issubclass(cls.form, PlusPluginBaseForm), "%s should have %s as subclass" % (
+            cls.form.__name__, PlusPluginBaseForm.__name__
         )
-        super().__init__(*args, **kwargs)
+        return super().__new__(cls)
 
     def render(self, context, instance, placeholder):
         context[self.template_data_label or "data"] = self.form.deserialize(instance.json)
