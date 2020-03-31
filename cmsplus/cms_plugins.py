@@ -2,7 +2,7 @@ from cms.plugin_pool import plugin_pool
 from django import forms
 
 from cmsplus.forms import PlusPluginBaseForm
-from cmsplus.plugin_base import PlusCMSPluginBase
+from cmsplus.plugin_base import PlusPluginBase
 
 
 class TestForm(PlusPluginBaseForm):
@@ -14,6 +14,6 @@ class TestForm(PlusPluginBaseForm):
 
 
 @plugin_pool.register_plugin
-class ExamplePluginPlus(PlusCMSPluginBase):
+class ExamplePluginPlus(PlusPluginBase):
     form = TestForm
     render_template = "test.html"

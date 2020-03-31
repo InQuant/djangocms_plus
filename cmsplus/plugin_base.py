@@ -1,15 +1,14 @@
-from typing import Any
-
 from cms.plugin_base import CMSPluginBase
+
 from cmsplus.forms import PlusPluginBaseForm
 from cmsplus.models import PlusPlugin
 
 
-class PlusCMSPluginBase(CMSPluginBase):
+class PlusPluginBase(CMSPluginBase):
     form = PlusPluginBaseForm
     template_data_label = "data"
 
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         cls.model = PlusPlugin  # overwrite model attr
         assert issubclass(cls.form, PlusPluginBaseForm), "%s should have %s as subclass" % (
             cls.form.__name__, PlusPluginBaseForm.__name__

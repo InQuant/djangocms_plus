@@ -62,7 +62,7 @@ setup(
     ],
     tests_require=TESTS_REQUIRE,
     extras_require={
-        'test': TESTS_REQUIRE,
+        'cmsplus_tests': TESTS_REQUIRE,
     },
-    cmdclass={'test': Tox}
+    cmdclass={'cmsplus_tests': Tox}
 )

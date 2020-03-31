@@ -1,5 +1,5 @@
-import jsonfield
 from cms.models import CMSPlugin
+from jsonfield import JSONField
 
 from cmsplus.utils import JSONEncoder
 
@@ -9,7 +9,7 @@ class PlusPlugin(CMSPlugin):
     BaseModel for plugins including the important json field.
     """
 
-    _json = jsonfield.JSONField(encoder_class=JSONEncoder)
+    _json = JSONField(encoder_class=JSONEncoder)
 
     @property
     def json(self):

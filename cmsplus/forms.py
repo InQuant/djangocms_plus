@@ -14,7 +14,7 @@ class PlusPluginBaseForm(forms.ModelForm):
     """
     class Meta:
         model = PlusPlugin
-        exclude = ["json"]  # Do not show json Field in Edit Form
+        exclude = ["_json"]  # Do not show json Field in Edit Form
 
     def save(self, commit=False):
         """
