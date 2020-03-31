@@ -29,10 +29,10 @@ TESTS_REQUIRE = ['tox >= 2.3']
 
 
 setup(
-    name='cmsplus',
+    name='djangocms_plus',
     version='0.1.0',
-    author='Dominik Lysiak',
-    author_email='dominik.lysiak@inquant.de',
+    author='InQuant GmbH',
+    author_email='info@inquant.de',
     packages=['cmsplus'],
     url='https://github.com/domlysi/djangocms_plus',
     license='MIT',
@@ -42,7 +42,7 @@ setup(
     zip_safe=False,
     include_package_data=True,
     package_data={'': ['README.md'], },
-    install_requires=['django-cms>=3.7.1', 'jsonfield>=3.1.0'],
+    install_requires=['django-cms>=3.7.1', 'django-jsonfield>=3.1.0'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
