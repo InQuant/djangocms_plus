@@ -36,7 +36,7 @@ setup(
     packages=['cmsplus'],
     url='https://github.com/domlysi/djangocms_plus',
     license='MIT',
-    description='Rewrite for Django CMS Plugins to store plugin data in JSON and to prevent migration terror circle.',
+    description='Lightweight rewrite for Django CMS Plugins to store plugin data in JSON and to prevent migration terror circle.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     zip_safe=False,
