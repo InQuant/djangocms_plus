@@ -5,9 +5,9 @@
 # This also works with Travis CI
 #
 # PACKAGE = Source code directory or leave empty
-PACKAGE =
+PACKAGE = "cmsplus"
 # TESTDIR = Test directory or '.' for current directory
-TESTDIR = tests
+TESTDIR = '.'
 PROJECT :=
 ENV = venv
 # Override by putting on commandline:  python=python2.7
@@ -28,7 +28,7 @@ TOX := $(BIN)/tox
 PYTHON := $(BIN)/$(python)
 ANALIZE := $(BIN)/pylint
 COVERAGE := $(BIN)/coverage
-TEST_RUNNER := $(BIN)/py.test
+TEST_RUNNER := $(PYTHON) django-admin test --settings cmsplus.test_settings
 
 # Project settings
 PKGDIR := $(or $(PACKAGE), ./)
@@ -159,16 +159,18 @@ authors:
 	echo "Authors\n=======\n\nA huge thanks to all of our contributors:\n\n" > AUTHORS.md
 	git log --raw | grep "^Author: " | cut -d ' ' -f2- | cut -d '<' -f1 | sed 's/^/- /' | sort | uniq >> AUTHORS.md
 
-register:
-	$(PYTHON) setup.py register -r pypi
+#register:
+#	$(PYTHON) setup.py register -r pypi
 
 dist: test
 	$(PYTHON) setup.py sdist
 	$(PYTHON) setup.py bdist_wheel
 
 upload: .git-no-changes register
-	$(PYTHON) setup.py sdist upload -r pypi
-	$(PYTHON) setup.py bdist_wheel upload -r pypi
+# $(PYTHON) setup.py sdist upload -r pypi
+# $(PYTHON) setup.py bdist_wheel upload -r pypi
+	$(PYTHON) -m twine upload dist/*
+
 
 .git-no-changes:
 	@if git diff --name-only --exit-code;         \

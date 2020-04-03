@@ -30,19 +30,19 @@ TESTS_REQUIRE = ['tox >= 2.3']
 
 setup(
     name='djangocms_plus',
-    version='0.1.0',
+    version='0.1.1',
     author='InQuant GmbH',
     author_email='info@inquant.de',
     packages=['cmsplus'],
     url='https://github.com/domlysi/djangocms_plus',
     license='MIT',
-    description='Lightweight rewrite for Django CMS Plugins to store plugin data in JSON and to prevent migration terror circle.',
+    description='Lightweight rewrite for DjangoCMS Plugins to store plugin data in JSON.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     zip_safe=False,
     include_package_data=True,
     package_data={'': ['README.md'], },
-    install_requires=['django-cms>=3.7.1', 'django-jsonfield>=3.1.0'],
+    install_requires=['django-cms>=3.7.1', 'django-jsonfield'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
