@@ -3,8 +3,6 @@ from django.utils.safestring import mark_safe
 
 from django import forms
 
-from cms.plugin_pool import plugin_pool
-
 from cmsplus import app_settings as cmsplus_settings
 from cmsplus.models import (PlusPlugin, LinkPluginMixin,)
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,

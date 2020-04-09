@@ -1,0 +1,43 @@
+{% load cms_tags sekizai_tags %}
+
+{% include "cmsplus/osm/_osm_dependencies.html" %}
+
+{% addtoblock "js" %}
+<script type="text/javascript">
+
+  if (typeof MAP_CONFIGS === 'undefined')
+    var MAP_CONFIGS = {};
+
+  MAP_CONFIGS['{{ instance.id }}'] = {
+    map_location: {
+      lat: {{ instance.glossary.latitude }},
+      lng: {{ instance.glossary.longitude }},
+      zoom: {{ instance.glossary.zoom }},
+    },
+    map_height: '{{ instance.glossary.map_height }}',
+    defaults: {
+      scrollWheelZoom: {{ scroll_wheel_zoom_int }},
+    },
+    markers: [
+      {% for m in markers %}
+        {% with m.glossary as g %}
+          { lat: {{ g.latitude }}, lon: {{ g.longitude }}, name: '{{ m.marker_name }}'},
+        {% endwith %}   
+      {% endfor %}   
+    ],
+    layer: '{{ instance.glossary.layer }}',
+  };
+</script>
+{% endaddtoblock %}
+
+<div>
+  <style scoped>
+    {% for m in markers %}
+      .c-osm-marker-{{ m.marker_name }} {
+        background-image: url({{ m.marker_url }});
+      }
+    {% endfor %}   
+  </style>
+
+  <cxng-openstreet-map instance-id="{{ instance.id }}"></cxng-openstreet-map>
+</div>

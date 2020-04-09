@@ -1,0 +1,22 @@
+{% load static sekizai_tags sass_tags %}
+
+{% addtoblock "css" %}<link href="{% static 'node_modules/leaflet/dist/leaflet.css' %}" rel="stylesheet" type="text/css" />{% endaddtoblock %}
+{% addtoblock "js" %}<script src="{% static 'node_modules/leaflet/dist/leaflet.js' %}" type="text/javascript"></script>{% endaddtoblock %}
+{% addtoblock "js" %}<script src="{% static 'node_modules/ui-leaflet/dist/ui-leaflet.min.js' %}" type="text/javascript"></script>{% endaddtoblock %}
+
+{% if instance.glossary.layer %}
+  {% addtoblock "css" %}<link href="{% static 'node_modules/mapbox-gl/dist/mapbox-gl.css' %}" rel="stylesheet" type="text/css" />{% endaddtoblock %}
+  {% addtoblock "js" %}<script src="{% static 'node_modules/mapbox-gl/dist/mapbox-gl.js' %}" type="text/javascript"></script>{% endaddtoblock %}
+  {% addtoblock "js" %}<script src="{% static 'node_modules/mapbox-gl-leaflet/leaflet-mapbox-gl.js' %}" type="text/javascript"></script>{% endaddtoblock %}
+{% endif %}
+
+{% addtoblock "js" %}<script src="{% static 'cascadex/osm/osm.js' %}" type="text/javascript"></script>{% endaddtoblock %}
+{% addtoblock "css" %}<link href="{% sass_src 'cascadex/osm/osm.scss' %}" rel="stylesheet" type="text/css" />{% endaddtoblock %}
+
+{% addtoblock "js" %}
+<script type="text/javascript">
+  // add module from osm.js to angular app deps
+  if (ANGULAR_APP_DEPENDENCIES.indexOf('cascadex.osm') == -1)
+    ANGULAR_APP_DEPENDENCIES.push('cascadex.osm');
+</script>
+{% endaddtoblock %}

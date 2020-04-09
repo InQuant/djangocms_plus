@@ -8,7 +8,15 @@ class DefaultSettings(object):
         return {
             'PLUGINS': (
                 'cmsplus.cms_plugins.generic.TextLinkPlugin',
+
+                'cmsplus.cms_plugins.osm.OsmPlugin',
+                'cmsplus.cms_plugins.osm.OsmMarkerPlugin',
             ),
+
+            'MAP_LAYER_CHOICES': (
+                ('', 'None'),
+                ('black', 'Black'),
+                ),
         }
 
 # Overwrite DefaultSettings, with those, configured in site settings
