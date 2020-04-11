@@ -15,23 +15,18 @@ class PlusPluginFormBase(forms.ModelForm):
     """
     BaseForm for PluginForms.
     This ModelForm references to a PlusPlugin Model in order to write and read
-    from the json (JSONField) attribute.
+    from the glossary (JSONField) attribute.
     """
     class Meta:
         model = PlusPlugin
         exclude = ["_json"]  # Do not show json Field in Edit Form
 
-    def save(self, commit=False):
-        """
-        Save data to glossary field after serializing it.
-        :param commit:
-        :return: Returns object
-        :rtype: object
-        """
-        obj = super().save(commit)
-        obj.glossary = self.serialize_data()
-        obj.save()
-        return obj
+    def save(self, commit=True):
+        '''
+        Put serialized data to glossary (_json) field, than save.
+        '''
+        self.instance.glossary = self.serialize_data()
+        return super().save(commit)
 
     def serialize_data(self):
         """
