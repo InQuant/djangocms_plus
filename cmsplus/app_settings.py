@@ -131,6 +131,12 @@ class DefaultSettings(object):
                 ('4', '.25 Unit (4)'),
                 ('0', '0'),
             ),
+
+            'CNT_BOTTOM_MARGIN_CHOICES' : (
+                ('mb-3 mb-md-5', 'Default'),
+                ('mb-2 mb-md-3', 'Small'),
+                ('', 'None'),
+            ),
         }
 
 # Overwrite DefaultSettings, with those, configured in site settings

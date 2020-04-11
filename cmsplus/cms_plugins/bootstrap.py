@@ -5,7 +5,7 @@ from django.contrib.admin.widgets import AdminDateWidget
 from django import forms
 
 from cmsplus import app_settings as cmsplus_settings
-from cmsplus.models import (PlusPlugin, LinkPluginMixin,)
+from cmsplus.models import PlusPlugin
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
         get_style_form_fields)
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin,
@@ -13,7 +13,7 @@ from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin,
 
 from cmsplus.app_settings import (TEXT_COLOR_CHOICES, BG_COLOR_CHOICES,
         RL_MARGIN_CHOICES, TB_MARGIN_CHOICES, PADDING_CHOICES, DEVICE_MAP,
-        DEVICE_MAX_WIDTH_MAP, DEVICE_MIN_WIDTH_MAP)
+        DEVICE_MAX_WIDTH_MAP, DEVICE_MIN_WIDTH_MAP, CNT_BOTTOM_MARGIN_CHOICES)
 
 def get_devices():
     return cmsplus_settings.DEVICES
@@ -89,13 +89,6 @@ class MagicWrapperForm(PlusPluginFormBase):
 
     STYLE_CHOICES = 'MAGIC_WRAPPER_STYLES'
     extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
-
-    visible = forms.BooleanField(label=u'Visible', required=False, initial=True,
-            help_text='Uncheck to hide wrapper with all of its childs.')
-    vis_from = forms.DateField(label=u'Visible from', required=False, widget=AdminDateWidget(),
-            help_text='Date when the wrapper with all of its childs will become visible.')
-    vis_to = forms.DateField(label=u'Visible to', required=False, widget=AdminDateWidget(),
-            help_text='Date when the wrapper with all of its childs will become invisible.')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -173,14 +166,6 @@ class MagicWrapperPlugin(BootstrapPluginBase):
             )
         }),
 
-        (_('Visibility settings'), {
-            'classes': ('collapse',),
-            'fields': (
-                'visible',
-                'vis_from', 'vis_to',
-            )
-        }),
-
         (_('Margin settings'), {
             'classes': ('collapse',),
             'fields': [WF_MARGIN_KEYS(for_dev=[dev]) for dev in get_devices()],
@@ -192,18 +177,72 @@ class MagicWrapperPlugin(BootstrapPluginBase):
         }),
     ]
 
-    @classmethod
-    def get_visibility(cls, instance):
-        g = instance.glossary
-        if not g.get('visible'): return False
 
-        now = datetime.now().date()
-        vis_from = dateutil.parser.parse(g['vis_from']).date() if g.get('vis_from') else now
-        vis_to = dateutil.parser.parse(g['vis_to']).date() if g.get('vis_to') else now
+# BootstrapContainerForm
+# ----------------------
+#
+class BootstrapContainerForm(PlusPluginFormBase):
 
-        if vis_from <= now and now <= vis_to:
-            return True
-        return False
+    FLUID_CHOICES = (
+        ('container', _('Fixed')),
+        ('container-fluid', _('Fluid')),
+    )
+    fluid = forms.ChoiceField(
+        label=_('Container Type'),
+        initial='container',
+        required=True,
+        choices= FLUID_CHOICES,
+        widget=forms.widgets.RadioSelect,
+        help_text=_('Changing your container from "fixed content with fluid '
+            'margin" to "fluid content with fixed margin".')
+    )
+
+    background_color = forms.ChoiceField(
+        choices=BG_COLOR_CHOICES,
+        label=_("Background Color"),
+        required=False,
+        help_text=_('Select a background color.')
+    )
+
+    bottom_margin = forms.ChoiceField(label=u'Bottom Margin',
+            required=False, choices=CNT_BOTTOM_MARGIN_CHOICES,
+            initial='',
+            help_text='Select the default bottom margin to be applied?')
+
+    STYLE_CHOICES = 'MOD_CONTAINER_STYLES'
+    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
 
 class BootstrapContainerPlugin(BootstrapPluginBase):
+    footnote_html="""
+    renders a bootstrap container fix or fluid for device classes of:
+     <ul>
+     <li>XS: Portrait Phones (<576px)</li>
+     <li>SM: Small Tablets  (≥576px and <768px)</li>
+     <li>MD: Tablets (≥768px and <992px)</li>
+     <li>LG: Laptops (≥992px and <1.200px)</li>
+     <li>XL: Desktops (≥1.200px and <1.600px)</li>
+     <li>2XL: Large Desktops (≥1.600px and < 1.900px)</li>
+     <li>3XL: X-Large Desktops (≥1.920px)</li>
+     <ul>
+    """
     name = 'Container'
+    form = BootstrapContainerForm
+    allow_children = True
+    parent_classes = None
+    require_parent = False
+    render_template = 'cmsplus/bootstrap/container.html'
+
+    css_class_fields = StylePluginMixin.css_class_fields + ['fluid',
+            'background_color', 'bottom_margin']
+
+    @classmethod
+    def get_tag_type(self, instance):
+        return 'div'
+
+    @classmethod
+    def get_identifier(cls, instance):
+        ident = super().get_identifier(instance)
+        if not ident:
+            cnt_info = dict(cls.form.FLUID_CHOICES)
+            ident = cnt_info.get(instance.glossary.get('fluid'))
+        return mark_safe(ident)

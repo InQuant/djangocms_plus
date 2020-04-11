@@ -50,7 +50,7 @@ class PlusPluginBase(CMSPluginBase):
         """
         Hook to return a description for the current model.
         """
-        return instance.get_short_description()
+        return instance.label
 
     @classmethod
     def get_tag_type(self, instance):
@@ -65,8 +65,10 @@ class PlusPluginBase(CMSPluginBase):
         Returns a list of CSS classes to be added as class="..." to the current HTML tag.
         """
         css_classes = []
+        record = cls.get_record(instance)
         for k in getattr(cls, 'css_class_fields', []):
-            xc = instance.glossary.get(k)
+
+            xc = record.get(k)
             if isinstance(xc, str):
                 css_classes.append(xc)
             elif isinstance(xc, list):
@@ -108,19 +110,6 @@ class StylePluginMixin(object):
             return self.render_template
 
         return style_template
-
-    @classmethod
-    def get_css_classes(cls, obj):
-        css_classes = super(StylePluginMixin, cls).get_css_classes(obj)
-
-        for k in cls.css_class_fields:
-            xc = obj.glossary.get(k)
-            if xc:
-                if type(xc) == str:
-                    css_classes.extend(xc.split())
-                elif type(xc) == list:
-                    css_classes.extend(xc)
-        return css_classes
 
     @classmethod
     def get_identifier(cls, obj):

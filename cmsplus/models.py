@@ -33,7 +33,7 @@ class PlusPlugin(CMSPlugin):
         ''' you may put a label field into the form to give the plugin a label
         for the cms structure view
         '''
-        return self.label or ''
+        return self.plugin_class.get_identifier(self)
 
     @cached_property
     def plugin_class(self):
