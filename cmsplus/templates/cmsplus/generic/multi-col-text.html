@@ -1,0 +1,17 @@
+{% load cms_tags %}
+
+{% with cpis=instance.child_plugin_instances data=instance.glossary %}
+  {% if cpis and cpis|length == 1 %}
+
+  <div class="
+  {% if data.col_xs %}g-text-col-{{ data.col_xs }} {% endif %}
+  {% if data.col_md %}g-text-col-md-{{ data.col_md }} {% endif %}
+  {% if data.col_lg %}g-text-col-lg-{{ data.col_lg }} {% endif %}
+  ">
+
+    {% render_plugin cpis.0 %}
+
+  </div>
+
+  {% endif %}
+{% endwith %}

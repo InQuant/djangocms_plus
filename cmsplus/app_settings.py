@@ -7,12 +7,15 @@ class DefaultSettings(object):
         return {
             'PLUGINS': (
                 'cmsplus.cms_plugins.generic.TextLinkPlugin',
+                'cmsplus.cms_plugins.generic.MultiColumnTextPlugin',
 
                 'cmsplus.cms_plugins.osm.OsmPlugin',
                 'cmsplus.cms_plugins.osm.OsmMarkerPlugin',
 
                 'cmsplus.cms_plugins.bootstrap.MagicWrapperPlugin',
                 'cmsplus.cms_plugins.bootstrap.BootstrapContainerPlugin',
+                'cmsplus.cms_plugins.bootstrap.BootstrapRowPlugin',
+                'cmsplus.cms_plugins.bootstrap.BootstrapColPlugin',
             ),
 
             'MAP_LAYER_CHOICES': (
@@ -137,6 +140,22 @@ class DefaultSettings(object):
                 ('mb-2 mb-md-3', 'Small'),
                 ('', 'None'),
             ),
+            'ROW_BOTTOM_MARGIN_CHOICES' : (
+                ('', 'None'),
+                ('mb-3 mb-md-5', 'Default'),
+                ('mb-2 mb-md-3', 'Small'),
+            ),
+            'COL_BOTTOM_MARGIN_CHOICES' : (
+                ('mb-3 mb-md-5', 'Default'),
+                ('mb-2 mb-md-3', 'Small'),
+                ('', 'None'),
+            ),
+
+            'TX_COL_CHOICES' : (
+                ('2', '2 Text Columns'),
+                ('3', '3 Text Columns'),
+                # remember to inc col no in scss
+            ),
         }
 
 # Overwrite DefaultSettings, with those, configured in site settings
@@ -145,3 +164,7 @@ app_settings.update(getattr(settings, 'CMSPLUS_SETTINGS', {}).items())
 
 # make them global for this module
 globals().update(app_settings.items())
+
+
+def get_devices():
+    return DEVICES

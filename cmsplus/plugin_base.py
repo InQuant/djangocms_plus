@@ -64,7 +64,11 @@ class PlusPluginBase(CMSPluginBase):
         """
         Returns a list of CSS classes to be added as class="..." to the current HTML tag.
         """
-        css_classes = []
+        if getattr(cls, 'default_css_class', None):
+            css_classes = [cls.default_css_class,]
+        else:
+            css_classes = []
+
         record = cls.get_record(instance)
         for k in getattr(cls, 'css_class_fields', []):
 

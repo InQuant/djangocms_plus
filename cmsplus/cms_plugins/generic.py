@@ -3,7 +3,8 @@ from django.utils.safestring import mark_safe
 
 from django import forms
 
-from cmsplus import app_settings as cmsplus_settings
+from cmsplus.app_settings import (get_devices, DEVICE_MAP, TX_COL_CHOICES)
+
 from cmsplus.models import (PlusPlugin, LinkPluginMixin,)
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
         get_style_form_fields)
@@ -53,3 +54,42 @@ class TextLinkPlugin(LinkPluginBase):
         """
         # TODO: Check if still needed (it was from cascade)
         return False
+
+
+# MultiColTextPlugin
+# ------------------
+#
+class MultiColTextForm(PlusPluginFormBase):
+
+    STYLE_CHOICES = 'MOD_COL_STYLES'
+    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+
+    @staticmethod
+    def _get_col_choice_field(dev):
+        if dev == 'xs':
+            choices = [('', '1 (default)'),]
+        else:
+            choices = [('', 'inherit'),]
+        choices.extend(list(TX_COL_CHOICES))
+
+        field_name = 'col_%s' % dev
+        field = forms.ChoiceField(label=u'%s No. of Cols' % DEVICE_MAP[dev],
+            required=False, choices=choices, initial='')
+        return field_name, field
+
+    @classmethod
+    def _extend_col_fields(cls):
+        for dev in get_devices():
+            field_name, field = cls._get_col_choice_field(dev)
+            cls.declared_fields[field_name] = field
+
+MultiColTextForm._extend_col_fields()
+
+class MultiColumnTextPlugin(PlusPluginBase):
+    footnote_html="""
+    renders a wrapper for a multi column text.
+    """
+    name = _('MultiColumnText')
+    form = MultiColTextForm
+    render_template = "cmsplus/generic/multi-col-text.html"
+    allow_children = True
