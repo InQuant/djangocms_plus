@@ -2,18 +2,13 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from cmsplus.app_settings import (BG_COLOR_CHOICES,
-                                  RL_MARGIN_CHOICES, TB_MARGIN_CHOICES, PADDING_CHOICES, DEVICE_MAP,
-                                  DEVICE_MAX_WIDTH_MAP, DEVICE_MIN_WIDTH_MAP, CNT_BOTTOM_MARGIN_CHOICES,
-                                  ROW_BOTTOM_MARGIN_CHOICES, COL_BOTTOM_MARGIN_CHOICES,
-                                  IMG_DEV_WIDTH_CHOICES, get_devices)
+from cmsplus.app_settings import cmsplus_settings as cps
 from cmsplus.fields import SizeField
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
                            get_style_form_fields, get_image_form_fields)
 from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin,
                                  LinkPluginBase)
-
 
 class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
     module = 'Bootstrap'
@@ -41,13 +36,13 @@ def get_choices(side, device, values):
 
 def get_margin_choice_fields():
     sides = {'ml': 'left', 'mr': 'right', 'mt': 'top', 'mb': 'bottom'}
-    choices = {'ml': RL_MARGIN_CHOICES, 'mr': RL_MARGIN_CHOICES,
-            'mt': TB_MARGIN_CHOICES, 'mb': TB_MARGIN_CHOICES}
-    for dev in get_devices():
+    choices = {'ml': cps.RL_MARGIN_CHOICES, 'mr': cps.RL_MARGIN_CHOICES,
+            'mt': cps.TB_MARGIN_CHOICES, 'mb': cps.TB_MARGIN_CHOICES}
+    for dev in cps.DEVICES:
         for side in ['ml', 'mr', 'mt', 'mb']:
             # e.g. label = 'left phone'
             key = '%s_%s' % (side, dev)
-            label = '%s %s' % (sides[side], DEVICE_MAP[dev])
+            label = '%s %s' % (sides[side], cps.DEVICE_MAP[dev])
 
             field = forms.ChoiceField(label=label, required=False,
                     choices=get_choices(side, dev, choices[side]))
@@ -55,14 +50,14 @@ def get_margin_choice_fields():
 
 def get_padding_choice_fields():
     sides = {'pl': 'left', 'pr': 'right', 'pt': 'top', 'pb': 'bottom'}
-    for dev in get_devices():
+    for dev in cps.DEVICES:
         for side in ['pl', 'pr', 'pt', 'pb']:
             # e.g. label = 'left phone'
             key = '%s_%s' % (side, dev)
-            label= '%s %s' % (sides[side], DEVICE_MAP[dev])
+            label= '%s %s' % (sides[side], cps.DEVICE_MAP[dev])
 
             field = forms.ChoiceField(label=label, required=False,
-                    choices=get_choices(side, dev, PADDING_CHOICES))
+                    choices=get_choices(side, dev, cps.PADDING_CHOICES))
             yield key, field
 
 class MagicWrapperForm(PlusPluginFormBase):
@@ -76,7 +71,7 @@ class MagicWrapperForm(PlusPluginFormBase):
     )
 
     background_color = forms.ChoiceField(
-        choices=BG_COLOR_CHOICES,
+        choices=cps.BG_COLOR_CHOICES,
         label=_("Background Color"),
         required=False,
         help_text=_('Select a background color.')
@@ -94,7 +89,7 @@ class MagicWrapperForm(PlusPluginFormBase):
     @staticmethod
     def get_margin_keys(for_dev=None):
         keys = []
-        devs = for_dev or get_devices()
+        devs = for_dev or cps.DEVICES
         for dev in devs:
             for s in ['ml', 'mr', 'mt', 'mb']:
                 keys.append('%s_%s' % (s, dev))
@@ -103,7 +98,7 @@ class MagicWrapperForm(PlusPluginFormBase):
     @staticmethod
     def get_padding_keys(for_dev=None):
         keys = []
-        devs = for_dev or get_devices()
+        devs = for_dev or cps.DEVICES
         for dev in devs:
             for s in ['pl', 'pr', 'pt', 'pb']:
                 keys.append('%s_%s' % (s, dev))
@@ -165,12 +160,12 @@ class MagicWrapperPlugin(BootstrapPluginBase):
 
         (_('Margin settings'), {
             'classes': ('collapse',),
-            'fields': [WF_MARGIN_KEYS(for_dev=[dev]) for dev in get_devices()],
+            'fields': [WF_MARGIN_KEYS(for_dev=[dev]) for dev in cps.DEVICES],
         }),
 
         (_('Padding settings'), {
             'classes': ('collapse',),
-            'fields': [WF_PADDING_KEYS(for_dev=[dev]) for dev in get_devices()],
+            'fields': [WF_PADDING_KEYS(for_dev=[dev]) for dev in cps.DEVICES],
         }),
     ]
 
@@ -195,14 +190,14 @@ class BootstrapContainerForm(PlusPluginFormBase):
     )
 
     background_color = forms.ChoiceField(
-        choices=BG_COLOR_CHOICES,
+        choices=cps.BG_COLOR_CHOICES,
         label=_("Background Color"),
         required=False,
         help_text=_('Select a background color.')
     )
 
     bottom_margin = forms.ChoiceField(label=u'Bottom Margin',
-            required=False, choices=CNT_BOTTOM_MARGIN_CHOICES,
+            required=False, choices=cps.CNT_BOTTOM_MARGIN_CHOICES,
             initial='',
             help_text='Select the default bottom margin to be applied?')
 
@@ -248,8 +243,8 @@ class BootstrapContainerPlugin(BootstrapPluginBase):
 class BootstrapRowForm(PlusPluginFormBase):
 
     bottom_margin = forms.ChoiceField(label=u'Bottom Margin',
-            required=False, choices=ROW_BOTTOM_MARGIN_CHOICES,
-            initial=ROW_BOTTOM_MARGIN_CHOICES[0][0],
+            required=False, choices=cps.ROW_BOTTOM_MARGIN_CHOICES,
+            initial=cps.ROW_BOTTOM_MARGIN_CHOICES[0][0],
             help_text='Select the default bottom margin to be applied?')
 
     STYLE_CHOICES = 'MOD_ROW_STYLES'
@@ -359,14 +354,14 @@ class ColDefHelper:
         _attrs = attrs or ['offset', 'width', 'order', 'display']
 
         for attr in _attrs:
-            for dev in get_devices():
+            for dev in cps.DEVICES:
                 field_name = 'col_%s_%s' % (attr, dev)
 
                 choice_method = getattr(self, 'col_%s_choices' % attr)
                 attr_choices = choices.get(attr, {}).get(dev, choice_method(dev))
 
                 # e.g. label = 'left phone'
-                label= '%s %s' % (DEVICE_MAP[dev], attr)
+                label= '%s %s' % (cps.DEVICE_MAP[dev], attr)
 
                 if attr == 'width' and dev == 'xs':
                     field = forms.ChoiceField(
@@ -384,8 +379,8 @@ class ColDefHelper:
 class BootstrapColumnForm(PlusPluginFormBase):
 
     bottom_margin = forms.ChoiceField(label=u'Bottom Margin',
-            required=False, choices=COL_BOTTOM_MARGIN_CHOICES,
-            initial=COL_BOTTOM_MARGIN_CHOICES[0][0],
+            required=False, choices=cps.COL_BOTTOM_MARGIN_CHOICES,
+            initial=cps.COL_BOTTOM_MARGIN_CHOICES[0][0],
             help_text='Select the default bottom margin to be applied')
 
     STYLE_CHOICES = 'MOD_COL_STYLES'
@@ -399,7 +394,7 @@ class BootstrapColumnForm(PlusPluginFormBase):
         keys = []
         attrs = for_attrs or ['offset', 'width', 'order', 'display']
         for attr in attrs:
-            for dev in get_devices():
+            for dev in cps.DEVICES:
                 keys.append('col_%s_%s' % (attr, dev))
         return keys
 
@@ -482,34 +477,34 @@ class BootstrapCol10Plugin(BootstrapColPlugin):
 # ------------
 #
 def get_img_dev_width_fields(initials={}):
-    for dev in get_devices():
+    for dev in cps.DEVICES:
         field_name = 'img_dev_width_%s' % dev
 
         # e.g. label = 'phone width'
-        label= '%s Width' % DEVICE_MAP[dev].title()
+        label= '%s Width' % cps.DEVICE_MAP[dev].title()
 
         if dev == 'xs':
             field = forms.ChoiceField(
                     label=label,
-                    choices=IMG_DEV_WIDTH_CHOICES,
+                    choices=cps.IMG_DEV_WIDTH_CHOICES,
                     initial=initials.get('xs', '1/2'))
         else:
             field = forms.ChoiceField(
                     label=label,
                     required=False,
-                    choices=[('', 'inherit'),] + list(IMG_DEV_WIDTH_CHOICES),
+                    choices=[('', 'inherit'),] + list(cps.IMG_DEV_WIDTH_CHOICES),
                     initial=initials.get(dev, ''))
 
         key = 'img_dev_width_%s' % dev
         yield key, field
 
 def get_fixed_dim_fields(attr):
-    for dev in get_devices():
+    for dev in cps.DEVICES:
         # e.g. fixed_width_xs
         field_name = 'fixed_%s_%s' % (attr, dev)
 
         # e.g. label = 'phone width'
-        label= '%s %s' % (DEVICE_MAP[dev].title(), attr.title())
+        label= '%s %s' % (cps.DEVICE_MAP[dev].title(), attr.title())
 
         field = SizeField(
             label=_(label),
@@ -661,11 +656,11 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
                 instance)
 
         # srcset sizes
-        context['sizes'] = [media_queries[dev] for dev in get_devices()]
+        context['sizes'] = [media_queries[dev] for dev in cps.DEVICES]
 
         # srcset
         srcset = {}
-        for dev in get_devices():
+        for dev in cps.DEVICES:
             # e.g. srcset['320w'] = '320x200'
             k = '%dw' % easy_thumb_sizes[dev][0]
             v = '%dx%d' % (easy_thumb_sizes[dev][0], easy_thumb_sizes[dev][1])
@@ -683,9 +678,9 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         if len(fixed_sizes.keys()) == 1 and 'xs' in fixed_sizes.keys():
             pass # no scoped style neeed - see get_inline_styles
         else:
-            for dev in get_devices():
+            for dev in cps.DEVICES:
                 if fixed_sizes.get(dev):
-                    k = DEVICE_MIN_WIDTH_MAP.get(dev)
+                    k = cps.DEVICE_MIN_WIDTH_MAP.get(dev)
                     scopedstyles[k] = (fixed_sizes[dev].get('width'),
                             fixed_sizes[dev].get('height'))
         context['scopedstyles'] = scopedstyles
@@ -777,7 +772,7 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         fixed_size = {'width': instance.glossary.get('fixed_width_xs'), 'height':
                 instance.glossary.get('fixed_height_xs')}
 
-        for dev in get_devices():
+        for dev in cps.DEVICES:
             # inherits from xs or other value for higher device
             for attr in ['width', 'height']:
                 k = 'fixed_%s_%s' % (attr, dev)
@@ -817,14 +812,14 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
 
         queries = {} # for srcset sizes
         ets = {} # easythumb_sizes
-        for dev in get_devices():
+        for dev in cps.DEVICES:
 
             # inherits from xs or other value for higher device
             _dev_img_fraction = glossary.get('img_dev_width_%s' % dev)
             if _dev_img_fraction:
                 dev_img_fraction = eval(_dev_img_fraction)
 
-            dev_max_w = DEVICE_MAX_WIDTH_MAP.get(dev)
+            dev_max_w = cps.DEVICE_MAX_WIDTH_MAP.get(dev)
             ets[dev] = cls._compute_image_size(glossary.get('image_file'), dev_max_w,
                     dev_img_fraction, fixed_size)
 

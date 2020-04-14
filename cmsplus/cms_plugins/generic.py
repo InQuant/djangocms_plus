@@ -2,7 +2,9 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from cmsplus.app_settings import (get_devices, DEVICE_MAP, TX_COL_CHOICES)
+from cmsplus.app_settings import cmsplus_settings as cps
+
+from cmsplus.models import (PlusPlugin, LinkPluginMixin,)
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
                            get_style_form_fields)
 from cmsplus.models import (PlusPlugin, LinkPluginMixin, )
@@ -65,17 +67,17 @@ class MultiColTextForm(PlusPluginFormBase):
         if dev == 'xs':
             choices = [('', '1 (default)'), ]
         else:
-            choices = [('', 'inherit'), ]
-        choices.extend(list(TX_COL_CHOICES))
+            choices = [('', 'inherit'),]
+        choices.extend(list(cps.TX_COL_CHOICES))
 
         field_name = 'col_%s' % dev
-        field = forms.ChoiceField(label=u'%s No. of Cols' % DEVICE_MAP[dev],
-                                  required=False, choices=choices, initial='')
+        field = forms.ChoiceField(label=u'%s No. of Cols' % cps.DEVICE_MAP[dev],
+            required=False, choices=choices, initial='')
         return field_name, field
 
     @classmethod
-    def extend_col_fields(cls):
-        for dev in get_devices():
+    def _extend_col_fields(cls):
+        for dev in cps.DEVICES:
             field_name, field = cls._get_col_choice_field(dev)
             cls.declared_fields[field_name] = field
 
