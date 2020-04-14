@@ -16,6 +16,7 @@ class DefaultSettings(object):
                 'cmsplus.cms_plugins.bootstrap.BootstrapContainerPlugin',
                 'cmsplus.cms_plugins.bootstrap.BootstrapRowPlugin',
                 'cmsplus.cms_plugins.bootstrap.BootstrapColPlugin',
+                'cmsplus.cms_plugins.bootstrap.BootstrapImagePlugin',
             ),
 
             'MAP_LAYER_CHOICES': (
@@ -156,6 +157,18 @@ class DefaultSettings(object):
                 ('3', '3 Text Columns'),
                 # remember to inc col no in scss
             ),
+
+            'IMG_DEV_WIDTH_CHOICES' : (
+                ('1', 'full screen'),
+                ('3/4', '3/4 screen'),
+                ('2/3', '2/3 screen'),
+                ('1/2', '1/2 screen'),
+                ('1/3', '1/3 screen'),
+                ('1/4', '1/4 screen'),
+                ('1/5', '1/5 screen'),
+                ('1/6', '1/6 screen'),
+            ),
+
         }
 
 # Overwrite DefaultSettings, with those, configured in site settings

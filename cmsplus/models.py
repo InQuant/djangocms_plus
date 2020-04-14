@@ -17,6 +17,10 @@ class PlusPlugin(CMSPlugin):
     def __str__(self):
         return self.plugin_class.get_identifier(self)
 
+    def save(self, *args, **kwargs):
+        self.plugin_class.sanitize_model(self)
+        super().save(*args, **kwargs)
+
     @property
     def glossary(self):
         return self._json
@@ -49,9 +53,15 @@ class PlusPlugin(CMSPlugin):
         return mark_safe(' '.join(c for c in css_classes if c))
 
     @property
+    def inline_styles(self):
+        inline_styles = self.plugin_class.get_inline_styles(self)
+        return format_html_join(' ', '{0}: {1};', (s for s in inline_styles.items() if s[1]))
+
+    @property
     def html_tag_attributes(self):
         attributes = self.plugin_class.get_html_tag_attributes(self)
-        joined = format_html_join(' ', '{0}="{1}"', ((attr, val) for attr, val in attributes.items() if val))
+        joined = format_html_join(' ', '{0}="{1}"',
+            ((attr, val) for attr, val in attributes.items() if val))
         if joined:
             return mark_safe(' ' + joined)
         return ''

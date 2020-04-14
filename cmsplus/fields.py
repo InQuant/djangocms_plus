@@ -1,14 +1,19 @@
 from abc import abstractmethod, ABC
+import re
 
 from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import ProhibitNullCharactersValidator
 from django.contrib.admin.sites import site as admin_site
+from django.forms.fields import Field
 from django.db.models.fields.related import ManyToOneRel
+from django.utils.deconstruct import deconstructible
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 from filer.models.filemodels import File as FilerFileModel
 from filer.fields.file import AdminFileWidget, FilerFileField
 from filer.models.imagemodels import Image as FilerImageModel
 from filer.fields.image import AdminImageWidget, FilerImageField
-
 
 from cms.models.pagemodel import Page
 
@@ -83,3 +88,83 @@ class PlusFilerImageSearchField(PlusModelChoiceField):
         *args, **kwargs):
 
         super().__init__(queryset=queryset, widget=widget, *args, **kwargs)
+
+# SizeField
+# ---------
+#
+NUMBER_REGEX = r'^[-+]?([0-9]+(\.[0-9]+)?|\.[0-9]+)'
+UNSIGNED_NUMBER_REGEX = r'^([0-9]+(\.[0-9]+)?|\.[0-9]+)'
+NUMBER_PAT = re.compile(NUMBER_REGEX)
+
+@deconstructible
+class SizeUnitValidator():
+    '''
+    taken and adopted from cmsplugin_cascade.fields
+    '''
+    allowed_units = []
+    message = _("'%(value)s' is not a valid size unit. Allowed units are: %(allowed_units)s.")
+    code = 'invalid_size_unit'
+
+    def __init__(self, allowed_units=None, allow_negative=True):
+        possible_units = ['vw', 'vh', 'rem', 'px', 'em', '%', 'auto']
+        if allowed_units is None:
+            self.allowed_units = possible_units
+        else:
+            self.allowed_units = [au for au in allowed_units if au in possible_units]
+        units_with_value = list(self.allowed_units)
+        if 'auto' in self.allowed_units:
+            self.allow_auto = True
+            units_with_value.remove('auto')
+        else:
+            self.allow_auto = False
+        if allow_negative:
+            patterns = '{}({})$'.format(NUMBER_REGEX, '|'.join(units_with_value))
+        else:
+            patterns = '{}({})$'.format(UNSIGNED_NUMBER_REGEX, '|'.join(units_with_value))
+        self.validation_pattern = re.compile(patterns)
+
+    def __call__(self, value):
+        if self.allow_auto and value == 'auto':
+            return
+        match = self.validation_pattern.match(value)
+        if not (match and match.group(1).isdigit()):
+            allowed_units = " {} ".format(ugettext("or")).join("'{}'".format(u) for u in self.allowed_units)
+            params = {'value': value, 'allowed_units': allowed_units}
+            raise ValidationError(self.message, code=self.code, params=params)
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, self.__class__) and
+            self.allowed_units == other.allowed_units and
+            self.message == other.message and
+            self.code == other.code
+        )
+
+
+class SizeField(Field):
+    """
+    Use this field for validating input containing a value ending in ``px``, ``em``, ``rem`` or ``%``.
+    Use it for values representing a size, margin, padding, width or height.
+    """
+
+    def __init__(self, *, allowed_units=None, **kwargs):
+        self.empty_value = ''
+        super().__init__(**kwargs)
+        self.validators.append(SizeUnitValidator(allowed_units))
+        self.validators.append(ProhibitNullCharactersValidator())
+
+    def to_python(self, value):
+        """Return a stripped string."""
+        if value not in self.empty_values:
+            value = str(value).strip()
+        if value in self.empty_values:
+            return self.empty_value
+        return value
+
+    @staticmethod
+    def get_number_part(value):
+        m = NUMBER_PAT.search(value)
+        try:
+            return int(m.group())
+        except ValueError:
+            return float(m.group())

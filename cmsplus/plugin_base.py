@@ -46,6 +46,15 @@ class PlusPluginBase(CMSPluginBase):
         return obj
 
     @classmethod
+    def sanitize_model(cls, instance):
+        """
+        This method is called, before the model is saved to the database. It can be overloaded
+        to sanitize the current glossary.
+        """
+        if instance.glossary is None:
+            instance.glossary = {}
+
+    @classmethod
     def get_identifier(cls, instance):
         """
         Hook to return a description for the current model.
@@ -80,14 +89,29 @@ class PlusPluginBase(CMSPluginBase):
         return css_classes
 
     @classmethod
+    def get_inline_styles(cls, instance):
+        """
+        Returns a dictionary of CSS attributes to be added as style="..." to the current HTML tag.
+        Inline styles can be defined in the plugin class via:
+        - default_inline_styles = { 'min-height': 'initial', ... }
+        - inline_style_map = { 'fixed_height': 'height' }
+        """
+        inline_styles = getattr(cls, 'default_inline_styles', {})
+        style_map = getattr(cls, 'inline_style_map', {})
+        if style_map:
+            inline_styles.update([(style, instance.glossary.get(key, '')) for
+                key, style in style_map.items()])
+        return inline_styles
+
+    @classmethod
     def get_html_tag_attributes(cls, instance):
         """
         Returns a dictionary of attributes, which shall be added to the current HTML tag.
-        This method normally is called by the models's property method ``html_tag_ attributes``,
-        which enriches the HTML tag with those attributes converted to a list as
-        ``attr1="val1" attr2="val2" ...``.
+        Tag attributes can be defined in the plugin class via:
+        - tag_attr_map = { 'image_title': 'title' } - where image_title defines the
+          glossary key which holds the value for the final tag attribute `title`.
         """
-        attrs = getattr(cls, 'html_tag_attributes', {})
+        attrs = getattr(cls, 'tag_attr_map', {})
         return dict((attr, instance.glossary.get(key, '')) for key, attr in attrs.items())
 
 
@@ -136,10 +160,9 @@ class StylePluginMixin(object):
 #
 class LinkPluginBase(PlusPluginBase):
     allow_children = False
-    parent_classes = []
     require_parent = False
-    ring_plugin = 'LinkPluginBase'
-    html_tag_attributes = {'title': 'title', 'target': 'target'}
+    #ring_plugin = 'LinkPluginBase'
+    #tag_attr_map = {'title': 'title', 'target': 'target'}
 
     #class Media:
         #js = ['admin/js/jquery.init.js', 'cascade/js/admin/linkplugin.js']

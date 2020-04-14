@@ -5,16 +5,18 @@ from django.contrib.admin.widgets import AdminDateWidget
 from django import forms
 
 from cmsplus import app_settings as cmsplus_settings
-from cmsplus.models import PlusPlugin
+from cmsplus.fields import SizeField
+from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
-        get_style_form_fields)
+        get_style_form_fields, get_image_form_fields)
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin,
         LinkPluginBase)
 
 from cmsplus.app_settings import (TEXT_COLOR_CHOICES, BG_COLOR_CHOICES,
         RL_MARGIN_CHOICES, TB_MARGIN_CHOICES, PADDING_CHOICES, DEVICE_MAP,
         DEVICE_MAX_WIDTH_MAP, DEVICE_MIN_WIDTH_MAP, CNT_BOTTOM_MARGIN_CHOICES,
-        ROW_BOTTOM_MARGIN_CHOICES, COL_BOTTOM_MARGIN_CHOICES, get_devices)
+        ROW_BOTTOM_MARGIN_CHOICES, COL_BOTTOM_MARGIN_CHOICES,
+        IMG_DEV_WIDTH_CHOICES, get_devices)
 
 class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
     module = 'Bootstrap'
@@ -477,3 +479,360 @@ class BootstrapCol10Plugin(BootstrapColPlugin):
     """
     name = _('Column 1/10')
     form = BootstrapCol10Form
+
+
+# Image Plugin
+# ------------
+#
+def get_img_dev_width_fields(initials={}):
+    for dev in get_devices():
+        field_name = 'img_dev_width_%s' % dev
+
+        # e.g. label = 'phone width'
+        label= '%s Width' % DEVICE_MAP[dev].title()
+
+        if dev == 'xs':
+            field = forms.ChoiceField(
+                    label=label,
+                    choices=IMG_DEV_WIDTH_CHOICES,
+                    initial=initials.get('xs', '1/2'))
+        else:
+            field = forms.ChoiceField(
+                    label=label,
+                    required=False,
+                    choices=[('', 'inherit'),] + list(IMG_DEV_WIDTH_CHOICES),
+                    initial=initials.get(dev, ''))
+
+        key = 'img_dev_width_%s' % dev
+        yield key, field
+
+def get_fixed_dim_fields(attr):
+    for dev in get_devices():
+        # e.g. fixed_width_xs
+        field_name = 'fixed_%s_%s' % (attr, dev)
+
+        # e.g. label = 'phone width'
+        label= '%s %s' % (DEVICE_MAP[dev].title(), attr.title())
+
+        field = SizeField(
+            label=_(label),
+            required = False,
+            allowed_units=['px', '%', 'rem', 'vw', 'vh'],
+            initial='',
+        )
+        key = 'fixed_%s_%s' % (attr, dev)
+        yield key, field
+
+
+class BootstrapImageForm(LinkFormBase):
+
+    image_file, image_title, image_alt = get_image_form_fields()
+
+    STYLE_CHOICES = 'IMAGE_STYLES'
+    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+
+    require_link = False
+
+    SHAPE_CHOICES = [
+        ('', _('None')),
+        ('rounded', _('Rounded')),
+        ('rounded-circle', _('Circle')),
+        ('img-thumbnail', _('Thumbnail')),
+    ]
+    image_shapes = forms.ChoiceField(
+        label=_("Image Shapes"),
+        choices=SHAPE_CHOICES,
+        required = False,
+        initial=''
+    )
+
+    ALIGNMENT_OPTIONS = [
+        ('', _("None")),
+        ('float-left', _("Left")),
+        ('float-right', _("Right")),
+        ('mx-auto', _("Center")),
+    ]
+    image_alignment = forms.ChoiceField(
+        label=_("Image Alignment"),
+        choices=ALIGNMENT_OPTIONS,
+        required = False,
+        initial='',
+        help_text=_("How to align the image."),
+    )
+
+    # fixed width and height fields are added with _extend_form_fields below
+
+    RESIZE_OPTIONS = [
+        ('crop', _("Crop image")),
+        ('upscale', _("Upscale image")),
+    ]
+    resize_options = forms.MultipleChoiceField(
+        label=_("Resize Options"),
+        choices=RESIZE_OPTIONS,
+        widget=forms.widgets.CheckboxSelectMultiple,
+        required = True,
+        help_text=_("Options to use when resizing the image."),
+        initial=['crop'],
+    )
+    # img_dev_width fields are added with _extend_form_fields below
+
+    @classmethod
+    def _extend_form_fields(cls):
+        for field_name, field in get_fixed_dim_fields('width'):
+            cls.declared_fields[field_name] = field
+        for field_name, field in get_fixed_dim_fields('height'):
+            cls.declared_fields[field_name] = field
+        for field_name, field in get_img_dev_width_fields():
+            cls.declared_fields[field_name] = field
+
+BootstrapImageForm._extend_form_fields()
+
+class BootstrapImagePluginModel(PlusPlugin, LinkPluginMixin):
+    class Meta:
+        proxy = True
+
+
+class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
+    name = 'Image'
+    model = BootstrapImagePluginModel
+    form = BootstrapImageForm
+    parent_classes = None
+    require_parent = False
+
+    text_enabled = True # enable in CK_EDITOR
+    render_template = 'cmsplus/bootstrap/image.html'
+
+    default_css_class = 'img-fluid'
+    css_class_fields = StylePluginMixin.css_class_fields + ['image_shapes',
+            'image_alignment']
+    tag_attr_map = { 'image_title':'title', 'image_alt':'alt' }
+
+    #ring_plugin = 'ImagePlugin'
+    #class Media:
+    #    js = ['admin/js/jquery.init.js', 'cascadex/admin/imageplugin.js']
+
+    fieldsets = [
+        (None, {
+            'fields': ('image_file', 'image_title', 'image_alt'),
+        }),
+        (_('Shape and alignment settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                ('image_shapes', 'image_alignment',),
+            )
+        }),
+        (_('Fixed Dimension'), {
+            'classes': ('collapse',),
+            'description': _('Set one or both image dimensions to fixed [px, %, rem, vw, vh].'),
+            'fields': (
+                ('fixed_width_xs', 'fixed_width_sm', 'fixed_width_md', 'fixed_width_lg', 'fixed_width_xl',),
+                ('fixed_height_xs', 'fixed_height_sm', 'fixed_height_md', 'fixed_height_lg', 'fixed_height_xl',),
+            ),
+        }),
+        (_('Responsive options'), {
+            'classes': ('collapse',),
+            'description': _('Maximum responsive width per device if no fixed '
+            '(px) width or height given. Used to provide optimal image size '
+            'for each device with respect to loading time.'),
+            'fields': (
+                ('img_dev_width_xs', 'img_dev_width_sm', 'img_dev_width_md',
+                    'img_dev_width_lg', 'img_dev_width_xl',),
+                ('resize_options',), 
+            ),
+        }),
+        (_('Module settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_style', 'extra_classes', 'label',
+            )
+        }),
+        (_('Link settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'link_type', 'cms_page', 'section', 'download_file', 'ext_url',
+                'mail_to', 'link_target', 'link_title'
+            )
+        }),
+    ]
+
+    def render(self, context, instance, placeholder):
+        context = super().render(context, instance, placeholder)
+
+        record = self.get_record(instance)
+        media_queries, easy_thumb_sizes = self._get_media_sizes(
+                instance)
+
+        # srcset sizes
+        context['sizes'] = [media_queries[dev] for dev in get_devices()]
+
+        # srcset
+        srcset = {}
+        for dev in get_devices():
+            # e.g. srcset['320w'] = '320x200'
+            k = '%dw' % easy_thumb_sizes[dev][0]
+            v = '%dx%d' % (easy_thumb_sizes[dev][0], easy_thumb_sizes[dev][1])
+            srcset[k] = v
+        context['srcset'] = srcset
+        context['src_size'] = v
+
+        # crop / upscale options
+        context['crop'] = 'crop' in record.get('resize_options')
+        context['upscale'] = 'upscale' in record.get('resize_options')
+
+        # scoped styles
+        scopedstyles = {}
+        fixed_sizes = self._get_fixed_sizes(instance)
+        if len(fixed_sizes.keys()) == 1 and 'xs' in fixed_sizes.keys():
+            pass # no scoped style neeed - see get_inline_styles
+        else:
+            for dev in get_devices():
+                if fixed_sizes.get(dev):
+                    k = DEVICE_MIN_WIDTH_MAP.get(dev)
+                    scopedstyles[k] = (fixed_sizes[dev].get('width'),
+                            fixed_sizes[dev].get('height'))
+        context['scopedstyles'] = scopedstyles
+
+        return context
+
+    @classmethod
+    def get_inline_styles(cls, instance):
+        inline_styles = super().get_inline_styles(instance)
+
+        # if only xs is in fixed_sizes, we don't need scoped styles
+        # (see render) as we don't have any media settings in this case
+        fs = cls._get_fixed_sizes(instance)
+        if len(fs.keys()) == 1 and 'xs' in fs.keys():
+            for k, v in fs.get('xs').items():
+                inline_styles[k] = v
+        return inline_styles
+
+    @classmethod
+    def _compute_image_size(cls, image, dev_max_width, dev_img_fraction, given_fixed_size):
+
+        def _compute_aspect_ratio(image):
+            if image.exif.get('Orientation', 1) > 4:
+                # image is rotated by 90 degrees, while keeping width and height
+                return float(image.width) / float(image.height)
+            else:
+                return float(image.height) / float(image.width)
+
+        def _clean_w(width):
+            if width > dev_max_width: return dev_max_width;
+            return round(width)
+
+        aspect_ratio = _compute_aspect_ratio(image)
+        fallback_width = round(dev_max_width * dev_img_fraction)
+
+        g_w = given_fixed_size['width']
+        g_h = given_fixed_size['height']
+
+        gnp = SizeField.get_number_part
+        if g_w and g_h:
+            # fixed width **and** height given
+
+            if 'px' in g_w and 'px' in g_h:
+                # both are in px
+                return (_clean_w(gnp(g_w)), round(gnp(g_h)))
+            elif 'px' in g_w:
+                # width in px
+                return (_clean_w(gnp(g_w)), 0)
+            elif 'px' in g_h:
+                # height in px
+                h = gnp(g_h)
+                return (round(h/aspect_ratio), round(h) )
+            else:
+                # fallback dev_max_width * fraction
+                return (fallback_width, 0)
+
+        elif g_w:
+            # fixed width given
+            if 'px' in g_w:
+                # width in px
+                return (_clean_w(gnp(g_w)), 0)
+            else:
+                # fallback dev_max_width * fraction
+                return (fallback_width, 0)
+
+        elif g_h:
+            # fixed height given
+            if 'px' in g_h:
+                # height in px
+                h = gnp(g_h)
+                return (round(h/aspect_ratio), round(h))
+            else:
+                # fallback dev_max_width * fraction
+                return (fallback_width, 0)
+        else:
+            # no fixed
+            return (fallback_width, 0)
+
+    @classmethod
+    def _get_fixed_sizes(cls, instance):
+        """
+        get the img fixed_sizes for style scoped, e.g:
+
+        fixed_sizes': {'xs': {'width': '100vw'}, 'md': {'width': '50vw'}}}
+
+        """
+        fixed_sizes = {} # for scoped media depending style
+
+        fixed_size = {'width': instance.glossary.get('fixed_width_xs'), 'height':
+                instance.glossary.get('fixed_height_xs')}
+
+        for dev in get_devices():
+            # inherits from xs or other value for higher device
+            for attr in ['width', 'height']:
+                k = 'fixed_%s_%s' % (attr, dev)
+                v = instance.glossary.get(k)
+                if v:
+                    if not fixed_sizes.get(dev): fixed_sizes[dev] = {}
+                    fixed_sizes[dev][attr] = v
+                    fixed_size[attr] = v
+        return fixed_sizes
+
+    @classmethod
+    def _get_media_sizes(cls, instance):
+        """
+        creates media_queries (srcset - sizes), e.g:
+
+        media_queries = {
+          'xs': '(max-width: 575.98px) 575px',
+          'sm': '(max-width: 767.98px) 767px',
+          'md': '(max-width: 991.98px) 496px',
+          'lg': '(max-width: 1199.98px) 600px',
+          'xl': '800px'}
+
+        and the img sizes for easythumbnail, e.g:
+
+        easythumb_sizes = {
+          'xs': (575, 0),
+          'sm': (767, 0),
+          ...
+        }
+        """
+        record = cls.get_record(instance)
+
+        # img_dev_width_* contains '1/2' or '1/3' (of screen size)
+        dev_img_fraction = eval(record.get('img_dev_width_xs'))
+        fixed_size = {'width': record.get('fixed_width_xs'), 'height':
+                record.get('fixed_height_xs')}
+
+        queries = {} # for srcset sizes
+        ets = {} # easythumb_sizes
+        for dev in get_devices():
+
+            # inherits from xs or other value for higher device
+            _dev_img_fraction = record.get('img_dev_width_%s' % dev)
+            if _dev_img_fraction:
+                dev_img_fraction = eval(_dev_img_fraction)
+
+            dev_max_w = DEVICE_MAX_WIDTH_MAP.get(dev)
+            ets[dev] = cls._compute_image_size(record.get('image_file'), dev_max_w,
+                    dev_img_fraction, fixed_size)
+
+            if dev != 'xl':
+                queries[dev] = '(max-width: %.2fpx) %.2fpx' % (dev_max_w, ets[dev][0])
+            else:
+                queries[dev] = '%.2fpx' % ets[dev][0]
+
+        return queries, ets

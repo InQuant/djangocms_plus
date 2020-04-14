@@ -212,7 +212,7 @@ class LinkFormBase(PlusPluginFormBase):
 # image form fields
 # -----------------
 #
-def get_imgage_form_fields(required=False, help_text=''):
+def get_image_form_fields(required=False, help_text=''):
     ''' can be used to insert image form fields into the custom plugin form
     definition. call e.g.:
     image_file, image_title, image_alt = get_image_form_fields(required=True)

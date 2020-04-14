@@ -1,0 +1,49 @@
+{% load l10n cms_tags thumbnail %}
+{% localize off %}{% spaceless %}
+{% with css_classes=instance.css_classes inline_styles=instance.inline_styles %} 
+
+{% if scopedstyles %}
+<style scoped>
+#img-{{ instance.id}} {
+  {% if scopedstyles.0 %}
+  {% if scopedstyles.0.0 %}width: {{ scopedstyles.0.0 }};{% endif %}
+  {% if scopedstyles.0.1 %}height: {{ scopedstyles.0.1 }};{% endif %}
+  {% endif %}
+}
+
+{% for k, size in scopedstyles.items %}
+  {% if k and k != 0 %}
+  @media (min-width: {{ k }}px) {
+    #img-{{ instance.id}} {
+      {% if size.0 %}width: {{ size.0 }};{% endif %}
+      {% if size.1 %}height: {{ size.1 }};{% endif %}
+    }
+  }
+  {% endif %}
+{% endfor %}"
+</style>
+{% endif %}
+
+{% if instance.link %}
+  <a href="{{ instance.link }}"
+    {% if instance.download %} download="{{ instance.download }}"{% endif %}
+    {% if instance.glossary.link_target %} target="{{ instance.glossary.link_target }}"{% endif %}>
+{% endif %}
+
+<img id="img-{{ instance.id}}"
+  {{ instance.html_tag_attributes }}
+  {% if css_classes %} class="{{ css_classes }}"{% endif %}
+  {% if inline_styles %} style="{{ inline_styles }}"{% endif %}
+	{% if sizes %} sizes="{{ sizes|join:', ' }}"{% endif %}
+	srcset="
+    {% for width, size in srcset.items %}
+		  {% thumbnail record.image_file size crop=crop upscale=upscale as thumb %}
+      {{ thumb.url }} {{ width }}{% if not forloop.last %},{% endif %}
+	  {% endfor %}"
+	{% thumbnail record.image_file src_size crop=crop upscale=upscale as thumb %}
+	src="{{ thumb.url }}"/>
+
+{% if instance.link %}</a>{% endif %}
+
+{% endwith %}
+{% endspaceless %}{% endlocalize %}
