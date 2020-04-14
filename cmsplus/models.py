@@ -1,11 +1,10 @@
-from jsonfield import JSONField
-
+from cms.models import CMSPlugin
 from django.utils.functional import cached_property
 from django.utils.html import mark_safe, format_html_join
-
-from cms.models import CMSPlugin
+from jsonfield import JSONField
 
 from cmsplus.utils import JSONEncoder
+
 
 class PlusPlugin(CMSPlugin):
     """
@@ -85,6 +84,9 @@ class LinkPluginMixin(object):
         model = ImagePluginModel
         ...
     """
+    plugin_class = None
+    glossary = None
+
     @property
     def link(self):
         return self.plugin_class.get_link(self)

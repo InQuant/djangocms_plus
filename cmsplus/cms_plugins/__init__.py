@@ -1,4 +1,5 @@
 from importlib import import_module
+
 from cms.plugin_pool import plugin_pool
 
 from cmsplus import app_settings as cmspluscfg

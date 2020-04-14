@@ -1,15 +1,13 @@
-from django.utils.translation import ugettext_lazy as _
-from django.utils.safestring import mark_safe
-
 from django import forms
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import (get_devices, DEVICE_MAP, TX_COL_CHOICES)
-
-from cmsplus.models import (PlusPlugin, LinkPluginMixin,)
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
-        get_style_form_fields)
-from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin,
-        LinkPluginBase)
+                           get_style_form_fields)
+from cmsplus.models import (PlusPlugin, LinkPluginMixin, )
+from cmsplus.plugin_base import (PlusPluginBase, LinkPluginBase)
+
 
 # TextLinkPlugin
 # --------------
@@ -20,7 +18,6 @@ class TextLinkPluginModel(PlusPlugin, LinkPluginMixin):
 
 
 class TextLinkForm(LinkFormBase):
-
     link_content = forms.CharField(
         label=_("Link Content"),
         widget=forms.widgets.TextInput(attrs={'id': 'id_name'}),  # replace
@@ -37,7 +34,7 @@ class TextLinkPlugin(LinkPluginBase):
 
     text_enabled = True
     render_template = 'cmsplus/generic/text-link.html'
-    parent_classes = ['TextPlugin',]
+    parent_classes = ['TextPlugin', ]
 
     #class Media:
         #js = ['admin/js/jquery.init.js', 'cmsplus/js/admin/textlinkplugin.js']
@@ -60,33 +57,34 @@ class TextLinkPlugin(LinkPluginBase):
 # ------------------
 #
 class MultiColTextForm(PlusPluginFormBase):
-
     STYLE_CHOICES = 'MOD_COL_STYLES'
     extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
 
     @staticmethod
     def _get_col_choice_field(dev):
         if dev == 'xs':
-            choices = [('', '1 (default)'),]
+            choices = [('', '1 (default)'), ]
         else:
-            choices = [('', 'inherit'),]
+            choices = [('', 'inherit'), ]
         choices.extend(list(TX_COL_CHOICES))
 
         field_name = 'col_%s' % dev
         field = forms.ChoiceField(label=u'%s No. of Cols' % DEVICE_MAP[dev],
-            required=False, choices=choices, initial='')
+                                  required=False, choices=choices, initial='')
         return field_name, field
 
     @classmethod
-    def _extend_col_fields(cls):
+    def extend_col_fields(cls):
         for dev in get_devices():
             field_name, field = cls._get_col_choice_field(dev)
             cls.declared_fields[field_name] = field
 
-MultiColTextForm._extend_col_fields()
+
+MultiColTextForm.extend_col_fields()
+
 
 class MultiColumnTextPlugin(PlusPluginBase):
-    footnote_html="""
+    footnote_html = """
     renders a wrapper for a multi column text.
     """
     name = _('MultiColumnText')

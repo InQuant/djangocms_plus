@@ -1,21 +1,20 @@
-from abc import abstractmethod, ABC
 import re
-
-from django import forms
-from django.core.exceptions import ValidationError
-from django.core.validators import ProhibitNullCharactersValidator
-from django.contrib.admin.sites import site as admin_site
-from django.forms.fields import Field
-from django.db.models.fields.related import ManyToOneRel
-from django.utils.deconstruct import deconstructible
-from django.utils.translation import ugettext_lazy as _, ugettext
-
-from filer.models.filemodels import File as FilerFileModel
-from filer.fields.file import AdminFileWidget, FilerFileField
-from filer.models.imagemodels import Image as FilerImageModel
-from filer.fields.image import AdminImageWidget, FilerImageField
+from abc import abstractmethod, ABC
 
 from cms.models.pagemodel import Page
+from django import forms
+from django.contrib.admin.sites import site as admin_site
+from django.core.exceptions import ValidationError
+from django.core.validators import ProhibitNullCharactersValidator
+from django.db.models.fields.related import ManyToOneRel
+from django.forms.fields import Field
+from django.utils.deconstruct import deconstructible
+from django.utils.translation import ugettext_lazy as _, ugettext
+from filer.fields.file import AdminFileWidget, FilerFileField
+from filer.fields.image import FilerImageField
+from filer.models.filemodels import File as FilerFileModel
+from filer.models.imagemodels import Image as FilerImageModel
+
 
 class BaseFieldMixIn(ABC):
     @abstractmethod

@@ -1,6 +1,6 @@
-from django.utils.safestring import mark_safe
-
 from cms.plugin_base import CMSPluginBase
+from django.utils.safestring import mark_safe
+from djangocms_file.models import File as FilerFileModel
 
 from cmsplus.forms import PlusPluginFormBase
 from cmsplus.models import PlusPlugin
@@ -62,11 +62,11 @@ class PlusPluginBase(CMSPluginBase):
         return instance.label
 
     @classmethod
-    def get_tag_type(self, instance):
+    def get_tag_type(cls, instance):
         """
         Return the tag_type used to render this plugin.
         """
-        return instance.glossary.get('tag_type', getattr(self, 'tag_type', ''))
+        return instance.glossary.get('tag_type', getattr(cls, 'tag_type', ''))
 
     @classmethod
     def get_css_classes(cls, instance):
@@ -123,9 +123,9 @@ class StylePluginMixin(object):
     css_class_fields = ['extra_style', 'extra_classes',]
 
     def get_render_template(self, context, instance, placeholder):
-        ''' try to eval a template based on dirname of render_template and given
+        """ try to eval a template based on dirname of render_template and given
         extra_style name, e.g.: 'phoenix/plugins/c-category-tile.html'
-        '''
+        """
         if not getattr(self, 'render_template', None):
             return super().get_render_template(context, instance, placeholder)
 

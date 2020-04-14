@@ -1,9 +1,9 @@
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
+
 
 class DefaultSettings(object):
-    
-    def settings(self):
+    @staticmethod
+    def settings():
         return {
             'PLUGINS': (
                 'cmsplus.cms_plugins.generic.TextLinkPlugin',
@@ -24,17 +24,17 @@ class DefaultSettings(object):
                 ('black', 'Black'),
             ),
 
-            'DEVICES' : ('xs', 'sm', 'md', 'lg', 'xl'),
-            'DEVICE_MAP' : {'xs': 'phone', 'sm': 'tablet sm', 'md': 'tablet', 'lg':
+            'DEVICES': ('xs', 'sm', 'md', 'lg', 'xl'),
+            'DEVICE_MAP': {'xs': 'phone', 'sm': 'tablet sm', 'md': 'tablet', 'lg':
                 'desktop', 'xl': 'desktop xl'},
-            'DEVICE_MAX_WIDTH_MAP' : {
+            'DEVICE_MAX_WIDTH_MAP': {
                 'xs': 575,
                 'sm': 767,
                 'md': 991,
                 'lg': 1199,
                 'xl': 1599,
             },
-            'DEVICE_MIN_WIDTH_MAP' : {
+            'DEVICE_MIN_WIDTH_MAP': {
                 'xs': 0,
                 'sm': 576,
                 'md': 768,
@@ -42,7 +42,7 @@ class DefaultSettings(object):
                 'xl': 1200,
             },
 
-            'TEXT_COLOR_CHOICES' : (
+            'TEXT_COLOR_CHOICES': (
                 ('', 'Default'),
                 ('text-primary', 'Primary'),
                 ('text-secondary', 'Secondary'),
@@ -53,7 +53,7 @@ class DefaultSettings(object):
                 ('text-warning', 'Warning'),
                 ('text-danger', 'Danger'),
             ),
-            'BG_COLOR_CHOICES' : (
+            'BG_COLOR_CHOICES': (
                 ('', 'Transparent'),
                 ('bg-primary', 'Primary'),
                 ('bg-secondary', 'Secondary'),
@@ -64,7 +64,7 @@ class DefaultSettings(object):
                 ('bg-warning', 'Warning'),
                 ('bg-danger', 'Danger'),
             ),
-            'RL_MARGIN_CHOICES' : (
+            'RL_MARGIN_CHOICES': (
                 ('1cw', '1 Col'),
                 ('160', '10 Unit (160)'),
                 ('120', '7.5 Unit (120)'),
@@ -94,7 +94,7 @@ class DefaultSettings(object):
                 ('-160', '-10 Unit (160)'),
                 ('-1cw', '-1 Col'),
             ),
-            'TB_MARGIN_CHOICES' : (
+            'TB_MARGIN_CHOICES': (
                 ('160', '10 Unit (160)'),
                 ('120', '7.5 Unit (120)'),
                 ('80', '5 Unit (80)'),
@@ -119,7 +119,7 @@ class DefaultSettings(object):
                 ('-120', '-7.5 Unit (120)'),
                 ('-160', '-10 Unit (160)'),
             ),
-            'PADDING_CHOICES' : (
+            'PADDING_CHOICES': (
                 ('160', '10 Unit (160)'),
                 ('120', '7.5 Unit (120)'),
                 ('80', '5 Unit (80)'),
@@ -136,29 +136,29 @@ class DefaultSettings(object):
                 ('0', '0'),
             ),
 
-            'CNT_BOTTOM_MARGIN_CHOICES' : (
+            'CNT_BOTTOM_MARGIN_CHOICES': (
                 ('mb-3 mb-md-5', 'Default'),
                 ('mb-2 mb-md-3', 'Small'),
                 ('', 'None'),
             ),
-            'ROW_BOTTOM_MARGIN_CHOICES' : (
+            'ROW_BOTTOM_MARGIN_CHOICES': (
                 ('', 'None'),
                 ('mb-3 mb-md-5', 'Default'),
                 ('mb-2 mb-md-3', 'Small'),
             ),
-            'COL_BOTTOM_MARGIN_CHOICES' : (
+            'COL_BOTTOM_MARGIN_CHOICES': (
                 ('mb-3 mb-md-5', 'Default'),
                 ('mb-2 mb-md-3', 'Small'),
                 ('', 'None'),
             ),
 
-            'TX_COL_CHOICES' : (
+            'TX_COL_CHOICES': (
                 ('2', '2 Text Columns'),
                 ('3', '3 Text Columns'),
                 # remember to inc col no in scss
             ),
 
-            'IMG_DEV_WIDTH_CHOICES' : (
+            'IMG_DEV_WIDTH_CHOICES': (
                 ('1', 'full screen'),
                 ('3/4', '3/4 screen'),
                 ('2/3', '2/3 screen'),
@@ -171,8 +171,9 @@ class DefaultSettings(object):
 
         }
 
+
 # Overwrite DefaultSettings, with those, configured in site settings
-app_settings = DefaultSettings().settings()
+app_settings = DefaultSettings.settings()
 app_settings.update(getattr(settings, 'CMSPLUS_SETTINGS', {}).items())
 
 # make them global for this module

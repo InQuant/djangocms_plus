@@ -1,22 +1,19 @@
-from django.utils.translation import ugettext_lazy as _
-from django.utils.safestring import mark_safe
-from django.contrib.admin.widgets import AdminDateWidget
-
 from django import forms
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
-from cmsplus import app_settings as cmsplus_settings
+from cmsplus.app_settings import (BG_COLOR_CHOICES,
+                                  RL_MARGIN_CHOICES, TB_MARGIN_CHOICES, PADDING_CHOICES, DEVICE_MAP,
+                                  DEVICE_MAX_WIDTH_MAP, DEVICE_MIN_WIDTH_MAP, CNT_BOTTOM_MARGIN_CHOICES,
+                                  ROW_BOTTOM_MARGIN_CHOICES, COL_BOTTOM_MARGIN_CHOICES,
+                                  IMG_DEV_WIDTH_CHOICES, get_devices)
 from cmsplus.fields import SizeField
-from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
-        get_style_form_fields, get_image_form_fields)
+                           get_style_form_fields, get_image_form_fields)
+from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin,
-        LinkPluginBase)
+                                 LinkPluginBase)
 
-from cmsplus.app_settings import (TEXT_COLOR_CHOICES, BG_COLOR_CHOICES,
-        RL_MARGIN_CHOICES, TB_MARGIN_CHOICES, PADDING_CHOICES, DEVICE_MAP,
-        DEVICE_MAX_WIDTH_MAP, DEVICE_MIN_WIDTH_MAP, CNT_BOTTOM_MARGIN_CHOICES,
-        ROW_BOTTOM_MARGIN_CHOICES, COL_BOTTOM_MARGIN_CHOICES,
-        IMG_DEV_WIDTH_CHOICES, get_devices)
 
 class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
     module = 'Bootstrap'
@@ -586,6 +583,7 @@ class BootstrapImageForm(LinkFormBase):
             cls.declared_fields[field_name] = field
 
 BootstrapImageForm._extend_form_fields()
+
 
 class BootstrapImagePluginModel(PlusPlugin, LinkPluginMixin):
     class Meta:

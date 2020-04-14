@@ -1,12 +1,12 @@
+import logging
 from collections import OrderedDict
+
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
+from cmsplus.fields import (PageSearchField, PlusFilerFileSearchField, PlusFilerImageSearchField)
 from cmsplus.models import PlusPlugin
-from cmsplus.fields import (PageSearchField, PlusModelChoiceField,
-        PlusFilerFileSearchField, PlusFilerImageSearchField)
-import logging
 
 logger = logging.getLogger(__name__)
 
