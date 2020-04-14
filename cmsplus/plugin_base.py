@@ -180,3 +180,6 @@ class LinkPluginBase(PlusPluginBase):
             relobj = instance.glossary.get('download_file', None)
             if isinstance(relobj, FilerFileModel):
                 return mark_safe(relobj.original_filename)
+
+    class Media:
+        js = ('cmsplus/js/admin/link_plugin.js', )
