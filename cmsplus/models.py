@@ -10,7 +10,6 @@ class PlusPlugin(CMSPlugin):
     """
     BaseModel for plugins including the important json field.
     """
-
     _json = JSONField(encoder_class=JSONEncoder)
 
     def __str__(self):
@@ -18,15 +17,24 @@ class PlusPlugin(CMSPlugin):
 
     def save(self, *args, **kwargs):
         self.plugin_class.sanitize_model(self)
+        self._glossary = None
         super().save(*args, **kwargs)
 
     @property
-    def glossary(self):
+    def data(self):
+        ''' raw glossary data
+        '''
         return self._json
 
-    @glossary.setter
-    def glossary(self, value):
+    @data.setter
+    def data(self, value:dict):
         self._json = value
+
+    @property
+    def glossary(self):
+        if not getattr(self, '_glossary', None):
+            self._glossary = self.plugin_class.get_glossary(self)
+        return self._glossary
 
     @property
     def label(self):

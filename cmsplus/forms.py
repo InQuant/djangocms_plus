@@ -21,11 +21,25 @@ class PlusPluginFormBase(forms.ModelForm):
         model = PlusPlugin
         exclude = ["_json"]  # Do not show json Field in Edit Form
 
+    def __init__(self, *args, **kwargs):
+
+        if kwargs.get('instance'):
+            # set form initial values as our instance model attributes are in
+            # glossary not in the instance itself
+            initial = kwargs.get('initial', {})
+
+            for field_name, field in self.declared_fields.items():
+                initial[field_name] = kwargs.get('instance').glossary.get(field_name)
+
+            kwargs['initial'] = initial
+        super().__init__(*args, **kwargs)
+
+
     def save(self, commit=True):
         '''
         Put serialized data to glossary (_json) field, than save.
         '''
-        self.instance.glossary = self.serialize_data()
+        self.instance.data = self.serialize_data()
         return super().save(commit)
 
     def serialize_data(self):

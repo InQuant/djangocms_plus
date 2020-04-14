@@ -37,10 +37,10 @@
 	{% if sizes %} sizes="{{ sizes|join:', ' }}"{% endif %}
 	srcset="
     {% for width, size in srcset.items %}
-		  {% thumbnail record.image_file size crop=crop upscale=upscale as thumb %}
+		  {% thumbnail instance.glossary.image_file size crop=crop upscale=upscale as thumb %}
       {{ thumb.url }} {{ width }}{% if not forloop.last %},{% endif %}
 	  {% endfor %}"
-	{% thumbnail record.image_file src_size crop=crop upscale=upscale as thumb %}
+	{% thumbnail instance.glossary.image_file src_size crop=crop upscale=upscale as thumb %}
 	src="{{ thumb.url }}"/>
 
 {% if instance.link %}</a>{% endif %}

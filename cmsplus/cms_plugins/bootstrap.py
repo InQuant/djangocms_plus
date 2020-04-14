@@ -656,7 +656,7 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
     def render(self, context, instance, placeholder):
         context = super().render(context, instance, placeholder)
 
-        record = self.get_record(instance)
+        glossary = instance.glossary
         media_queries, easy_thumb_sizes = self._get_media_sizes(
                 instance)
 
@@ -674,8 +674,8 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         context['src_size'] = v
 
         # crop / upscale options
-        context['crop'] = 'crop' in record.get('resize_options')
-        context['upscale'] = 'upscale' in record.get('resize_options')
+        context['crop'] = 'crop' in glossary.get('resize_options')
+        context['upscale'] = 'upscale' in glossary.get('resize_options')
 
         # scoped styles
         scopedstyles = {}
@@ -808,24 +808,24 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
           ...
         }
         """
-        record = cls.get_record(instance)
+        glossary = instance.glossary
 
         # img_dev_width_* contains '1/2' or '1/3' (of screen size)
-        dev_img_fraction = eval(record.get('img_dev_width_xs'))
-        fixed_size = {'width': record.get('fixed_width_xs'), 'height':
-                record.get('fixed_height_xs')}
+        dev_img_fraction = eval(glossary.get('img_dev_width_xs'))
+        fixed_size = {'width': glossary.get('fixed_width_xs'), 'height':
+                glossary.get('fixed_height_xs')}
 
         queries = {} # for srcset sizes
         ets = {} # easythumb_sizes
         for dev in get_devices():
 
             # inherits from xs or other value for higher device
-            _dev_img_fraction = record.get('img_dev_width_%s' % dev)
+            _dev_img_fraction = glossary.get('img_dev_width_%s' % dev)
             if _dev_img_fraction:
                 dev_img_fraction = eval(_dev_img_fraction)
 
             dev_max_w = DEVICE_MAX_WIDTH_MAP.get(dev)
-            ets[dev] = cls._compute_image_size(record.get('image_file'), dev_max_w,
+            ets[dev] = cls._compute_image_size(glossary.get('image_file'), dev_max_w,
                     dev_img_fraction, fixed_size)
 
             if dev != 'xl':

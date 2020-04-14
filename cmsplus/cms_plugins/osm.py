@@ -103,8 +103,7 @@ class OsmMarkerPlugin(StylePluginMixin, PlusPluginBase):
 
     @classmethod
     def get_marker_url(cls, instance):
-        record = cls.get_record(instance)
-        img = record.get('image_file')
+        img = instance.glossary.get('image_file')
         if img:
             return img.url
         return None

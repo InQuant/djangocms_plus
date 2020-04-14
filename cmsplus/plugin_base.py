@@ -9,29 +9,10 @@ from cmsplus.models import PlusPlugin
 class PlusPluginBase(CMSPluginBase):
     form = PlusPluginFormBase
     model = PlusPlugin
-    template_record_key = "record"
 
     @classmethod
-    def get_record(cls, instance):
-        return cls.form.deserialize(instance.glossary)
-
-    def render(self, context, instance, placeholder):
-        # record is the deserialized form of the glossary
-        context[self.template_record_key] = self.get_record(instance)
-        return super().render(context, instance, placeholder)
-
-    def get_form(self, request, obj=None, change=False, **kwargs):
-        """
-        Get form and if there is already an instance call the deserialization method to get initial values.
-        """
-        form = super().get_form(request, obj, change, **kwargs)
-        if not obj:
-            return form
-
-        record = self.get_record(obj)
-        for field_key, field in self.form.declared_fields.items():
-            form.declared_fields[field_key].initial = record.get(field_key) or field.initial
-        return form
+    def get_glossary(cls, instance):
+        return cls.form.deserialize(instance.data)
 
     def save_form(self, request, form, change):
         """
@@ -49,10 +30,10 @@ class PlusPluginBase(CMSPluginBase):
     def sanitize_model(cls, instance):
         """
         This method is called, before the model is saved to the database. It can be overloaded
-        to sanitize the current glossary.
+        to sanitize the current (_json) data dict of the instance.
         """
-        if instance.glossary is None:
-            instance.glossary = {}
+        if instance.data is None:
+            instance.data = {}
 
     @classmethod
     def get_identifier(cls, instance):
@@ -78,10 +59,9 @@ class PlusPluginBase(CMSPluginBase):
         else:
             css_classes = []
 
-        record = cls.get_record(instance)
         for k in getattr(cls, 'css_class_fields', []):
 
-            xc = record.get(k)
+            xc = instance.glossary.get(k)
             if isinstance(xc, str):
                 css_classes.append(xc)
             elif isinstance(xc, list):
@@ -169,32 +149,31 @@ class LinkPluginBase(PlusPluginBase):
 
     @classmethod
     def get_link(cls, instance):
-        record = cls.get_record(instance)
-        link_type = record.get('link_type', '')
+        glossary = instance.glossary
+        link_type = glossary.get('link_type', '')
         if link_type == 'exturl':
-            return '{ext_url}'.format(**instance.glossary)
+            return '{ext_url}'.format(**glossary)
         if link_type == 'email':
-            return 'mailto:{mail_to}'.format(**instance.glossary)
+            return 'mailto:{mail_to}'.format(**glossary)
 
-        # otherwise resolve by model record
+        # otherwise resolve by model glossary
         if link_type == 'cmspage':
-            relobj = record.get('cms_page', None)
+            relobj = glossary.get('cms_page', None)
             if relobj:
                 href = relobj.get_absolute_url()
-                if record.get('section'):
-                    href = '{}#{}'.format(href, record.get('section'))
+                if glossary.get('section'):
+                    href = '{}#{}'.format(href, glossary.get('section'))
                 return href
         elif link_type == 'download':
-            relobj = record.get('download_file', None)
+            relobj = glossary.get('download_file', None)
             if isinstance(relobj, FilerFileModel):
                 return relobj.url
         return link_type
 
     @classmethod
     def get_download_name(cls, instance):
-        record = cls.get_record(instance)
-        link_type = record.get('link_type', '')
+        link_type = instance.glossary.get('link_type', '')
         if link_type == 'download':
-            relobj = record.get('download_file', None)
+            relobj = instance.glossary.get('download_file', None)
             if isinstance(relobj, FilerFileModel):
                 return mark_safe(relobj.original_filename)
