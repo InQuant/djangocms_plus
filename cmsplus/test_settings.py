@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'cmsplus',
     'cmsplus.tests',
+    'easy_thumbnails',
 ]
 
 
