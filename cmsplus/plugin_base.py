@@ -1,6 +1,6 @@
 from cms.plugin_base import CMSPluginBase
 from django.utils.safestring import mark_safe
-from djangocms_file.models import File as FilerFileModel
+from filer.models.filemodels import File as FilerFileModel
 
 from cmsplus.forms import PlusPluginFormBase
 from cmsplus.models import PlusPlugin

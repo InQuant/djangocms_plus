@@ -82,7 +82,7 @@ class MultiColTextForm(PlusPluginFormBase):
             cls.declared_fields[field_name] = field
 
 
-MultiColTextForm.extend_col_fields()
+MultiColTextForm._extend_col_fields()
 
 
 class MultiColumnTextPlugin(PlusPluginBase):

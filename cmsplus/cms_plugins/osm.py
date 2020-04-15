@@ -11,10 +11,6 @@ from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin)
 # Openstreetmap forms
 # -------------------
 #
-MAP_LAYER_CHOICES = getattr(cps, 'MAP_LAYER_CHOICES', (
-    ('', 'None'),
-    ('black', 'Black'),
-))
 
 class OsmForm(PlusPluginFormBase):
     latitude = forms.FloatField(label= _('Center Latitude'), required=True,
@@ -33,7 +29,7 @@ class OsmForm(PlusPluginFormBase):
         label=_('Custom Layer'),
         required=False,
         initial='',
-        choices=MAP_LAYER_CHOICES,
+        choices=cps.MAP_LAYER_CHOICES,
         help_text=_('Adds a custom (colored) layer to the map.'),
     )
 
