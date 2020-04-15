@@ -10,8 +10,10 @@ from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin,
                                  LinkPluginBase)
 
+
 class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
     module = 'Bootstrap'
+
 
 # MagicWrapper
 # ------------
@@ -22,10 +24,10 @@ def get_choices(side, device, values):
     # e.g. g-ml, g-mb
     if device == 'xs':
         prefix = '%s' % side
-        choices = [('', 'None',),]
+        choices = [('', 'None',), ]
     else:
         prefix = '%s-%s' % (side, device)
-        choices = [('', 'inherit',),]
+        choices = [('', 'inherit',), ]
 
     for t in values:
         # v is a tuple e.g.  ('-1cw', '-1 Col'),
@@ -34,19 +36,22 @@ def get_choices(side, device, values):
         choices.append(('g-%s-%s' % (prefix, v), d))
     return choices
 
+
 def get_margin_choice_fields():
     sides = {'ml': 'left', 'mr': 'right', 'mt': 'top', 'mb': 'bottom'}
     choices = {'ml': cps.RL_MARGIN_CHOICES, 'mr': cps.RL_MARGIN_CHOICES,
-            'mt': cps.TB_MARGIN_CHOICES, 'mb': cps.TB_MARGIN_CHOICES}
+               'mt': cps.TB_MARGIN_CHOICES, 'mb': cps.TB_MARGIN_CHOICES}
     for dev in cps.DEVICES:
         for side in ['ml', 'mr', 'mt', 'mb']:
             # e.g. label = 'left phone'
             key = '%s_%s' % (side, dev)
             label = '%s %s' % (sides[side], cps.DEVICE_MAP[dev])
 
-            field = forms.ChoiceField(label=label, required=False,
-                    choices=get_choices(side, dev, choices[side]))
+            field = forms.ChoiceField(
+                label=label, required=False,
+                choices=get_choices(side, dev, choices[side]))
             yield key, field
+
 
 def get_padding_choice_fields():
     sides = {'pl': 'left', 'pr': 'right', 'pt': 'top', 'pb': 'bottom'}
@@ -54,11 +59,13 @@ def get_padding_choice_fields():
         for side in ['pl', 'pr', 'pt', 'pb']:
             # e.g. label = 'left phone'
             key = '%s_%s' % (side, dev)
-            label= '%s %s' % (sides[side], cps.DEVICE_MAP[dev])
+            label = '%s %s' % (sides[side], cps.DEVICE_MAP[dev])
 
-            field = forms.ChoiceField(label=label, required=False,
-                    choices=get_choices(side, dev, cps.PADDING_CHOICES))
+            field = forms.ChoiceField(
+                label=label, required=False,
+                choices=get_choices(side, dev, cps.PADDING_CHOICES))
             yield key, field
+
 
 class MagicWrapperForm(PlusPluginFormBase):
 
@@ -84,7 +91,6 @@ class MagicWrapperForm(PlusPluginFormBase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
 
     @staticmethod
     def get_margin_keys(for_dev=None):
@@ -119,6 +125,7 @@ class MagicWrapperForm(PlusPluginFormBase):
         for field_name, field in get_padding_choice_fields():
             cls.declared_fields[field_name] = field
 
+
 # complete form fields with configured devices
 MagicWrapperForm._extend_form_fields()
 
@@ -126,8 +133,9 @@ MagicWrapperForm._extend_form_fields()
 WF_MARGIN_KEYS = MagicWrapperForm.get_margin_keys
 WF_PADDING_KEYS = MagicWrapperForm.get_padding_keys
 
+
 class MagicWrapperPlugin(BootstrapPluginBase):
-    footnote_html="""
+    footnote_html = """
     <p>renders a magic wrapper (e.g. div) which can be used to:</p>
     <ul>
     <li>- apply a chapter spacer</li>
@@ -141,7 +149,7 @@ class MagicWrapperPlugin(BootstrapPluginBase):
     allow_children = True
     render_template = 'cmsplus/bootstrap/wrapper.html'
     css_class_fields = StylePluginMixin.css_class_fields + WF_MARGIN_KEYS() + WF_PADDING_KEYS() + [
-            'background_color',]
+            'background_color', ]
     form = MagicWrapperForm
 
     fieldsets = [
@@ -183,10 +191,10 @@ class BootstrapContainerForm(PlusPluginFormBase):
         label=_('Container Type'),
         initial='container',
         required=True,
-        choices= FLUID_CHOICES,
+        choices=FLUID_CHOICES,
         widget=forms.widgets.RadioSelect,
         help_text=_('Changing your container from "fixed content with fluid '
-            'margin" to "fluid content with fixed margin".')
+                    'margin" to "fluid content with fixed margin".')
     )
 
     background_color = forms.ChoiceField(
@@ -196,16 +204,18 @@ class BootstrapContainerForm(PlusPluginFormBase):
         help_text=_('Select a background color.')
     )
 
-    bottom_margin = forms.ChoiceField(label=u'Bottom Margin',
-            required=False, choices=cps.CNT_BOTTOM_MARGIN_CHOICES,
-            initial='',
-            help_text='Select the default bottom margin to be applied?')
+    bottom_margin = forms.ChoiceField(
+        label=u'Bottom Margin',
+        required=False, choices=cps.CNT_BOTTOM_MARGIN_CHOICES,
+        initial='',
+        help_text='Select the default bottom margin to be applied?')
 
     STYLE_CHOICES = 'MOD_CONTAINER_STYLES'
     extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
 
+
 class BootstrapContainerPlugin(BootstrapPluginBase):
-    footnote_html="""
+    footnote_html = """
     renders a bootstrap container fix or fluid for device classes of:
      <ul>
      <li>XS: Portrait Phones (<576px)</li>
@@ -225,8 +235,8 @@ class BootstrapContainerPlugin(BootstrapPluginBase):
     render_template = 'cmsplus/bootstrap/container.html'
 
     tag_type = 'div'
-    css_class_fields = StylePluginMixin.css_class_fields + ['fluid',
-            'background_color', 'bottom_margin']
+    css_class_fields = StylePluginMixin.css_class_fields + [
+        'fluid', 'background_color', 'bottom_margin']
 
     @classmethod
     def get_identifier(cls, instance):
@@ -242,16 +252,18 @@ class BootstrapContainerPlugin(BootstrapPluginBase):
 #
 class BootstrapRowForm(PlusPluginFormBase):
 
-    bottom_margin = forms.ChoiceField(label=u'Bottom Margin',
-            required=False, choices=cps.ROW_BOTTOM_MARGIN_CHOICES,
-            initial=cps.ROW_BOTTOM_MARGIN_CHOICES[0][0],
-            help_text='Select the default bottom margin to be applied?')
+    bottom_margin = forms.ChoiceField(
+        label=u'Bottom Margin',
+        required=False, choices=cps.ROW_BOTTOM_MARGIN_CHOICES,
+        initial=cps.ROW_BOTTOM_MARGIN_CHOICES[0][0],
+        help_text='Select the default bottom margin to be applied?')
 
     STYLE_CHOICES = 'MOD_ROW_STYLES'
     extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
 
+
 class BootstrapRowPlugin(BootstrapPluginBase):
-    footnote_html="""
+    footnote_html = """
     renders a bootstrap (grid) row.
     """
     name = 'Row'
@@ -265,7 +277,7 @@ class BootstrapRowPlugin(BootstrapPluginBase):
 
     tag_type = 'div'
     default_css_class = 'row'
-    css_class_fields = StylePluginMixin.css_class_fields + ['bottom_margin',]
+    css_class_fields = StylePluginMixin.css_class_fields + ['bottom_margin', ]
 
 
 # BootstrapColForm
@@ -299,9 +311,9 @@ class ColDefHelper:
         tok = self.get_dev_token(dev)
 
         if dev == 'xs':
-            choices = [('', 'flex'),]
+            choices = [('', 'flex'), ]
         else:
-            choices = [('', 'inherit'),]
+            choices = [('', 'inherit'), ]
             choices.append(('col%s%s' % (self.col_base, tok), 'flex'))
 
         choices.extend(self.get_col_choices(tok, 'col', col_base=self.col_base))
@@ -314,9 +326,9 @@ class ColDefHelper:
         '''
         tok = self.get_dev_token(dev)
         if dev == 'xs':
-            choices = [('', 'none'),]
+            choices = [('', 'none'), ]
         else:
-            choices = [('', 'inherit'),]
+            choices = [('', 'inherit'), ]
         choices.extend(self.get_attr_choices(tok, 'offset'))
         return choices
 
@@ -326,9 +338,9 @@ class ColDefHelper:
         '''
         tok = self.get_dev_token(dev)
         if dev == 'xs':
-            choices = [('', 'none'),]
+            choices = [('', 'none'), ]
         else:
-            choices = [('', 'inherit'),]
+            choices = [('', 'inherit'), ]
         choices.append(('order%s-first' % tok, 'first'))
         choices.extend(self.get_attr_choices(tok, 'order'))
         choices.append(('order%s-last' % tok, 'last'))
@@ -341,14 +353,13 @@ class ColDefHelper:
         DISPLAY_VALUES = ['block', 'flex', 'inline', 'inline-block', 'none', 'table', 'table-cell']
         tok = self.get_dev_token(dev)
         if dev == 'xs':
-            choices = [('', 'not set'),]
+            choices = [('', 'not set'), ]
         else:
-            choices = [('', 'inherit'),]
+            choices = [('', 'inherit'), ]
 
         for v in DISPLAY_VALUES:
             choices.append(('d%s-%s' % (tok, v), '%s' % v),)
         return choices
-
 
     def get_column_form_fields(self, attrs=[], initials={}, choices={}):
         _attrs = attrs or ['offset', 'width', 'order', 'display']
@@ -361,7 +372,7 @@ class ColDefHelper:
                 attr_choices = choices.get(attr, {}).get(dev, choice_method(dev))
 
                 # e.g. label = 'left phone'
-                label= '%s %s' % (cps.DEVICE_MAP[dev], attr)
+                label = '%s %s' % (cps.DEVICE_MAP[dev], attr)
 
                 if attr == 'width' and dev == 'xs':
                     field = forms.ChoiceField(
@@ -369,19 +380,22 @@ class ColDefHelper:
                             choices=attr_choices,
                             initial=initials.get(attr, {}).get(dev, 'col'))
                 else:
-                    field = forms.ChoiceField(label=label, required=False,
-                            choices=attr_choices,
-                            initial=initials.get(attr, {}).get(dev, ''))
+                    field = forms.ChoiceField(
+                        label=label, required=False,
+                        choices=attr_choices,
+                        initial=initials.get(attr, {}).get(dev, ''))
 
                 field_name = 'col_%s_%s' % (attr, dev)
                 yield field_name, field
 
+
 class BootstrapColumnForm(PlusPluginFormBase):
 
-    bottom_margin = forms.ChoiceField(label=u'Bottom Margin',
-            required=False, choices=cps.COL_BOTTOM_MARGIN_CHOICES,
-            initial=cps.COL_BOTTOM_MARGIN_CHOICES[0][0],
-            help_text='Select the default bottom margin to be applied')
+    bottom_margin = forms.ChoiceField(
+        label=u'Bottom Margin',
+        required=False, choices=cps.COL_BOTTOM_MARGIN_CHOICES,
+        initial=cps.COL_BOTTOM_MARGIN_CHOICES[0][0],
+        help_text='Select the default bottom margin to be applied')
 
     STYLE_CHOICES = 'MOD_COL_STYLES'
     extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
@@ -410,13 +424,15 @@ class BootstrapColumnForm(PlusPluginFormBase):
         for field_name, field in col_helper.get_column_form_fields():
             cls.declared_fields[field_name] = field
 
+
 BootstrapColumnForm._extend_form_fields(
-        ColDefHelper(col_range=13, col_base='')) # default 12 divided form
+        ColDefHelper(col_range=13, col_base=''))  # default 12 divided form
 
 MCF_COLUMN_KEYS = BootstrapColumnForm.get_column_keys
 
+
 class BootstrapColPlugin(BootstrapPluginBase):
-    footnote_html="""
+    footnote_html = """
     renders a bootstrap column with variable offset and with.
     """
     name = _('Column')
@@ -434,15 +450,15 @@ class BootstrapColPlugin(BootstrapPluginBase):
     fieldsets = [
         (_('Column settings'), {
             'fields': (
-                MCF_COLUMN_KEYS(for_attrs=['offset',]),
-                MCF_COLUMN_KEYS(for_attrs=['width',]),
+                MCF_COLUMN_KEYS(for_attrs=['offset', ]),
+                MCF_COLUMN_KEYS(for_attrs=['width', ]),
             )
         }),
         (_('Extra Column settings'), {
             'classes': ('collapse',),
             'fields': (
-                MCF_COLUMN_KEYS(for_attrs=['order',]),
-                MCF_COLUMN_KEYS(for_attrs=['display',]),
+                MCF_COLUMN_KEYS(for_attrs=['order', ]),
+                MCF_COLUMN_KEYS(for_attrs=['display', ]),
             )
         }),
         (_('Module settings'), {
@@ -455,18 +471,20 @@ class BootstrapColPlugin(BootstrapPluginBase):
         }),
     ]
 
+
 # 10 divided column form and plugin
 # ---------------------------------
 class BootstrapCol10Form(BootstrapColumnForm):
     ''' 10 divided column form.
     '''
 
+
 BootstrapCol10Form._extend_form_fields(
         ColDefHelper(col_range=11, col_base='10'))
 
 
 class BootstrapCol10Plugin(BootstrapColPlugin):
-    footnote_html="""
+    footnote_html = """
     renders a bootstrap 10 divided column with variable offset and with.
     """
     name = _('Column 1/10')
@@ -478,10 +496,9 @@ class BootstrapCol10Plugin(BootstrapColPlugin):
 #
 def get_img_dev_width_fields(initials={}):
     for dev in cps.DEVICES:
-        field_name = 'img_dev_width_%s' % dev
 
         # e.g. label = 'phone width'
-        label= '%s Width' % cps.DEVICE_MAP[dev].title()
+        label = '%s Width' % cps.DEVICE_MAP[dev].title()
 
         if dev == 'xs':
             field = forms.ChoiceField(
@@ -490,30 +507,30 @@ def get_img_dev_width_fields(initials={}):
                     initial=initials.get('xs', '1/2'))
         else:
             field = forms.ChoiceField(
-                    label=label,
-                    required=False,
-                    choices=[('', 'inherit'),] + list(cps.IMG_DEV_WIDTH_CHOICES),
-                    initial=initials.get(dev, ''))
+                label=label,
+                required=False,
+                choices=[('', 'inherit'), ] + list(cps.IMG_DEV_WIDTH_CHOICES),
+                initial=initials.get(dev, ''))
 
-        key = 'img_dev_width_%s' % dev
-        yield key, field
+        field_name = 'img_dev_width_%s' % dev
+        yield field_name, field
+
 
 def get_fixed_dim_fields(attr):
     for dev in cps.DEVICES:
         # e.g. fixed_width_xs
-        field_name = 'fixed_%s_%s' % (attr, dev)
 
         # e.g. label = 'phone width'
-        label= '%s %s' % (cps.DEVICE_MAP[dev].title(), attr.title())
+        label = '%s %s' % (cps.DEVICE_MAP[dev].title(), attr.title())
 
         field = SizeField(
             label=_(label),
-            required = False,
+            required=False,
             allowed_units=['px', '%', 'rem', 'vw', 'vh'],
             initial='',
         )
-        key = 'fixed_%s_%s' % (attr, dev)
-        yield key, field
+        field_name = 'fixed_%s_%s' % (attr, dev)
+        yield field_name, field
 
 
 class BootstrapImageForm(LinkFormBase):
@@ -534,7 +551,7 @@ class BootstrapImageForm(LinkFormBase):
     image_shapes = forms.ChoiceField(
         label=_("Image Shapes"),
         choices=SHAPE_CHOICES,
-        required = False,
+        required=False,
         initial=''
     )
 
@@ -547,7 +564,7 @@ class BootstrapImageForm(LinkFormBase):
     image_alignment = forms.ChoiceField(
         label=_("Image Alignment"),
         choices=ALIGNMENT_OPTIONS,
-        required = False,
+        required=False,
         initial='',
         help_text=_("How to align the image."),
     )
@@ -562,7 +579,7 @@ class BootstrapImageForm(LinkFormBase):
         label=_("Resize Options"),
         choices=RESIZE_OPTIONS,
         widget=forms.widgets.CheckboxSelectMultiple,
-        required = True,
+        required=True,
         help_text=_("Options to use when resizing the image."),
         initial=['crop'],
     )
@@ -576,6 +593,7 @@ class BootstrapImageForm(LinkFormBase):
             cls.declared_fields[field_name] = field
         for field_name, field in get_img_dev_width_fields():
             cls.declared_fields[field_name] = field
+
 
 BootstrapImageForm._extend_form_fields()
 
@@ -592,16 +610,16 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
     parent_classes = None
     require_parent = False
 
-    text_enabled = True # enable in CK_EDITOR
+    text_enabled = True  # enable in CK_EDITOR
     render_template = 'cmsplus/bootstrap/image.html'
 
     default_css_class = 'img-fluid'
-    css_class_fields = StylePluginMixin.css_class_fields + ['image_shapes',
-            'image_alignment']
-    tag_attr_map = { 'image_title':'title', 'image_alt':'alt' }
+    css_class_fields = StylePluginMixin.css_class_fields + [
+        'image_shapes', 'image_alignment']
+    tag_attr_map = {'image_title': 'title', 'image_alt': 'alt'}
 
-    #ring_plugin = 'ImagePlugin'
-    #class Media:
+    # ring_plugin = 'ImagePlugin'
+    # class Media:
     #    js = ['admin/js/jquery.init.js', 'cascadex/admin/imageplugin.js']
 
     fieldsets = [
@@ -623,15 +641,16 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
             ),
         }),
         (_('Responsive options'), {
-            'classes': ('collapse',),
-            'description': _('Maximum responsive width per device if no fixed '
-            '(px) width or height given. Used to provide optimal image size '
-            'for each device with respect to loading time.'),
-            'fields': (
-                ('img_dev_width_xs', 'img_dev_width_sm', 'img_dev_width_md',
-                    'img_dev_width_lg', 'img_dev_width_xl',),
-                ('resize_options',), 
-            ),
+          'classes': ('collapse',),
+          'description': _(
+              'Maximum responsive width per device if no fixed '
+              '(px) width or height given. Used to provide optimal image size '
+              'for each device with respect to loading time.'),
+          'fields': (
+               ('img_dev_width_xs', 'img_dev_width_sm', 'img_dev_width_md',
+                   'img_dev_width_lg', 'img_dev_width_xl',),
+               ('resize_options',),
+           ),
         }),
         (_('Module settings'), {
             'classes': ('collapse',),
@@ -676,13 +695,14 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         scopedstyles = {}
         fixed_sizes = self._get_fixed_sizes(instance)
         if len(fixed_sizes.keys()) == 1 and 'xs' in fixed_sizes.keys():
-            pass # no scoped style neeed - see get_inline_styles
+            pass  # no scoped style neeed - see get_inline_styles
         else:
             for dev in cps.DEVICES:
                 if fixed_sizes.get(dev):
                     k = cps.DEVICE_MIN_WIDTH_MAP.get(dev)
-                    scopedstyles[k] = (fixed_sizes[dev].get('width'),
-                            fixed_sizes[dev].get('height'))
+                    scopedstyles[k] = (
+                        fixed_sizes[dev].get('width'),
+                        fixed_sizes[dev].get('height'))
         context['scopedstyles'] = scopedstyles
 
         return context
@@ -710,7 +730,8 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
                 return float(image.height) / float(image.width)
 
         def _clean_w(width):
-            if width > dev_max_width: return dev_max_width;
+            if width > dev_max_width:
+                return dev_max_width
             return round(width)
 
         aspect_ratio = _compute_aspect_ratio(image)
@@ -732,7 +753,7 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
             elif 'px' in g_h:
                 # height in px
                 h = gnp(g_h)
-                return (round(h/aspect_ratio), round(h) )
+                return (round(h/aspect_ratio), round(h))
             else:
                 # fallback dev_max_width * fraction
                 return (fallback_width, 0)
@@ -767,10 +788,11 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         fixed_sizes': {'xs': {'width': '100vw'}, 'md': {'width': '50vw'}}}
 
         """
-        fixed_sizes = {} # for scoped media depending style
+        fixed_sizes = {}  # for scoped media depending style
 
-        fixed_size = {'width': instance.glossary.get('fixed_width_xs'), 'height':
-                instance.glossary.get('fixed_height_xs')}
+        fixed_size = {
+            'width': instance.glossary.get('fixed_width_xs'), 'height':
+            instance.glossary.get('fixed_height_xs')}
 
         for dev in cps.DEVICES:
             # inherits from xs or other value for higher device
@@ -778,7 +800,8 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
                 k = 'fixed_%s_%s' % (attr, dev)
                 v = instance.glossary.get(k)
                 if v:
-                    if not fixed_sizes.get(dev): fixed_sizes[dev] = {}
+                    if not fixed_sizes.get(dev):
+                        fixed_sizes[dev] = {}
                     fixed_sizes[dev][attr] = v
                     fixed_size[attr] = v
         return fixed_sizes
@@ -807,11 +830,12 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
 
         # img_dev_width_* contains '1/2' or '1/3' (of screen size)
         dev_img_fraction = eval(glossary.get('img_dev_width_xs'))
-        fixed_size = {'width': glossary.get('fixed_width_xs'), 'height':
-                glossary.get('fixed_height_xs')}
+        fixed_size = {
+            'width': glossary.get('fixed_width_xs'), 'height':
+            glossary.get('fixed_height_xs')}
 
-        queries = {} # for srcset sizes
-        ets = {} # easythumb_sizes
+        queries = {}  # for srcset sizes
+        ets = {}  # easythumb_sizes
         for dev in cps.DEVICES:
 
             # inherits from xs or other value for higher device
@@ -820,8 +844,9 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
                 dev_img_fraction = eval(_dev_img_fraction)
 
             dev_max_w = cps.DEVICE_MAX_WIDTH_MAP.get(dev)
-            ets[dev] = cls._compute_image_size(glossary.get('image_file'), dev_max_w,
-                    dev_img_fraction, fixed_size)
+            ets[dev] = cls._compute_image_size(
+                glossary.get('image_file'), dev_max_w,
+                dev_img_fraction, fixed_size)
 
             if dev != 'xl':
                 queries[dev] = '(max-width: %.2fpx) %.2fpx' % (dev_max_w, ets[dev][0])

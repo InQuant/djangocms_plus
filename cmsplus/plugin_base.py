@@ -1,6 +1,9 @@
-from cms.plugin_base import CMSPluginBase
+from django.conf import settings
 from django.utils.safestring import mark_safe
+
 from filer.models.filemodels import File as FilerFileModel
+
+from cms.plugin_base import CMSPluginBase
 
 from cmsplus.forms import PlusPluginFormBase
 from cmsplus.models import PlusPlugin
@@ -29,8 +32,8 @@ class PlusPluginBase(CMSPluginBase):
     @classmethod
     def sanitize_model(cls, instance):
         """
-        This method is called, before the model is saved to the database. It can be overloaded
-        to sanitize the current (_json) data dict of the instance.
+        This method is called, before the model is saved to the database. It can be overloaded to sanitize the current
+        (_json) data dict of the instance.
         """
         if instance.data is None:
             instance.data = {}
@@ -55,7 +58,7 @@ class PlusPluginBase(CMSPluginBase):
         Returns a list of CSS classes to be added as class="..." to the current HTML tag.
         """
         if getattr(cls, 'default_css_class', None):
-            css_classes = [cls.default_css_class,]
+            css_classes = [cls.default_css_class, ]
         else:
             css_classes = []
 
@@ -71,16 +74,16 @@ class PlusPluginBase(CMSPluginBase):
     @classmethod
     def get_inline_styles(cls, instance):
         """
-        Returns a dictionary of CSS attributes to be added as style="..." to the current HTML tag.
-        Inline styles can be defined in the plugin class via:
+        Returns a dictionary of CSS attributes to be added as style="..." to the current HTML tag.  Inline styles can
+        be defined in the plugin class via:
         - default_inline_styles = { 'min-height': 'initial', ... }
         - inline_style_map = { 'fixed_height': 'height' }
         """
         inline_styles = getattr(cls, 'default_inline_styles', {})
         style_map = getattr(cls, 'inline_style_map', {})
         if style_map:
-            inline_styles.update([(style, instance.glossary.get(key, '')) for
-                key, style in style_map.items()])
+            inline_styles.update(
+                [(style, instance.glossary.get(key, '')) for key, style in style_map.items()])
         return inline_styles
 
     @classmethod
@@ -98,9 +101,9 @@ class PlusPluginBase(CMSPluginBase):
 # Base Class to provide plugin help, a label and extra style css classes
 # ----------------------------------------------------------------------
 # TODO: active Help later - see plugin_change_form
-#class CssLabelPluginMixin(PluginHelpMixin):
+# class CssLabelPluginMixin(PluginHelpMixin):
 class StylePluginMixin(object):
-    css_class_fields = ['extra_style', 'extra_classes',]
+    css_class_fields = ['extra_style', 'extra_classes', ]
 
     def get_render_template(self, context, instance, placeholder):
         """ try to eval a template based on dirname of render_template and given
@@ -112,8 +115,9 @@ class StylePluginMixin(object):
         if not instance.glossary.get('extra_style'):
             return self.render_template
 
-        style_template = getattr(settings, 'EXTRA_STYLE_TEMPLATES',
-                {}).get(instance.glossary.get('extra_style'))
+        style_template = getattr(
+            settings, 'EXTRA_STYLE_TEMPLATES',
+            {}).get(instance.glossary.get('extra_style'))
         if not style_template:
             return self.render_template
 
@@ -122,7 +126,8 @@ class StylePluginMixin(object):
     @classmethod
     def get_identifier(cls, obj):
         label = obj.glossary.get('label', None)
-        if label: return label
+        if label:
+            return label
 
         if obj.glossary.get('extra_style'):
             try:
@@ -130,7 +135,7 @@ class StylePluginMixin(object):
                 choice_key = getattr(form, 'STYLE_CHOICES')
                 style_map = dict(getattr(settings, choice_key))
                 return style_map[obj.glossary.get('extra_style')]
-            except:
+            except Exception:
                 return obj.glossary.get('extra_style')
         return super().get_identifier(obj)
 
@@ -141,11 +146,9 @@ class StylePluginMixin(object):
 class LinkPluginBase(PlusPluginBase):
     allow_children = False
     require_parent = False
-    #ring_plugin = 'LinkPluginBase'
-    #tag_attr_map = {'title': 'title', 'target': 'target'}
 
-    #class Media:
-        #js = ['admin/js/jquery.init.js', 'cascade/js/admin/linkplugin.js']
+    # class Media:
+    #   js = ['admin/js/jquery.init.js', 'cascade/js/admin/linkplugin.js']
 
     @classmethod
     def get_link(cls, instance):

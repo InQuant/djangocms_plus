@@ -27,7 +27,7 @@ class PlusPlugin(CMSPlugin):
         return self._json
 
     @data.setter
-    def data(self, value:dict):
+    def data(self, value: dict):
         self._json = value
 
     @property
@@ -67,8 +67,7 @@ class PlusPlugin(CMSPlugin):
     @property
     def html_tag_attributes(self):
         attributes = self.plugin_class.get_html_tag_attributes(self)
-        joined = format_html_join(' ', '{0}="{1}"',
-            ((attr, val) for attr, val in attributes.items() if val))
+        joined = format_html_join(' ', '{0}="{1}"', ((attr, val) for attr, val in attributes.items() if val))
         if joined:
             return mark_safe(' ' + joined)
         return ''

@@ -1,7 +1,7 @@
 import re
 from abc import abstractmethod, ABC
 
-from cms.models.pagemodel import Page
+
 from django import forms
 from django.contrib.admin.sites import site as admin_site
 from django.core.exceptions import ValidationError
@@ -10,10 +10,14 @@ from django.db.models.fields.related import ManyToOneRel
 from django.forms.fields import Field
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _, ugettext
+
 from filer.fields.file import AdminFileWidget, FilerFileField
 from filer.fields.image import FilerImageField
 from filer.models.filemodels import File as FilerFileModel
 from filer.models.imagemodels import Image as FilerImageModel
+
+from cms.models.pagemodel import Page
+from cms.utils import get_current_site
 
 
 class BaseFieldMixIn(ABC):
@@ -50,6 +54,7 @@ class PageChoiceIterator(forms.models.ModelChoiceIterator):
         for obj in pages:
             yield self.choice(obj)
 
+
 class PageSearchField(PlusModelChoiceField):
     iterator = PageChoiceIterator
 
@@ -57,7 +62,7 @@ class PageSearchField(PlusModelChoiceField):
         queryset = Page.objects.public()
         try:
             queryset = queryset.on_site(get_current_site())
-        except:
+        except Exception:
             pass  # can happen if database is not ready yet
         kwargs.setdefault('queryset', queryset)
         super().__init__(*args, **kwargs)
@@ -70,23 +75,29 @@ class PageSearchField(PlusModelChoiceField):
 
 class PlusFilerFileSearchField(PlusModelChoiceField):
 
-    def __init__(self,
+    def __init__(
+        self,
         queryset=FilerFileModel.objects.all(),
         widget=AdminFileWidget(
             ManyToOneRel(FilerFileField, FilerFileModel, 'id'), admin_site),
-        *args, **kwargs):
+        *args, **kwargs
+    ):
 
         super().__init__(queryset=queryset, widget=widget, *args, **kwargs)
+
 
 class PlusFilerImageSearchField(PlusModelChoiceField):
 
-    def __init__(self,
+    def __init__(
+        self,
         queryset=FilerImageModel.objects.all(),
         widget=AdminFileWidget(
             ManyToOneRel(FilerImageField, FilerImageModel, 'id'), admin_site),
-        *args, **kwargs):
+        *args, **kwargs
+    ):
 
         super().__init__(queryset=queryset, widget=widget, *args, **kwargs)
+
 
 # SizeField
 # ---------
@@ -94,6 +105,7 @@ class PlusFilerImageSearchField(PlusModelChoiceField):
 NUMBER_REGEX = r'^[-+]?([0-9]+(\.[0-9]+)?|\.[0-9]+)'
 UNSIGNED_NUMBER_REGEX = r'^([0-9]+(\.[0-9]+)?|\.[0-9]+)'
 NUMBER_PAT = re.compile(NUMBER_REGEX)
+
 
 @deconstructible
 class SizeUnitValidator():

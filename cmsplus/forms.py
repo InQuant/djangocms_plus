@@ -2,6 +2,7 @@ import logging
 from collections import OrderedDict
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
@@ -33,7 +34,6 @@ class PlusPluginFormBase(forms.ModelForm):
 
             kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
-
 
     def save(self, commit=True):
         '''
@@ -87,6 +87,7 @@ class PlusPluginFormBase(forms.ModelForm):
 
         return parsed_dict
 
+
 # StylePluginMixin form fields
 # ----------------------------
 #
@@ -109,11 +110,14 @@ def get_style_form_fields(style_config_key=None, style_multiple=False):
         style_field = forms.ChoiceField
 
     return (
-        style_field(label=_('Style'), required=False, choices=sc,
+        style_field(
+            label=_('Style'), required=False, choices=sc,
             initial=sc[0][0], help_text='Extra CSS predefined style class for plugin.'),
-        forms.CharField(label=u'Extra Classes', required=False, initial='',
+        forms.CharField(
+            label=u'Extra Classes', required=False, initial='',
             help_text='Extra CSS Classes (space separated) for plugin.'),
-        forms.CharField(label=u'Label', required=False, initial='',
+        forms.CharField(
+            label=u'Label', required=False, initial='',
             help_text='Label to identify this plugin in page-structure.'),
     )
 
@@ -219,7 +223,8 @@ class LinkFormBase(PlusPluginFormBase):
                 error = ValidationError(_("Mailto link is missing."))
                 self.add_error('mail_to', error)
 
-        if self.errors: return None
+        if self.errors:
+            return None
         return cleaned_data
 
 
@@ -241,14 +246,14 @@ def get_image_form_fields(required=False, help_text=''):
        forms.CharField(
            label=_('Image Title'),
            required=False,
-           help_text=_('Caption text added to the "title" attribute of the '
-               '<img> element.'),
+           help_text=_(
+               'Caption text added to the "title" attribute of the ' '<img> element.'),
            ),
 
        forms.CharField(
            label=_('Alternative Description'),
            required=False,
-           help_text=_('Textual description of the image added to the "alt" '
-               'tag of the <img> element.'),
+           help_text=_(
+               'Textual description of the image added to the "alt" ' 'tag of the <img> element.'),
            )
        )

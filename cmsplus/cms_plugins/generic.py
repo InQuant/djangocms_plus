@@ -7,7 +7,6 @@ from cmsplus.app_settings import cmsplus_settings as cps
 from cmsplus.models import (PlusPlugin, LinkPluginMixin,)
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
                            get_style_form_fields)
-from cmsplus.models import (PlusPlugin, LinkPluginMixin, )
 from cmsplus.plugin_base import (PlusPluginBase, LinkPluginBase)
 
 
@@ -38,8 +37,8 @@ class TextLinkPlugin(LinkPluginBase):
     render_template = 'cmsplus/generic/text-link.html'
     parent_classes = ['TextPlugin', ]
 
-    #class Media:
-        #js = ['admin/js/jquery.init.js', 'cmsplus/js/admin/textlinkplugin.js']
+    # class Media:
+    #   js = ['admin/js/jquery.init.js', 'cmsplus/js/admin/textlinkplugin.js']
 
     @classmethod
     def get_identifier(cls, obj):
@@ -67,12 +66,12 @@ class MultiColTextForm(PlusPluginFormBase):
         if dev == 'xs':
             choices = [('', '1 (default)'), ]
         else:
-            choices = [('', 'inherit'),]
+            choices = [('', 'inherit'), ]
         choices.extend(list(cps.TX_COL_CHOICES))
 
         field_name = 'col_%s' % dev
-        field = forms.ChoiceField(label=u'%s No. of Cols' % cps.DEVICE_MAP[dev],
-            required=False, choices=choices, initial='')
+        field = forms.ChoiceField(
+            label=u'%s No. of Cols' % cps.DEVICE_MAP[dev], required=False, choices=choices, initial='')
         return field_name, field
 
     @classmethod
