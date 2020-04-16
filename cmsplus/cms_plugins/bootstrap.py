@@ -3,12 +3,10 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings as cps
-from cmsplus.fields import SizeField
-from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
-                           get_style_form_fields, get_image_form_fields)
+from cmsplus.fields import SizeField, PlusFilerImageSearchField
+from cmsplus.forms import (PlusPluginFormBase, LinkFormBase, get_style_form_fields, get_image_form_fields)
 from cmsplus.models import PlusPlugin, LinkPluginMixin
-from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin,
-                                 LinkPluginBase)
+from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin, LinkPluginBase)
 
 
 class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
@@ -636,8 +634,8 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
             'classes': ('collapse',),
             'description': _('Set one or both image dimensions to fixed [px, %, rem, vw, vh].'),
             'fields': (
-                ('fixed_width_xs', 'fixed_width_sm', 'fixed_width_md', 'fixed_width_lg', 'fixed_width_xl',),
-                ('fixed_height_xs', 'fixed_height_sm', 'fixed_height_md', 'fixed_height_lg', 'fixed_height_xl',),
+                [field_name for field_name, field in get_fixed_dim_fields('width')],
+                [field_name for field_name, field in get_fixed_dim_fields('height')],
             ),
         }),
         (_('Responsive options'), {
@@ -647,9 +645,8 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
               '(px) width or height given. Used to provide optimal image size '
               'for each device with respect to loading time.'),
           'fields': (
-               ('img_dev_width_xs', 'img_dev_width_sm', 'img_dev_width_md',
-                   'img_dev_width_lg', 'img_dev_width_xl',),
-               ('resize_options',),
+              [field_name for field_name, field in get_img_dev_width_fields()],
+              ('resize_options',),
            ),
         }),
         (_('Module settings'), {
@@ -854,3 +851,107 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
                 queries[dev] = '%.2fpx' % ets[dev][0]
 
         return queries, ets
+
+
+# Background Image
+# ----------------
+#
+class BackgroundImageForm(PlusPluginFormBase):
+
+    image_file = PlusFilerImageSearchField(
+            label=_('Background Image File'),
+            required=True,
+            )
+
+    image_title = forms.CharField(
+            label=_('Background Image Title'),
+            required=False,
+            help_text=_(
+                'Caption text added to the "title" attribute of the '
+                '<div> background image container element.'),
+            )
+
+    image_filter = forms.ChoiceField(
+        label='Image Filter', required=False,
+        choices=cps.BGIMG_FILTER_CHOICES, initial='',
+        help_text='The color filter to be applied over the unhovered image.')
+
+    # img_dev_width - fields are added below
+
+    bottom_margin = forms.ChoiceField(
+        label=u'Bottom Margin',
+        required=False, choices=cps.BGIMG_BOTTOM_MARGIN_CHOICES,
+        initial='',
+        help_text='Select the default bottom margin to be applied?')
+
+    STYLE_CHOICES = 'BACKGROUND_IMAGE_STYLES'
+    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+
+    @classmethod
+    def _extend_form_fields(cls):
+        for field_name, field in get_img_dev_width_fields():
+            cls.declared_fields[field_name] = field
+
+
+BackgroundImageForm._extend_form_fields()
+
+
+class BackgroundImagePlugin(BootstrapPluginBase):
+    name = _("Background Img")
+    allow_children = True
+    form = BackgroundImageForm
+    render_template = 'cmsplus/bootstrap/background-image/background-image.html'
+
+    tag_attr_map = {'image_title': 'title'}
+    css_class_fields = StylePluginMixin.css_class_fields + ['bottom_margin']
+
+    fieldsets = [
+        (None, {
+            'fields': (
+                'image_file', 'image_title',
+                'image_filter', 'bottom_margin'),
+        }),
+
+        (_('Responsive options'), {
+            'description': _(
+                'Maximum responsive width per device used to '
+                'provide optimal image size for each device with respect to '
+                'loading time.'),
+            'fields': (
+                [field_name for field_name, field in get_img_dev_width_fields()],
+            ),
+        }),
+
+        (_('Module settings'), {
+            'fields': (
+                'extra_style', 'extra_classes', 'label',
+            )
+        }),
+    ]
+
+    def render(self, context, instance, placeholder):
+        context = super().render(context, instance, placeholder)
+        context.update(self.eval_background_image_props(instance))
+        return context
+
+    def eval_background_image_props(self, instance):
+        # shorty
+        igg = instance.glossary.get
+
+        # scoped style background image widths
+        bgimgwidths = {}
+        ratio = igg('img_dev_width_xs') or '1/4'
+        for dev in cps.DEVICES:
+            width_key = 'img_dev_width_%s' % dev
+            if igg(width_key):
+                ratio = igg(width_key)
+            k = cps.DEVICE_MIN_WIDTH_MAP.get(dev)
+            w = cps.DEVICE_MAX_WIDTH_MAP.get(dev)
+            # e.g. 0: 288, 768 : 384
+            bgimgwidths[k] = '%dx0' % round(w * eval(ratio))
+
+        return {
+            'bgimgwidths': bgimgwidths,
+            'crop': True,
+            'upscale': True,
+        }

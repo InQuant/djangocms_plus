@@ -14,3 +14,12 @@
   -moz-background-size: cover;
   -o-background-size: cover;
 }
+
+.c-bgimg-cover {
+  background-color: white;
+  background: no-repeat center center;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+}

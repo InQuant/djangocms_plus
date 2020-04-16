@@ -1,0 +1,24 @@
+{% load cms_tags static sekizai_tags thumbnail %}
+
+{% addtoblock "css" %}<link href="{% static 'cmsplus/bootstrap/bgimg.css' %}" rel="stylesheet" type="text/css" />{% endaddtoblock %}
+
+{% with i=instance glossary=instance.glossary ifilter=instance.glossary.image_filter %}
+<div id="div-{{ i.id }}" {{ i.html_tag_attributes }} class="c-bgimg-cover {{ instance.css_classes }}{% if ifilter %} c-bgimg-after{% endif %}">
+
+
+  {% if ifilter %}
+    {% include 'cmsplus/bootstrap/background-image/_bg_img_src_set.html' with img=glossary.image_file id=i.id imgwidths=bgimgwidths crop=crop upscale=upscale after='::after' %}
+  {% else %}
+    {% include 'cmsplus/bootstrap/background-image/_bg_img_src_set.html' with img=glossary.image_file id=i.id imgwidths=bgimgwidths crop=crop upscale=upscale %}
+  {% endif %}
+
+  {% for child in instance.child_plugin_instances %}
+    {% render_plugin child %}
+  {% endfor %}
+
+  {% if ifilter %}
+    <div class="{{ ifilter }}"></div>
+  {% endif %}
+
+</div>
+{% endwith %}

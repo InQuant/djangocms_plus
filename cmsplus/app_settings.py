@@ -13,6 +13,7 @@ DEFAULTS = {
         'cmsplus.cms_plugins.bootstrap.BootstrapRowPlugin',
         'cmsplus.cms_plugins.bootstrap.BootstrapColPlugin',
         'cmsplus.cms_plugins.bootstrap.BootstrapImagePlugin',
+        'cmsplus.cms_plugins.bootstrap.BackgroundImagePlugin',
         ),
 
     'MAP_LAYER_CHOICES': (
@@ -150,6 +151,14 @@ DEFAULTS = {
         ('1/4', '1/4 screen'),
         ('1/5', '1/5 screen'),
         ('1/6', '1/6 screen'),
+        ),
+
+    'BGIMG_BOTTOM_MARGIN_CHOICES': (
+        ('mb-3 mb-md-5', 'Default'),
+        ('', 'None'),
+        ),
+    'BGIMG_FILTER_CHOICES': (
+        ('', 'None'),
         ),
 }
 

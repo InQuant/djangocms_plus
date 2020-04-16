@@ -1,0 +1,24 @@
+{% load thumbnail %}
+
+{% with id=id img=img imgwidths=imgwidths crop=crop upscale=upscale after=after %}
+
+<style scoped>
+
+#div-{{ id }}{{ after }} {
+  {% thumbnail img imgwidths.0 crop=crop upscale=upscale as thumb %}
+  background-image: url({{ thumb.url }});
+}
+
+{% for k, size in imgwidths.items %}
+  {% if k and k != 0 %}
+    @media (min-width: {{ k }}px ) {
+      #div-{{ id }}{{ after }} {
+        {% thumbnail img size crop=crop upscale=upscale as thumb %}
+        background-image: url({{ thumb.url }});
+      }
+    }
+  {% endif %}
+{% endfor %}
+</style>
+
+{% endwith %}
