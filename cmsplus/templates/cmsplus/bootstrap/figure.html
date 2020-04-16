@@ -1,0 +1,7 @@
+{% load cms_tags %}
+<figure class="figure {{ instance.css_classes }}">
+  {% for child in instance.child_plugin_instances %}
+    {% render_plugin child %}
+  {% endfor %}
+  <figcaption class="{{ instance.css_classes }}">{{ instance.glossary.caption }}</figcaption>
+</figure>

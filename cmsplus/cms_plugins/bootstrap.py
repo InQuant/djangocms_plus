@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -880,7 +881,7 @@ class BackgroundImageForm(PlusPluginFormBase):
 
     bottom_margin = forms.ChoiceField(
         label=u'Bottom Margin',
-        required=False, choices=cps.BGIMG_BOTTOM_MARGIN_CHOICES,
+        required=False, choices=cps.CNT_BOTTOM_MARGIN_CHOICES,
         initial='',
         help_text='Select the default bottom margin to be applied?')
 
@@ -955,3 +956,82 @@ class BackgroundImagePlugin(BootstrapPluginBase):
             'crop': True,
             'upscale': True,
         }
+
+
+# HeadingPlugin
+# -------------
+#
+class HeadingForm(PlusPluginFormBase):
+    TAG_TYPES = [('h{}'.format(k), _("Heading {}").format(k)) for k in range(1, 7)]
+
+    tag_type = forms.ChoiceField(
+        choices=TAG_TYPES,
+        label=_("HTML element tag"),
+        help_text=_('Choose a tag type for this HTML element.')
+    )
+
+    content = forms.CharField(
+        label=_("Heading content"),
+        widget=forms.widgets.TextInput(
+            attrs={'style': 'width: 100%; padding-right: 0; font-weight: bold; font-size: 125%;'}),
+    )
+
+    background_color = forms.ChoiceField(
+        choices=cps.BG_COLOR_CHOICES,
+        label=_("Background Color"),
+        required=False,
+        help_text=_('Select a background color.')
+    )
+
+    bottom_margin = forms.ChoiceField(
+        label=u'Bottom Margin',
+        required=False, choices=cps.CNT_BOTTOM_MARGIN_CHOICES,
+        initial='',
+        help_text='Select the default bottom margin to be applied?')
+
+    STYLE_CHOICES = 'HEADING_STYLES'
+    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+
+
+class HeadingPlugin(BootstrapPluginBase):
+    name = _("Heading")
+    parent_classes = None
+    allow_children = False
+    form = HeadingForm
+    render_template = 'cmsplus/bootstrap/heading.html'
+
+    @classmethod
+    def get_identifier(cls, instance):
+        tag_type = instance.glossary.get('tag_type')
+        content = mark_safe(instance.glossary.get('content', ''))
+        if tag_type:
+            return format_html('<code>{0}</code>: {1}', tag_type, content)
+        return content
+
+    def render(self, context, instance, placeholder):
+        context = super().render(context, instance, placeholder)
+        context.update({'content': mark_safe(instance.glossary.get('content', ''))})
+        return context
+
+
+# Figure Plugin
+# -------------
+#
+class FigureForm(PlusPluginFormBase):
+
+    caption = forms.CharField(
+        label=_("Figure Caption"),
+        widget=forms.widgets.TextInput(attrs={'style': 'width: 100%; padding-right: 0;'}),
+    )
+
+    STYLE_CHOICES = 'FIGURE_CAPTION_STYLES'
+    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+
+
+class BootstrapFigurePlugin(BootstrapPluginBase):
+    name = _("Figure")
+    parent_classes = None
+    allow_children = True
+    form = FigureForm
+    render_template = 'cmsplus/bootstrap/figure.html'
+    default_css_class = 'figure-caption'
