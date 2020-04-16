@@ -100,7 +100,7 @@ class LinkPluginMixin(object):
 
     @property
     def content(self):
-        return mark_safe(self.glossary.get('link_content', ''))
+        return mark_safe(self.glossary.get('link_content', '') if self.glossary else None)
 
     @property
     def download_name(self):

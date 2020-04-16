@@ -1,0 +1,57 @@
+{% load cms_tags sekizai_tags staticfiles %}
+{% addtoblock 'css' %}<link rel="stylesheet" href="{% static 'cmsplus/css/generic/slider.css' %}">{% endaddtoblock %}
+{% addtoblock 'js' %}<script src="{% static 'cmsplus/ext/glidejs/glide.min.js' %}"></script>{% endaddtoblock %}
+{% addtoblock 'js' %}
+  <script>
+      let glide = new Glide('#glide-{{ instance.id }}', {
+          focusAt: "center",
+
+          {% if  instance.glossary.n_slides_xl %}
+              perView: {{ instance.glossary.n_slides_xl }},
+          {% endif %}
+          {% if instance.glossary.type %}
+              type: "{{ instance.glossary.type }}",
+          {% endif %}
+          {% if instance.glossary.breakpoints %}
+              breakpoints: {{ instance.glossary.breakpoints }},
+          {% endif %}
+          {% if instance.glossary.gap %}
+              gap: {{ instance.glossary.gap }},
+          {% endif %}
+          {% if instance.glossary.autoplay %}
+              autoplay: {{ instance.glossary.autoplay|yesno:"true,false" }},
+          {% endif %}
+          {% if instance.glossary.hoverpause %}
+              hoverpause: {{ instance.glossary.hoverpause|yesno:"true,false" }},
+          {% endif %}
+          {% if instance.glossary.peek %}
+              peek: {{ instance.glossary.peek }},
+          {% endif %}
+
+          animationDuration: {{ instance.glossary.animation_duration|default_if_none:400 }},
+          animationTimingFunc: "{{ instance.glossary.animation_timing_func|default_if_none:'cubic-bezier(0.165, 0.840, 0.440, 1.000)' }}",
+      });
+      glide.mount();
+  </script>
+{% endaddtoblock %}
+
+<div class="glide-plugin--wrapper">
+  <div id="glide-{{ instance.id }}" class="glide glide-swipeable {{ instance.css_classes }}">
+    <div class="glide__arrows" data-glide-el="controls">
+      <button class="glide__arrow glide__arrow--left btn btn-outline"
+              data-glide-dir="<"><i class="fa fa-chevron-left"></i></button>
+      <button class="glide__arrow glide__arrow--right btn btn-outline"
+              data-glide-dir=">"><i class="fa fa-chevron-right"></i></button>
+    </div>
+
+    <div class="glide__track" data-glide-el="track">
+      <ul class="glide__slides mb-0">
+        {% for plugin in instance.child_plugin_instances %}
+        <li class="glide__slide">
+          {% render_plugin plugin %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>

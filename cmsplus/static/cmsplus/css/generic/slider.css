@@ -1,0 +1,30 @@
+.glide-plugin--wrapper {
+    padding: 0 40px;
+}
+
+.glide__arrows {
+    z-index: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.glide__arrow {
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.glide__arrow--left {
+    position: absolute;
+    right: 100%;
+}
+.glide__arrow--right {
+    position: absolute;
+    left: 100%;
+}

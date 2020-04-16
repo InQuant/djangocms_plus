@@ -2,10 +2,11 @@ from django.conf import settings
 
 DEFAULTS = {
     'PLUGINS': (
-        'cmsplus.cms_plugins.generic.TextLinkPlugin',
         'cmsplus.cms_plugins.generic.MultiColumnTextPlugin',
         'cmsplus.cms_plugins.generic.SnippetPlugin',
-
+        'cmsplus.cms_plugins.generic.TextLinkPlugin',
+        'cmsplus.cms_plugins.generic.slider.SliderChildPlugin',
+        'cmsplus.cms_plugins.generic.slider.SliderPlugin',
         'cmsplus.cms_plugins.icon.IconPlugin',
 
         'cmsplus.cms_plugins.osm.OsmPlugin',
@@ -20,6 +21,12 @@ DEFAULTS = {
         'cmsplus.cms_plugins.bootstrap.HeadingPlugin',
         'cmsplus.cms_plugins.bootstrap.BootstrapFigurePlugin',
         'cmsplus.cms_plugins.bootstrap.BootstrapEmbedPlugin',
+        'cmsplus.cms_plugins.bootstrap.accordion.BootstrapAccordionPlugin',
+        'cmsplus.cms_plugins.bootstrap.accordion.BootstrapAccordionGroupPlugin',
+        'cmsplus.cms_plugins.bootstrap.card.BootstrapCardHeaderPlugin',
+        'cmsplus.cms_plugins.bootstrap.card.BootstrapCardBodyPlugin',
+        'cmsplus.cms_plugins.bootstrap.card.BootstrapCardFooterPlugin',
+        'cmsplus.cms_plugins.bootstrap.card.BootstrapCardPlugin',
         ),
 
     'MAP_LAYER_CHOICES': (

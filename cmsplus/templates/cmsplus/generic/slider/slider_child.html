@@ -1,0 +1,15 @@
+{% load cms_tags %}
+
+{% if instance.link %}
+  <a href="{{ instance.link }}" class="c-slide-link"
+    {% if instance.download %} download="{{ instance.download }}"{% endif %}
+    {% if instance.glossary.link_target %} target="{{ instance.glossary.link_target }}"{% endif %}>
+{% endif %}
+
+<div class="{{ instance.css_classes }}">
+{% for plugin in instance.child_plugin_instances %}
+  {% render_plugin plugin %}
+{% endfor %}
+</div>
+
+{% if instance.link %}</a>{% endif %}
