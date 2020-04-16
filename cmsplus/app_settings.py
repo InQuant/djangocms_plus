@@ -16,6 +16,7 @@ DEFAULTS = {
         'cmsplus.cms_plugins.bootstrap.BackgroundImagePlugin',
         'cmsplus.cms_plugins.bootstrap.HeadingPlugin',
         'cmsplus.cms_plugins.bootstrap.BootstrapFigurePlugin',
+        'cmsplus.cms_plugins.bootstrap.BootstrapEmbedPlugin',
         ),
 
     'MAP_LAYER_CHOICES': (

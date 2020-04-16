@@ -1,4 +1,7 @@
+import urllib
+
 from django import forms
+from django.forms import widgets
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -565,7 +568,7 @@ class BootstrapImageForm(LinkFormBase):
         choices=ALIGNMENT_OPTIONS,
         required=False,
         initial='',
-        help_text=_("How to align the image."),
+        help_text=_("How to align the image (this choice only applies if the image is fixed size (none repsonsive)."),
     )
 
     # fixed width and height fields are added with _extend_form_fields below
@@ -579,9 +582,10 @@ class BootstrapImageForm(LinkFormBase):
         choices=RESIZE_OPTIONS,
         widget=forms.widgets.CheckboxSelectMultiple,
         required=True,
-        help_text=_("Options to use when resizing the image."),
         initial=['crop'],
+        help_text=_("Options to use when calculating the cached size device specific version of the image."),
     )
+
     # img_dev_width fields are added with _extend_form_fields below
 
     @classmethod
@@ -603,6 +607,9 @@ class BootstrapImagePluginModel(PlusPlugin, LinkPluginMixin):
 
 
 class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
+    footnote_html = """
+        renders a bootstrap responsive (fluid) image.
+    """
     name = 'Image'
     model = BootstrapImagePluginModel
     form = BootstrapImageForm
@@ -898,6 +905,11 @@ BackgroundImageForm._extend_form_fields()
 
 
 class BackgroundImagePlugin(BootstrapPluginBase):
+    footnote_html = """
+        renders a div container with a background image.
+        <br>
+        if a filter is given, the image is put in the containers after tag, and placed below the filter.
+    """
     name = _("Background Img")
     allow_children = True
     form = BackgroundImageForm
@@ -994,6 +1006,9 @@ class HeadingForm(PlusPluginFormBase):
 
 
 class HeadingPlugin(BootstrapPluginBase):
+    footnote_html = """
+        renders a bootstrap heading (h1-h6) with the ability to display a background box.
+    """
     name = _("Heading")
     parent_classes = None
     allow_children = False
@@ -1029,9 +1044,99 @@ class FigureForm(PlusPluginFormBase):
 
 
 class BootstrapFigurePlugin(BootstrapPluginBase):
+    footnote_html = """
+        renders a bootstrap figure plugin to display a figure caption.
+    """
     name = _("Figure")
     parent_classes = None
     allow_children = True
     form = FigureForm
     render_template = 'cmsplus/bootstrap/figure.html'
     default_css_class = 'figure-caption'
+
+
+# Embed Plugin
+# ------------
+#
+class EmbedForm(PlusPluginFormBase):
+
+    url = forms.URLField(
+        label=_("Media URL"),
+        widget=widgets.URLInput(attrs={'size': 50}),
+        help_text=_(
+            'Video Url to an external service w/o query params such as YouTube, Vimeo or others, ' 'e.g.: '
+            'https://www.youtube.com/embed/vZw35VUBdzo'),
+    )
+
+    ASPECT_RATIO_CHOICES = [
+        ('embed-responsive-21by9', _("Responsive 21:9")),
+        ('embed-responsive-16by9', _("Responsive 16:9")),
+        ('embed-responsive-4by3', _("Responsive 4:3")),
+        ('embed-responsive-1by1', _("Responsive 1:1")),
+    ]
+    aspect_ratio = forms.ChoiceField(
+        label=_("Aspect Ratio"),
+        choices=ASPECT_RATIO_CHOICES,
+        widget=widgets.RadioSelect,
+        required=False,
+        initial=ASPECT_RATIO_CHOICES[1][0],
+    )
+
+    allow_fullscreen = forms.BooleanField(
+        label=_("Allow Fullscreen"),
+        required=False,
+        initial=True,
+    )
+
+    autoplay = forms.BooleanField(
+        label=_("Autoplay"),
+        required=False,
+    )
+
+    controls = forms.BooleanField(
+        label=_("Display Controls"),
+        required=False,
+    )
+
+    loop = forms.BooleanField(
+        label=_("Enable Looping"),
+        required=False,
+        help_text=_('Inifinte loop playing.'),
+    )
+
+    rel = forms.BooleanField(
+        label=_("Show related"),
+        required=False,
+        help_text=_('Show related media content'),
+    )
+
+    STYLE_CHOICES = 'EMBED_STYLES'
+    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+
+
+class BootstrapEmbedPlugin(BootstrapPluginBase):
+    footnote_html = """
+        renders a bootstrap embed iframe for playing (e.g. youtube) videos.
+        <br>
+        It can be used with a modal popup or direct.
+    """
+    name = _("Embed Video")
+    allow_children = False
+    form = EmbedForm
+    render_template = 'cmsplus/bootstrap/embed.html'
+    default_css_class = 'embed-responsive'
+    css_class_fields = StylePluginMixin.css_class_fields + ['aspect_ratio']
+
+    def render(self, context, instance, placeholder):
+        context = super().render(context, instance, placeholder)
+        url = instance.glossary.get('url')
+        params = {}
+        for k in ['autoplay', 'controls', 'loop', 'rel']:
+            if instance.glossary.get(k):
+                params[k] = instance.glossary.get(k)
+        q = urllib.parse.urlencode(params)
+        context.update({
+            'embed_url': '%s?%s' % (url, q),
+            'allowfullscreen': 'allowfullscreen' if instance.glossary.get('allow_fullscreen') else '',
+        })
+        return context

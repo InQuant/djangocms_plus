@@ -1,0 +1,5 @@
+{% with instance=instance embed_url=embed_url allowfullscreen=allowfullscreen %}
+<div class="{{ instance.css_classes }}">
+	<iframe class="embed-responsive-item" src="{{ embed_url }}" {{ allowfullscreen }}></iframe>
+</div>
+{% endwith %}
