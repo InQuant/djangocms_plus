@@ -1,4 +1,8 @@
+import sys
+
 from django import forms
+from django import template
+from django.template.context import Context
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -7,7 +11,7 @@ from cmsplus.app_settings import cmsplus_settings as cps
 from cmsplus.models import (PlusPlugin, LinkPluginMixin,)
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
                            get_style_form_fields)
-from cmsplus.plugin_base import (PlusPluginBase, LinkPluginBase)
+from cmsplus.plugin_base import (StylePluginMixin, PlusPluginBase, LinkPluginBase)
 
 
 # TextLinkPlugin
@@ -92,3 +96,46 @@ class MultiColumnTextPlugin(PlusPluginBase):
     form = MultiColTextForm
     render_template = "cmsplus/generic/multi-col-text.html"
     allow_children = True
+
+
+# Snippet Plugin
+# --------------
+#
+class SnippetForm(PlusPluginFormBase):
+
+    html = forms.CharField(
+        label=_('HTML'),
+        widget=forms.Textarea(
+            attrs={
+                'rows': 15, 'data-editor': True,
+                'data-mode': 'html', 'data-theme': 'default',
+                'style': 'max-height: initial', 'class': 'c-border'}),
+    )
+
+    STYLE_CHOICES = 'SNIPPET_STYLES'
+    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+
+
+class SnippetPlugin(StylePluginMixin, PlusPluginBase):
+    footnote_html = """
+    renders a given html snippet, can be used to include another site via iframe.
+    """
+    name = _('Snippet')
+    form = SnippetForm
+    allow_children = False
+    render_template = 'cmsplus/generic/snippet/snippet.html'
+    change_form_template = 'cmsplus/generic/snippet/change_form.html'
+
+    text_enabled = True
+    text_editor_preview = False
+
+    def render(self, context, instance, placeholder):
+        context = super().render(context, instance, placeholder)
+        try:
+            t = template.Template(instance.glossary.get('html'))
+            content = t.render(Context(context))
+        except Exception:
+            exc = sys.exc_info()[0]
+            content = str(exc)
+        context['content'] = mark_safe(content)
+        return context

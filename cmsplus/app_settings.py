@@ -4,6 +4,7 @@ DEFAULTS = {
     'PLUGINS': (
         'cmsplus.cms_plugins.generic.TextLinkPlugin',
         'cmsplus.cms_plugins.generic.MultiColumnTextPlugin',
+        'cmsplus.cms_plugins.generic.SnippetPlugin',
 
         'cmsplus.cms_plugins.osm.OsmPlugin',
         'cmsplus.cms_plugins.osm.OsmMarkerPlugin',
