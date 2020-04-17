@@ -7,10 +7,9 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings as cps
-
-from cmsplus.models import (PlusPlugin, LinkPluginMixin,)
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
                            get_style_form_fields)
+from cmsplus.models import (PlusPlugin, LinkPluginMixin, )
 from cmsplus.plugin_base import (StylePluginMixin, PlusPluginBase, LinkPluginBase)
 
 
