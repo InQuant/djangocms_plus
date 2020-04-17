@@ -3,4 +3,4 @@ django-jsonfield==1.4.0
 setuptools
 django-filer
 django>=2.2.12
-tiwne
+twine
