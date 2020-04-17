@@ -1,0 +1,12 @@
+{% for icon in widget.icons %}
+  <button class="field-plugin-icon-select" type="button" title="{{ icon.name }}"
+          data-icon-name="{{ icon.name }}" data-icon-class="{{ icon.font_class_name }}">
+    <i class="{{ icon.font_class_name }}"></i></button>
+{% endfor %}
+
+<div class="highlight-selected-icon"{% if not widget.value %} style="display: none"{% endif %}>
+  <i class="{{ widget.value }}"></i>
+  <div class="name">{{ widget.value }}</div>
+</div>
+
+<input id="hidden-icon-field" type="hidden" name="{{ widget.name }}" value="{{ widget.value }}">

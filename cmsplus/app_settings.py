@@ -6,6 +6,8 @@ DEFAULTS = {
         'cmsplus.cms_plugins.generic.MultiColumnTextPlugin',
         'cmsplus.cms_plugins.generic.SnippetPlugin',
 
+        'cmsplus.cms_plugins.icon.IconPlugin',
+
         'cmsplus.cms_plugins.osm.OsmPlugin',
         'cmsplus.cms_plugins.osm.OsmMarkerPlugin',
 
@@ -160,6 +162,13 @@ DEFAULTS = {
     'BGIMG_FILTER_CHOICES': (
         ('', 'None'),
         ),
+
+    'ICONS_DIR': {
+        'FONTAWESOME': {
+            'meta': 'cmsplus/icons/fontawesome/metadata/icons.json',
+            'css': 'cmsplus/icons/fontawesome/css/all.css',
+            },
+        },
 }
 
 
