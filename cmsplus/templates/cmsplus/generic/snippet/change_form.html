@@ -1,9 +1,10 @@
 {% extends "admin/change_form.html" %}
+{% load staticfiles %}
 
 {% block object-tools %}
 {{ block.super }}
 
-<script src="/static/cmsplus/admin/generic/snippet/ace.js"></script>
+<script src="{% static 'cmsplus/admin/generic/snippet/ace.js' %}"></script>
 <style>
 .ace-default { border: 1px solid lightgrey }
 </style>

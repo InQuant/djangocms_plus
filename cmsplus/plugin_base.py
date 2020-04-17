@@ -98,12 +98,15 @@ class PlusPluginBase(CMSPluginBase):
         return dict((attr, instance.glossary.get(key, '')) for key, attr in attrs.items())
 
 
-# Base Class to provide plugin help, a label and extra style css classes
-# ----------------------------------------------------------------------
-# TODO: active Help later - see plugin_change_form
-# class CssLabelPluginMixin(PluginHelpMixin):
 class StylePluginMixin(object):
+    """
+    Base Class to provide plugin help, a label and extra style css classes.
+    TODO: active Help later - see plugin_change_form
+    """
     css_class_fields = ['extra_style', 'extra_classes', ]
+
+    def __init__(self):
+        self.render_template = None if not self.render_template else self.render_template
 
     def get_render_template(self, context, instance, placeholder):
         """ try to eval a template based on dirname of render_template and given
@@ -140,10 +143,10 @@ class StylePluginMixin(object):
         return super().get_identifier(obj)
 
 
-# Base Class to provide a PlusPluginBase with link helper methods
-# ---------------------------------------------------------------
-#
 class LinkPluginBase(PlusPluginBase):
+    """
+    Base Class to provide a PlusPluginBase with link helper methods.
+    """
     allow_children = False
     require_parent = False
 
@@ -159,7 +162,7 @@ class LinkPluginBase(PlusPluginBase):
         if link_type == 'email':
             return 'mailto:{mail_to}'.format(**glossary)
 
-        # otherwise resolve by model glossary
+        # otherwise, resolve by model glossary
         if link_type == 'cmspage':
             relobj = glossary.get('cms_page', None)
             if relobj:

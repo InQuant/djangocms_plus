@@ -22,8 +22,7 @@ class PlusPlugin(CMSPlugin):
 
     @property
     def data(self):
-        ''' raw glossary data
-        '''
+        """ raw glossary data """
         return self._json
 
     @data.setter
@@ -41,9 +40,10 @@ class PlusPlugin(CMSPlugin):
         return self.glossary.get('label', '')
 
     def get_short_description(self):
-        ''' you may put a label field into the form to give the plugin a label
-        for the cms structure view
-        '''
+        """
+        You may put a label field into the form to give the plugin a label
+        for the cms structure view.
+        """
         return self.plugin_class.get_identifier(self)
 
     @cached_property

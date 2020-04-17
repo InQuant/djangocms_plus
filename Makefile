@@ -11,7 +11,7 @@ TESTDIR = '.'
 PROJECT :=
 ENV = venv
 # Override by putting on commandline:  python=python2.7
-python = python
+python = python3
 REQUIRE = requirements.txt
 ##############################################################################
 ifdef TRAVIS
@@ -25,7 +25,7 @@ SYS_VIRTUALENV := virtualenv
 # virtualenv executables
 PIP := $(BIN)/pip
 TOX := $(BIN)/tox
-PYTHON := $(BIN)/$(python)
+PYTHON := $(BIN)/$(python3)
 ANALIZE := $(BIN)/pylint
 COVERAGE := $(BIN)/coverage
 TEST_RUNNER := $(PYTHON) django-admin test --settings cmsplus.test_settings

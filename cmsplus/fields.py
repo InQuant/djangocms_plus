@@ -47,8 +47,7 @@ class PlusModelChoiceField(forms.ModelChoiceField, BaseFieldMixIn):
 
 
 class PageChoiceIterator(forms.models.ModelChoiceIterator):
-    ''' sort pages by absolute url
-    '''
+    """ Sort pages by absolute url. """
     def __iter__(self):
         pages = sorted(self.queryset.all(), key=lambda p: p.get_absolute_url())
         for obj in pages:
@@ -68,8 +67,9 @@ class PageSearchField(PlusModelChoiceField):
         super().__init__(*args, **kwargs)
 
     def label_from_instance(self, obj):
-        ''' display value is the absolute url, sorted via iterator above
-        '''
+        """
+        Display value is the absolute url, sorted via iterator above.
+        """
         return obj.get_absolute_url()
 
 
@@ -108,10 +108,10 @@ NUMBER_PAT = re.compile(NUMBER_REGEX)
 
 
 @deconstructible
-class SizeUnitValidator():
-    '''
-    taken and adopted from cmsplugin_cascade.fields
-    '''
+class SizeUnitValidator:
+    """
+    Taken and adopted from cmsplugin_cascade.fields
+    """
     allowed_units = []
     message = _("'%(value)s' is not a valid size unit. Allowed units are: %(allowed_units)s.")
     code = 'invalid_size_unit'

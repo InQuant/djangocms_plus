@@ -64,7 +64,6 @@ INSTALLED_APPS = [
     'treebeard',
     'sekizai',
 
-    'rest_framework',
     'cmsplus',
     'cmsplus.tests',
     'easy_thumbnails',

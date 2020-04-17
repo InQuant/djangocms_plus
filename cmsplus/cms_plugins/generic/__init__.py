@@ -79,13 +79,13 @@ class MultiColTextForm(PlusPluginFormBase):
         return field_name, field
 
     @classmethod
-    def _extend_col_fields(cls):
+    def extend_col_fields(cls):
         for dev in cps.DEVICES:
             field_name, field = cls._get_col_choice_field(dev)
             cls.declared_fields[field_name] = field
 
 
-MultiColTextForm._extend_col_fields()
+MultiColTextForm.extend_col_fields()
 
 
 class MultiColumnTextPlugin(PlusPluginBase):

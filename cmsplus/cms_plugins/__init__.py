@@ -2,7 +2,7 @@ from importlib import import_module
 
 from cms.plugin_pool import plugin_pool
 
-from cmsplus.app_settings import  cmsplus_settings as cps
+from cmsplus.app_settings import cmsplus_settings as cps
 
 # register all plugins configured cmsplus app_settings
 for plugin in cps.PLUGINS:

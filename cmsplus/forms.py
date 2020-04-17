@@ -36,16 +36,16 @@ class PlusPluginFormBase(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
     def save(self, commit=True):
-        '''
-        Put serialized data to glossary (_json) field, than save.
-        '''
+        """
+        Put serialized data to glossary (_json) field, then save.
+        """
         self.instance.data = self.serialize_data()
         return super().save(commit)
 
     def serialize_data(self):
         """
         Takes form field values and calls "serialize_field" method for each field,
-        if it is declared in the field class.
+        if it is declared in the field class
         :return: Serialized data
         :rtype: dict
         """
@@ -68,7 +68,7 @@ class PlusPluginFormBase(forms.ModelForm):
         Deserialize data from Json field into dict. Opposite of serialize function (see above)
         :param obj:
         :return: Data
-        :rtype: dict
+        :rtype: dict:
         """
         parsed_dict = OrderedDict()
 
@@ -92,17 +92,18 @@ class PlusPluginFormBase(forms.ModelForm):
 # ----------------------------
 #
 def get_style_form_fields(style_config_key=None, style_multiple=False):
-    ''' style_config_key should be a django.conf.settings - key which holds the
+    """
+    style_config_key should be a django.conf.settings - key which holds the
     style choices, e.g.: ('c-text-white', 'Text White'), ...
-    '''
-    STYLE_CHOICES = (
+    """
+    style_choices = (
         ('', 'None'),
     )
 
     if style_config_key:
-        sc = getattr(settings, style_config_key, STYLE_CHOICES)
+        sc = getattr(settings, style_config_key, style_choices)
     else:
-        sc = STYLE_CHOICES
+        sc = style_choices
 
     if style_multiple:
         style_field = forms.MultipleChoiceField
@@ -126,9 +127,9 @@ def get_style_form_fields(style_config_key=None, style_multiple=False):
 # ------------
 #
 class LinkFormBase(PlusPluginFormBase):
-    ''' provides fields and methods which are needed to handle different link
-    types.
-    '''
+    """
+    provides fields and methods which are needed to handle different link types.
+    """
     LINK_TYPE_CHOICES = [
         ('cmspage', _("CMS Page")),
         ('download', _("Download File")),
@@ -232,10 +233,11 @@ class LinkFormBase(PlusPluginFormBase):
 # -----------------
 #
 def get_image_form_fields(required=False, help_text=''):
-    ''' can be used to insert image form fields into the custom plugin form
+    """
+    Can be used to insert image form fields into the custom plugin form
     definition. call e.g.:
     image_file, image_title, image_alt = get_image_form_fields(required=True)
-    '''
+    """
     return (
        PlusFilerImageSearchField(
            label=_('Image File'),

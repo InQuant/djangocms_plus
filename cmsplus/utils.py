@@ -43,7 +43,7 @@ class JSONEncoder(json.JSONEncoder):
         elif isinstance(obj, bytes):
             # Best-effort for binary blobs. See #4187.
             return obj.decode()
-        elif hasattr(obj, 'tolist'):
+        elif hasattr(obj, 'tolist') and callable(obj.tolist):
             # Numpy arrays and array scalars.
             return obj.tolist()
         elif hasattr(obj, '__getitem__'):

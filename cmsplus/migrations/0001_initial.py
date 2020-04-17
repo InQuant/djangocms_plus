@@ -17,7 +17,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PlusPlugin',
             fields=[
-                ('cmsplugin_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='cmsplus_plusplugin', serialize=False, to='cms.CMSPlugin')),
+                ('cmsplugin_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                                                       parent_link=True, primary_key=True,
+                                                       related_name='cmsplus_plusplugin', serialize=False,
+                                                       to='cms.CMSPlugin')),
                 ('_json', jsonfield.fields.JSONField(default=dict)),
             ],
             options={
