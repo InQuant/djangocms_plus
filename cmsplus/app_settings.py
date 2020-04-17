@@ -7,7 +7,7 @@ DEFAULTS = {
         'cmsplus.cms_plugins.generic.TextLinkPlugin',
         'cmsplus.cms_plugins.generic.slider.SliderChildPlugin',
         'cmsplus.cms_plugins.generic.slider.SliderPlugin',
-        'cmsplus.cms_plugins.icon.IconPlugin',
+        'cmsplus.cms_plugins.generic.icon.IconPlugin',
 
         'cmsplus.cms_plugins.osm.OsmPlugin',
         'cmsplus.cms_plugins.osm.OsmMarkerPlugin',

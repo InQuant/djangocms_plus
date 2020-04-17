@@ -94,7 +94,7 @@ class IconPlugin(PlusPluginBase):
     """
     name = _('Icon')
     form = IconFormPlugin
-    render_template = "cmsplus/icon.html"
+    render_template = "cmsplus/generic/icon.html"
     allow_children = False
     text_enabled = True
 
