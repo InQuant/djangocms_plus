@@ -25,7 +25,7 @@ SYS_VIRTUALENV := virtualenv
 # virtualenv executables
 PIP := $(BIN)/pip
 TOX := $(BIN)/tox
-PYTHON := $(BIN)/$(python3)
+PYTHON := $(BIN)/$(python)
 ANALIZE := $(BIN)/pylint
 COVERAGE := $(BIN)/coverage
 TEST_RUNNER := $(PYTHON) django-admin test --settings cmsplus.test_settings

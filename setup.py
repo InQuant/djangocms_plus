@@ -30,7 +30,7 @@ TESTS_REQUIRE = ['tox >= 2.3']
 
 setup(
     name='djangocms_plus',
-    version='0.1.11',
+    version='0.1.2',
     author='InQuant GmbH',
     author_email='info@inquant.de',
     packages=['cmsplus'],
