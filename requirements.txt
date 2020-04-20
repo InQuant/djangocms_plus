@@ -4,3 +4,5 @@ setuptools
 django-filer
 django>=2.2.12
 twine
+djangocms-text-ckeditor
+tiwne

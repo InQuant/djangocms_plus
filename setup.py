@@ -42,7 +42,8 @@ setup(
     zip_safe=False,
     include_package_data=True,
     package_data={'': ['README.md'], },
-    install_requires=['django-cms>=3.7.1', 'django-jsonfield', 'django-filer', 'easy_thumbnails', 'django>=2.2.12'],
+    install_requires=['django-cms>=3.7.1', 'django-jsonfield', 'django-filer',
+                      'easy_thumbnails', 'django>=2.2.12', 'djangocms-text-ckeditor'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
