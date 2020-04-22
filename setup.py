@@ -1,7 +1,7 @@
 import sys
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-
+from cmsplus import __version__
 
 class Tox(TestCommand):
 
@@ -30,7 +30,7 @@ TESTS_REQUIRE = ['tox >= 2.3']
 
 setup(
     name='djangocms_plus',
-    version='0.1.2',
+    version=__version__,
     author='InQuant GmbH',
     author_email='info@inquant.de',
     packages=['cmsplus'],
