@@ -49,7 +49,12 @@ class IconFieldWidget(forms.Widget):
 
         with open(path, 'rb') as f:
             raw_data = f.read()
-        data = json.loads(raw_data)
+        try:
+            data = json.loads(raw_data)
+        except TypeError:
+            # Python 3.5 compatibility
+            data = json.loads(raw_data.decode('utf-8'))
+
         for key, value in data.items():
             # check styles ['brands', 'solid', 'regular']
             for style in value.get('styles'):
