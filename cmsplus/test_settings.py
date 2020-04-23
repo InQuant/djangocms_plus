@@ -17,13 +17,14 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # the name of the whole site
-SITE_NAME = "example"
+SITE_NAME = "cmsplus"
+ROOT_URLCONF = 'cmsplus.test_urls'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'opnw(gb_s&fpcz(gk)4s9ry0-ls0(7az85)4*#c&8ct(kz0j2-'
+SECRET_KEY = 'abc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,8 +86,6 @@ MIDDLEWARE = [
     'cms.middleware.language.LanguageCookieMiddleware',
     'cms.middleware.utils.ApphookReloadMiddleware',
 ]
-
-ROOT_URLCONF = '%s.urls' % SITE_NAME
 
 TEMPLATES = [
     {

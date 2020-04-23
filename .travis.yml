@@ -1,11 +1,42 @@
 language:  python
-python:
-  - "3.4"
-  - "3.5"
-  - "3.6"      # current default Python on Travis CI
-  - "3.7"
-  - "3.8"
-  - "3.8-dev"  # 3.8 development branch
-  - "nightly"  # nightly build
+dist: bionic
+
+matrix:
+  fast_finish: true
+  include:
+    # Python 3.5
+    - python: 3.5
+      env: TOXENV=py35-django22
+
+    # Python 3.6
+    - python: 3.6
+      env: TOXENV=py36-django22
+
+    # Python 3.7
+    - python: 3.7
+      env: TOXENV=py37-django22
+
+    # Python 3.8
+    - python: 3.8
+      env: TOXENV=py38-django22
+
+    # Django Master
+    - python: 3.6
+      env: TOXENV=py36-djangomaster
+    - python: 3.7
+      env: TOXENV=py37-djangomaster
+    - python: 3.8
+      env: TOXENV=py38-djangomaster
+
+  allow_failures:
+    - python: 3.6
+      env: TOXENV=py36-djangomaster
+    - python: 3.7
+      env: TOXENV=py37-djangomaster
+    - python: 3.8
+      env: TOXENV=py38-djangomaster
+
 install:
-  pip install -r requirements.txt
+  - pip install tox-travis
+  - pip install -r requirements.txt
+script: tox
