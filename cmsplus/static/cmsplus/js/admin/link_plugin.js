@@ -21,7 +21,7 @@ $(function () {
 
     let toggleFields = (mappingKey) => {
         $.each(allFields(), (key, val) => {
-            if (fieldMapping[mappingKey].indexOf(val) < 0) {
+            if (fieldMapping && fieldMapping.hasOwnProperty(mappingKey) && fieldMapping[mappingKey].indexOf(val) < 0) {
                 $(val).fadeOut('fast');
             } else {
                 $(val).fadeIn('fast');

@@ -18,7 +18,7 @@ def get_visible_slides_fields():
             choices = n_choices
         else:
             initial = '1' if dev == 'sm' else ''
-            required = False,
+            required = False
             choices = [('', 'inherit'), ] + n_choices
         label = _('Num %s' % dev)
 
@@ -96,7 +96,6 @@ class SliderForm(PlusPluginFormBase):
 
 class SliderPlugin(LinkPluginBase):
     name = _("Slider")
-    parent_classes = None
     require_parent = False
     child_classes = ['SliderChildPlugin', ]
     allow_children = True
@@ -145,7 +144,7 @@ class SliderChildForm(SliderForm, LinkFormBase):
     require_link = False
 
 
-class SliderChildPlugin(StylePluginMixin, LinkPluginBase):
+class SliderChildPlugin(LinkPluginBase, StylePluginMixin):
     name = _("Slider Child")
     parent_classes = ['SliderPlugin', ]
     allow_children = True
