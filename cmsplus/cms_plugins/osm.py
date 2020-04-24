@@ -54,7 +54,7 @@ class OsmMarkerForm(PlusPluginFormBase):
 # Openstreetmap plugins
 # ---------------------
 #
-class OsmPlugin(StylePluginMixin, PlusPluginBase):
+class OsmPlugin(PlusPluginBase, StylePluginMixin):
     footnote_html = """
        renders a open streetmap with location.
        """
@@ -85,7 +85,7 @@ class OsmMarkerModel(PlusPlugin):
         return 'm%s' % self.id
 
 
-class OsmMarkerPlugin(StylePluginMixin, PlusPluginBase):
+class OsmMarkerPlugin(PlusPluginBase, StylePluginMixin):
     footnote_html = """
        renders a open streetmap marker on a map.
        """

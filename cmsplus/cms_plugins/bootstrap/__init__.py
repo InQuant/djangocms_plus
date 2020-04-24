@@ -13,7 +13,7 @@ from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin, LinkPluginBase)
 
 
-class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
+class BootstrapPluginBase(PlusPluginBase, StylePluginMixin):
     module = 'Bootstrap'
 
 
@@ -607,7 +607,7 @@ class BootstrapImagePluginModel(PlusPlugin, LinkPluginMixin):
         proxy = True
 
 
-class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
+class BootstrapImagePlugin(LinkPluginBase, StylePluginMixin):
     footnote_html = """
         renders a bootstrap responsive (fluid) image.
     """

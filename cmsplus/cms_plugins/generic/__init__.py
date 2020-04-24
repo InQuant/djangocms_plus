@@ -115,7 +115,7 @@ class SnippetForm(PlusPluginFormBase):
     extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
 
 
-class SnippetPlugin(StylePluginMixin, PlusPluginBase):
+class SnippetPlugin(PlusPluginBase, StylePluginMixin):
     footnote_html = """
     renders a given html snippet, can be used to include another site via iframe.
     """
