@@ -3,6 +3,7 @@ from setuptools import setup
 from setuptools.command.test import test as TestCommand
 from cmsplus import __version__
 
+
 class Tox(TestCommand):
 
     def initialize_options(self):
@@ -42,8 +43,7 @@ setup(
     zip_safe=False,
     include_package_data=True,
     package_data={'': ['README.md'], },
-    install_requires=['django-cms>=3.7.1', 'django-jsonfield', 'django-filer',
-                      'easy_thumbnails', 'django>=2.2.12', 'djangocms-text-ckeditor'],
+    install_requires=['django-cms~=3.7.2', 'django~=2.2.12', 'django-jsonfield~=1.4.0', 'django-filer'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
