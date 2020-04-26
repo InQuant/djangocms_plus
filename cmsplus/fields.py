@@ -1,12 +1,14 @@
+import json
 import re
 from abc import abstractmethod, ABC
+from six import string_types, u
 
 from cms.models.pagemodel import Page
 from cms.utils import get_current_site
 from django import forms
 from django.contrib.admin.sites import site as admin_site
 from django.core.exceptions import ValidationError
-from django.core.validators import ProhibitNullCharactersValidator
+from django.core.validators import ProhibitNullCharactersValidator, RegexValidator
 from django.db.models.fields.related import ManyToOneRel
 from django.forms.fields import Field
 from django.utils.deconstruct import deconstructible
@@ -15,6 +17,8 @@ from filer.fields.file import AdminFileWidget, FilerFileField
 from filer.fields.image import FilerImageField
 from filer.models.filemodels import File as FilerFileModel
 from filer.models.imagemodels import Image as FilerImageModel
+
+from cmsplus.widgets import KeyValueWidget
 
 
 class BaseFieldMixIn(ABC):
@@ -31,7 +35,7 @@ class PlusModelMultipleChoiceField(forms.ModelMultipleChoiceField, BaseFieldMixI
     def serialize_field(self, qs):
         return list(qs.values_list("pk", flat=True))
 
-    def deserialize_field(self, value: list):
+    def deserialize_field(self, value: list):  # noqa E999
         return self.queryset.filter(pk__in=value)
 
 
@@ -176,3 +180,26 @@ class SizeField(Field):
             return int(m.group())
         except ValueError:
             return float(m.group())
+
+
+regex_key_validator = RegexValidator(regex=r'^[a-z][-a-z0-9_]*\Z',
+                                     flags=re.IGNORECASE, code='invalid')
+
+
+class KeyValueField(forms.CharField):
+    empty_values = [None, '']
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('widget', KeyValueWidget)
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if isinstance(value, string_types) and value:
+            try:
+                return json.loads(value)
+            except ValueError as exc:
+                raise forms.ValidationError(
+                    'JSON decode error: %s' % (u(exc.args[0]),)
+                )
+        else:
+            return value

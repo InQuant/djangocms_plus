@@ -30,14 +30,20 @@
 </script>
 {% endaddtoblock %}
 
-<div>
-  <style scoped>
+{% addtoblock "css" %}
+  <style>
     {% for m in markers %}
       .c-osm-marker-{{ m.marker_name }} {
         background-image: url({{ m.marker_url }});
       }
     {% endfor %}   
   </style>
+{% endaddtoblock %}
+
+<div class="{{ instance.css_classes }}">
 
   <cxng-openstreet-map instance-id="{{ instance.id }}"></cxng-openstreet-map>
 </div>
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

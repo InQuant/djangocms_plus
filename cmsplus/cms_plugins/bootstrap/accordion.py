@@ -25,10 +25,10 @@ class BootstrapAccordionPluginForm(PlusPluginFormBase):
     )
 
     STYLE_CHOICES = 'ACCORDION_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
-class BootstrapAccordionPlugin(PlusPluginBase, StylePluginMixin):
+class BootstrapAccordionPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
     Renders a bootstrap accordion.
     """
@@ -49,6 +49,12 @@ class BootstrapAccordionPlugin(PlusPluginBase, StylePluginMixin):
                 'extra_style', 'extra_classes', 'label',
             )
         }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
+            )
+        }),
     )
 
     def render(self, context, instance, placeholder):
@@ -67,13 +73,13 @@ class BootstrapAccordionGroupForm(PlusPluginFormBase):
     )
 
     STYLE_CHOICES = 'ACCORDION_GROUP_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
     def clean_heading(self):
         return escape(self.cleaned_data['heading'])
 
 
-class BootstrapAccordionGroupPlugin(PlusPluginBase, StylePluginMixin):
+class BootstrapAccordionGroupPlugin(StylePluginMixin, PlusPluginBase):
     name = _("Accordion Group")
     module = 'Bootstrap'
     direct_parent_classes = parent_classes = ['BootstrapAccordionPlugin']
@@ -91,6 +97,12 @@ class BootstrapAccordionGroupPlugin(PlusPluginBase, StylePluginMixin):
             'classes': ('collapse',),
             'fields': (
                 'extra_style', 'extra_classes', 'label',
+            )
+        }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
             )
         }),
     )

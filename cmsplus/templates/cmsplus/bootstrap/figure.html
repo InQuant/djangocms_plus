@@ -1,7 +1,10 @@
 {% load cms_tags %}
-<figure class="figure {{ instance.css_classes }}">
+<figure class="figure">
   {% for child in instance.child_plugin_instances %}
     {% render_plugin child %}
   {% endfor %}
   <figcaption class="{{ instance.css_classes }}">{{ instance.glossary.caption }}</figcaption>
 </figure>
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

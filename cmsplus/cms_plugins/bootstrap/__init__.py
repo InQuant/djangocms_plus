@@ -13,7 +13,7 @@ from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin, LinkPluginBase)
 
 
-class BootstrapPluginBase(PlusPluginBase, StylePluginMixin):
+class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
     module = 'Bootstrap'
 
 
@@ -87,7 +87,7 @@ class MagicWrapperForm(PlusPluginFormBase):
     # margin and padding fields are added in _extend_form_fields below
 
     STYLE_CHOICES = 'MAGIC_WRAPPER_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -175,6 +175,12 @@ class MagicWrapperPlugin(BootstrapPluginBase):
             'classes': ('collapse',),
             'fields': [WF_PADDING_KEYS(for_dev=[dev]) for dev in cps.DEVICES],
         }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
+            )
+        }),
     ]
 
 
@@ -211,7 +217,7 @@ class BootstrapContainerForm(PlusPluginFormBase):
         help_text='Select the default bottom margin to be applied?')
 
     STYLE_CHOICES = 'MOD_CONTAINER_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class BootstrapContainerPlugin(BootstrapPluginBase):
@@ -259,7 +265,7 @@ class BootstrapRowForm(PlusPluginFormBase):
         help_text='Select the default bottom margin to be applied?')
 
     STYLE_CHOICES = 'MOD_ROW_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class BootstrapRowPlugin(BootstrapPluginBase):
@@ -400,7 +406,7 @@ class BootstrapColumnForm(PlusPluginFormBase):
         help_text='Select the default bottom margin to be applied')
 
     STYLE_CHOICES = 'MOD_COL_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
     # offset and width fields are dynamically added with _extend_form_fields
     # method below
@@ -469,6 +475,12 @@ class BootstrapColPlugin(BootstrapPluginBase):
                 'label',
                 'extra_style',
                 'extra_classes',
+            )
+        }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
             )
         }),
     ]
@@ -541,7 +553,7 @@ class BootstrapImageForm(LinkFormBase):
     image_file, image_title, image_alt = get_image_form_fields()
 
     STYLE_CHOICES = 'IMAGE_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
     require_link = False
 
@@ -607,7 +619,7 @@ class BootstrapImagePluginModel(PlusPlugin, LinkPluginMixin):
         proxy = True
 
 
-class BootstrapImagePlugin(LinkPluginBase, StylePluginMixin):
+class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
     footnote_html = """
         renders a bootstrap responsive (fluid) image.
     """
@@ -671,7 +683,21 @@ class BootstrapImagePlugin(LinkPluginBase, StylePluginMixin):
                 'mail_to', 'link_target', 'link_title'
             )
         }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
+            )
+        }),
     ]
+
+    @classmethod
+    def get_identifier(cls, instance):
+        try:
+            name = str(instance.glossary.get('image_file'))
+        except AttributeError:
+            name = _("No Image")
+        return mark_safe(name)
 
     def render(self, context, instance, placeholder):
         context = super().render(context, instance, placeholder)
@@ -896,7 +922,7 @@ class BackgroundImageForm(PlusPluginFormBase):
         help_text='Select the default bottom margin to be applied?')
 
     STYLE_CHOICES = 'BACKGROUND_IMAGE_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
     @classmethod
     def extend_form_fields(cls):
@@ -941,6 +967,12 @@ class BackgroundImagePlugin(BootstrapPluginBase):
         (_('Module settings'), {
             'fields': (
                 'extra_style', 'extra_classes', 'label',
+            )
+        }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
             )
         }),
     ]
@@ -1006,7 +1038,7 @@ class HeadingForm(PlusPluginFormBase):
         help_text='Select the default bottom margin to be applied?')
 
     STYLE_CHOICES = 'HEADING_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class HeadingPlugin(BootstrapPluginBase):
@@ -1044,7 +1076,7 @@ class FigureForm(PlusPluginFormBase):
     )
 
     STYLE_CHOICES = 'FIGURE_CAPTION_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class BootstrapFigurePlugin(BootstrapPluginBase):
@@ -1115,7 +1147,7 @@ class EmbedForm(PlusPluginFormBase):
     )
 
     STYLE_CHOICES = 'EMBED_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class BootstrapEmbedPlugin(BootstrapPluginBase):

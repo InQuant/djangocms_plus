@@ -1,7 +1,10 @@
 {% load cms_tags %}
 
-<div id="accordion-{{ instance.id }}">
+<div id="accordion-{{ instance.id }}" class="{{ instance.css_classes }}">
   {% for child in instance.child_plugin_instances %}
     {% render_plugin child %}
   {% endfor %}
 </div>
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

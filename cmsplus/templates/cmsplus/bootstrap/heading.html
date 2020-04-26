@@ -6,3 +6,7 @@
 {% if bg_color %}</div>{% endif %}
 {% if  bottom_margin %}</div>{% endif %}
 {% endwith %}
+
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

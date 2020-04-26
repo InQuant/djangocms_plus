@@ -4,6 +4,7 @@
   {% if cpis and cpis|length == 1 %}
 
   <div class="
+  {{ instance.css_classes }}
   {% if data.col_xs %}g-text-col-{{ data.col_xs }} {% endif %}
   {% if data.col_md %}g-text-col-md-{{ data.col_md }} {% endif %}
   {% if data.col_lg %}g-text-col-lg-{{ data.col_lg }} {% endif %}
@@ -15,3 +16,6 @@
 
   {% endif %}
 {% endwith %}
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

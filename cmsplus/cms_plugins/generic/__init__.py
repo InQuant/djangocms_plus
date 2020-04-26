@@ -62,7 +62,7 @@ class TextLinkPlugin(LinkPluginBase):
 #
 class MultiColTextForm(PlusPluginFormBase):
     STYLE_CHOICES = 'MOD_COL_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
     @staticmethod
     def _get_col_choice_field(dev):
@@ -87,7 +87,7 @@ class MultiColTextForm(PlusPluginFormBase):
 MultiColTextForm.extend_col_fields()
 
 
-class MultiColumnTextPlugin(PlusPluginBase):
+class MultiColumnTextPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
     renders a wrapper for a multi column text.
     """
@@ -112,10 +112,10 @@ class SnippetForm(PlusPluginFormBase):
     )
 
     STYLE_CHOICES = 'SNIPPET_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
-class SnippetPlugin(PlusPluginBase, StylePluginMixin):
+class SnippetPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
     renders a given html snippet, can be used to include another site via iframe.
     """

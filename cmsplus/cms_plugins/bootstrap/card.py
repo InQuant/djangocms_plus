@@ -6,7 +6,7 @@ from cmsplus.plugin_base import PlusPluginBase, StylePluginMixin
 
 class CardChildForm(PlusPluginFormBase):
     STYLE_CHOICES = 'SLIDE_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class CardChildBase(PlusPluginBase):
@@ -18,27 +18,27 @@ class CardChildBase(PlusPluginBase):
     render_template = 'cmsplus/bootstrap/card/wrapper.html'
 
 
-class BootstrapCardHeaderPlugin(CardChildBase, StylePluginMixin):
+class BootstrapCardHeaderPlugin(StylePluginMixin, CardChildBase):
     name = _("Card Header")
     default_css_class = 'card-header'
 
 
-class BootstrapCardBodyPlugin(CardChildBase, StylePluginMixin):
+class BootstrapCardBodyPlugin(StylePluginMixin, CardChildBase):
     name = _("Card Body")
     default_css_class = 'card-body'
 
 
-class BootstrapCardFooterPlugin(CardChildBase, StylePluginMixin):
+class BootstrapCardFooterPlugin(StylePluginMixin, CardChildBase):
     name = _("Card Footer")
     default_css_class = 'card-footer'
 
 
 class CardFormMixin(CardChildForm):
     STYLE_CHOICES = 'CARD_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
-class BootstrapCardPlugin(PlusPluginBase, StylePluginMixin):
+class BootstrapCardPlugin(StylePluginMixin, PlusPluginBase):
     """
     Use this plugin to display a card with optional card-header and card-footer.
     """

@@ -1,6 +1,6 @@
 {% load cms_tags %}
 
-<div class="card">
+<div class="card {{ instance.css_classes }}">
   <div class="card-header" id="accordion-heading-{{ instance.id }}">
     <h5 class="mb-0">
       <button class="btn btn-link" data-toggle="collapse" data-target="#accordion-item-{{ instance.id }}" aria-expanded="true" aria-controls="accordion-item-{{ instance.id }}">
@@ -18,3 +18,6 @@
     </div>
   </div>
 </div>
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

@@ -26,7 +26,7 @@ class PlusPlugin(CMSPlugin):
         return self._json
 
     @data.setter
-    def data(self, value: dict):
+    def data(self, value: dict):  # noqa E999
         self._json = value
 
     @property
@@ -71,6 +71,20 @@ class PlusPlugin(CMSPlugin):
         if joined:
             return mark_safe(' ' + joined)
         return ''
+
+    @property
+    def extra_css(self):
+        '''
+        returns e.g: [
+            ('default', 'margin-bottom:2rem;border:2px solid black'),
+            ('@media (min-width: 768px)', 'margin-bottom:3rem)'
+        ]
+        '''
+        css = []
+        for media, css_lines in self.plugin_class.get_extra_css(self).items():
+            _css = ';'.join(['%s:%s' % (k, v) for k, v in css_lines])
+            css.append((media, _css))
+        return css
 
 
 class LinkPluginMixin(object):

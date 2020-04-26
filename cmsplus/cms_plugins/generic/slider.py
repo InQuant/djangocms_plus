@@ -91,10 +91,10 @@ class SliderForm(PlusPluginFormBase):
     )
 
     STYLE_CHOICES = 'SLIDER_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
-class SliderPlugin(LinkPluginBase):
+class SliderPlugin(StylePluginMixin, LinkPluginBase):
     name = _("Slider")
     require_parent = False
     child_classes = ['SliderChildPlugin', ]
@@ -121,6 +121,12 @@ class SliderPlugin(LinkPluginBase):
                 'extra_style', 'extra_classes', 'label',
             )
         }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
+            )
+        }),
     ]
 
     def render(self, context, instance, placeholder):
@@ -144,7 +150,7 @@ class SliderChildForm(SliderForm, LinkFormBase):
     require_link = False
 
 
-class SliderChildPlugin(LinkPluginBase, StylePluginMixin):
+class SliderChildPlugin(StylePluginMixin, LinkPluginBase):
     name = _("Slider Child")
     parent_classes = ['SliderPlugin', ]
     allow_children = True

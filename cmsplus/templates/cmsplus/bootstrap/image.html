@@ -1,9 +1,14 @@
-{% load l10n cms_tags thumbnail %}
+{% load l10n cms_tags thumbnail sekizai_tags %}
 {% localize off %}{% spaceless %}
 {% with css_classes=instance.css_classes inline_styles=instance.inline_styles %} 
 
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}
+
 {% if scopedstyles %}
-<style scoped>
+{% addtoblock 'css' %}
+<style>
 #img-{{ instance.id}} {
   {% if scopedstyles.0 %}
   {% if scopedstyles.0.0 %}width: {{ scopedstyles.0.0 }};{% endif %}
@@ -22,6 +27,7 @@
   {% endif %}
 {% endfor %}"
 </style>
+{% endaddtoblock %}
 {% endif %}
 
 {% if instance.link %}

@@ -32,7 +32,7 @@ class OsmForm(PlusPluginFormBase):
     )
 
     STYLE_CHOICES = 'OSM_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class OsmMarkerForm(PlusPluginFormBase):
@@ -47,14 +47,11 @@ class OsmMarkerForm(PlusPluginFormBase):
         required=True,
     )
 
-    STYLE_CHOICES = 'OSM_MARKER_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
-
 
 # Openstreetmap plugins
 # ---------------------
 #
-class OsmPlugin(PlusPluginBase, StylePluginMixin):
+class OsmPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
        renders a open streetmap with location.
        """
@@ -85,7 +82,7 @@ class OsmMarkerModel(PlusPlugin):
         return 'm%s' % self.id
 
 
-class OsmMarkerPlugin(PlusPluginBase, StylePluginMixin):
+class OsmMarkerPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
        renders a open streetmap marker on a map.
        """

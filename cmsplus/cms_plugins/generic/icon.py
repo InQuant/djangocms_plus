@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings as cps
 from cmsplus.forms import PlusPluginFormBase, get_style_form_fields
-from cmsplus.plugin_base import PlusPluginBase
+from cmsplus.plugin_base import PlusPluginBase, StylePluginMixin
 
 
 class IconFieldWidget(forms.Widget):
@@ -81,9 +81,9 @@ class IconField(forms.CharField):
     widget = IconFieldWidget
 
 
-class IconFormPlugin(PlusPluginFormBase):
+class IconForm(PlusPluginFormBase):
     STYLE_CHOICES = 'MOD_ICON_STYLES'
-    extra_style, extra_classes, label = get_style_form_fields(STYLE_CHOICES)
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
     icon = IconField()
 
@@ -93,12 +93,12 @@ def get_icon_style_paths():
     return [fontawesome_path, ]
 
 
-class IconPlugin(PlusPluginBase):
+class IconPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
     Choose icon from font defined in the settings
     """
     name = _('Icon')
-    form = IconFormPlugin
+    form = IconForm
     render_template = "cmsplus/generic/icon.html"
     allow_children = False
     text_enabled = True

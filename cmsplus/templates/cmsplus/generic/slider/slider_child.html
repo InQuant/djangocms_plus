@@ -13,3 +13,6 @@
 </div>
 
 {% if instance.link %}</a>{% endif %}
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

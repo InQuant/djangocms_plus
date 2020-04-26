@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from cmsplus.fields import (PageSearchField, PlusFilerFileSearchField, PlusFilerImageSearchField)
+from cmsplus.fields import (PageSearchField, PlusFilerFileSearchField, PlusFilerImageSearchField, KeyValueField)
 from cmsplus.models import PlusPlugin
 
 logger = logging.getLogger(__name__)
@@ -93,6 +93,20 @@ class PlusPluginFormBase(forms.ModelForm):
 #
 def get_style_form_fields(style_config_key=None, style_multiple=False):
     """
+    Use together with StylePluginMixin, e.g.
+
+    class MyCustomForm(PlusPluginFormBase):
+        ...  # form defs
+
+        STYLE_CHOICES = 'MY_CUSTOM_STYLES'
+        extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
+
+
+    class MyCustomPlugin(StylePluginMixin, PlusPluginBase):
+        name = _('My Custom')
+        form = MyCustomForm
+        render_template = 'custom/snippet.html'
+
     style_config_key should be a django.conf.settings - key which holds the
     style choices, e.g.: ('c-text-white', 'Text White'), ...
     """
@@ -116,10 +130,14 @@ def get_style_form_fields(style_config_key=None, style_multiple=False):
             initial=sc[0][0], help_text='Extra CSS predefined style class for plugin.'),
         forms.CharField(
             label=u'Extra Classes', required=False, initial='',
+            widget=forms.widgets.TextInput(attrs={'style': 'width: 70vw'}),
             help_text='Extra CSS Classes (space separated) for plugin.'),
         forms.CharField(
             label=u'Label', required=False, initial='',
             help_text='Label to identify this plugin in page-structure.'),
+        KeyValueField(
+            label=u'Extra CSS', required=False, initial='',
+            help_text='Add extra (device specific) css key, values, e.g: margin or margin:md or transform:xl'),
     )
 
 
