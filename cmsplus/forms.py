@@ -87,7 +87,6 @@ class PlusPluginFormBase(forms.ModelForm):
 
         return parsed_dict
 
-
 # StylePluginMixin form fields
 # ----------------------------
 #
