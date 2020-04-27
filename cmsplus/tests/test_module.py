@@ -52,6 +52,13 @@ class ModuleTest(CMSTestCase):
                              "ModelMultipleChoice input and output is not the same. "
                              "Check 'PlusModelMultipleChoiceField'")
 
+        deserialized_data = dict(ExamplePlugin.form.deserialize(form.serialize_data()))
+
+        self.assertEqual(data['test_email'], deserialized_data['test_email'], "Test Email is not equal")
+        self.assertEqual(data['test_model_choice'], deserialized_data['test_model_choice'].id, "Model Choice not equal")
+        self.assertEqual(len(data['test_model_multiple_choice']),
+                         len(deserialized_data['test_model_multiple_choice']), "Model Choice Multiple not equal")
+
     def test_plugin_icon(self):
         icon_widget = IconFieldWidget()
         self.assertTrue(isinstance(icon_widget.get_fontawesome_icons, list), "Could not get Fontawesome icon list")
