@@ -206,10 +206,11 @@ class StylePluginMixin(object):
             try:
                 # k e.g. md:margin-bottom
                 css_key, dev = key.split(':')
+                media = '@media (min-width: %spx)' % cps.DEVICE_MIN_WIDTH_MAP.get(dev, 'xs')
             except ValueError:
                 css_key = key
-                dev = 'default'
-            return '@media (min-width: %spx)' % cps.DEVICE_MIN_WIDTH_MAP[dev], css_key
+                media = 'default'
+            return media, css_key
 
         css = super().get_extra_css(instance)
 

@@ -3,7 +3,7 @@
 {% addtoblock 'css' %}
 <style>
   {%for media, css in instance.extra_css %}
-    {% if media != default %}
+    {% if media != 'default' %}
     {{ media }} {
       .c-extra-{{ instance.id }} { {{ css }} }
     }

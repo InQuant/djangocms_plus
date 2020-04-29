@@ -550,7 +550,7 @@ def get_fixed_dim_fields(attr):
 
 class BootstrapImageForm(LinkFormBase):
 
-    image_file, image_title, image_alt = get_image_form_fields()
+    image_file, image_title, image_alt = get_image_form_fields(required=True)
 
     STYLE_CHOICES = 'IMAGE_STYLES'
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
