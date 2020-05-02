@@ -1,0 +1,34 @@
+{% extends "cmsplus/generic/wrapper.html" %}
+{% load cms_tags sekizai_tags %}
+
+{% block "wrapper-footer" %}
+{% addtoblock 'js' %}
+<script type="text/javascript">
+
+  function ratioForDiv{{ instance.id }}() {
+    var div = document.getElementsByClassName('c-vertical-ratio-spacer-{{ instance.id }}')[0];  // set in plugin method
+    var portrait_ratio = (window.innerHeight > window.innerWidth) ? true : false;
+    var portrait_height = '{{ instance.glossary.portrait_height }}';
+    var landscape_height = '{{ instance.glossary.landscape_height }}';
+
+    function setRatioHeight() {
+      if (portrait_ratio) {
+        div.style.height = portrait_height;
+      } else {
+        div.style.height = landscape_height;
+      }
+    }
+    setRatioHeight();
+
+    window.addEventListener("orientationchange", function() {
+      portrait_ratio = !portrait_ratio;
+      setRatioHeight();
+    });
+
+  }
+
+  ratioForDiv{{ instance.id }}();
+
+</script>
+{% endaddtoblock %}
+{% endblock "wrapper-footer" %}

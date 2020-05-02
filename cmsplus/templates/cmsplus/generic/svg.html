@@ -1,0 +1,18 @@
+{% load l10n cms_tags %}
+{% localize off %}{% spaceless %}
+{% with css_classes=instance.css_classes inline_styles=instance.inline_styles %} 
+
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}
+
+<img id="img-{{ instance.id}}"
+  {{ instance.html_tag_attributes }}
+  {% if css_classes %} class="{{ css_classes }}"{% endif %}
+  {% if inline_styles %} style="{{ inline_styles }}"{% endif %}
+	src="{{ instance.glossary.image_file.url }}"/>
+
+{% if instance.link %}</a>{% endif %}
+
+{% endwith %}
+{% endspaceless %}{% endlocalize %}

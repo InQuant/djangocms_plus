@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings as cps
+from cmsplus.fields import SizeField, PlusFilerFileSearchField
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase,
                            get_style_form_fields)
 from cmsplus.models import (PlusPlugin, LinkPluginMixin, )
@@ -138,3 +139,126 @@ class SnippetPlugin(StylePluginMixin, PlusPluginBase):
             content = str(exc)
         context['content'] = mark_safe(content)
         return context
+
+
+# SVG Plugin
+# ----------
+#
+class SvgImageForm(LinkFormBase):
+
+    image_file = PlusFilerFileSearchField(
+        label=_('SVG Image File'),
+        required=True,
+    )
+
+    image_title = forms.CharField(
+        label=_('Image Title'),
+        required=False,
+        help_text=_(
+            'Caption text added to the "title" attribute of the ' '<img> element.'),
+        )
+
+    image_alt = forms.CharField(
+        label=_('Alternative Description'),
+        required=False,
+        help_text=_(
+            'Textual description of the image added to the "alt" ' 'tag of the <img> element.'),
+        )
+
+    require_link = False
+    STYLE_CHOICES = 'SVG_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
+
+
+class SvgImagePluginModel(PlusPlugin, LinkPluginMixin):
+    class Meta:
+        proxy = True
+
+
+class SvgImagePlugin(StylePluginMixin, LinkPluginBase):
+    footnote_html = """
+    renders a svg in an image tag.
+    """
+    name = _('SvgImage')
+    form = SvgImageForm
+    model = SvgImagePluginModel
+    allow_children = False
+    render_template = 'cmsplus/generic/svg.html'
+
+    text_enabled = True  # enable in CK_EDITOR
+    text_editor_preview = False
+    tag_attr_map = {'image_title': 'title', 'image_alt': 'alt'}
+
+    fieldsets = [
+        (None, {
+            'fields': ('image_file', 'image_title', 'image_alt'),
+        }),
+        (_('Module settings'), {
+            'fields': (
+                'extra_style', 'extra_classes', 'label',
+            )
+        }),
+        (_('Link settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'link_type', 'cms_page', 'section', 'download_file', 'ext_url',
+                'mail_to', 'link_target', 'link_title'
+            )
+        }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
+            )
+        }),
+    ]
+
+    @classmethod
+    def get_identifier(cls, instance):
+        try:
+            name = str(instance.glossary.get('image_file'))
+        except AttributeError:
+            name = _("No Image")
+        return mark_safe(name)
+
+
+# VerticalRatioSpacer Plugin
+# --------------------------
+#
+class VerticalRatioSpacerForm(PlusPluginFormBase):
+
+    landscape_height = SizeField(
+        label=_('Height for landscape screen ratio.'),
+        required=True,
+        allowed_units=['px', '%', 'rem', 'vw', 'vh'],
+        initial='',
+    )
+    portrait_height = SizeField(
+        label=_('Height for portrait screen ratio.'),
+        required=True,
+        allowed_units=['px', '%', 'rem', 'vw', 'vh'],
+        initial='',
+    )
+
+    STYLE_CHOICES = 'VERTICAL_RATIO_SPACER_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
+
+
+class VerticalRatioSpacerPlugin(StylePluginMixin, PlusPluginBase):
+    footnote_html = """
+    renders a vertical spacer (div), where a ratio depending height can be given.
+    """
+    name = _('VerticalRatioSpacer')
+    form = VerticalRatioSpacerForm
+    allow_children = True
+    render_template = 'cmsplus/generic/vertical-ratio-spacer.html'
+    tag_type = 'div'
+
+    @classmethod
+    def get_css_classes(cls, instance):
+        """
+        add the c-vertical-ratio-spacer-<id> class to be able to identify the div element in js.
+        """
+        css_classes = super().get_css_classes(instance)
+        css_classes.append('c-vertical-ratio-spacer-%s' % instance.id)
+        return css_classes

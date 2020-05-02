@@ -637,10 +637,6 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         'image_shapes', 'image_alignment']
     tag_attr_map = {'image_title': 'title', 'image_alt': 'alt'}
 
-    # ring_plugin = 'ImagePlugin'
-    # class Media:
-    #    js = ['admin/js/jquery.init.js', 'cascadex/admin/imageplugin.js']
-
     fieldsets = [
         (None, {
             'fields': ('image_file', 'image_title', 'image_alt'),
@@ -913,8 +909,23 @@ class BackgroundImageForm(PlusPluginFormBase):
         choices=cps.BGIMG_FILTER_CHOICES, initial='',
         help_text='The color filter to be applied over the unhovered image.')
 
-    # img_dev_width - fields are added below
+    do_thumbnail = forms.BooleanField(
+        label=_('Do thumbnail'), initial=True, required=None,
+        help_text=_('Scale (thumbnail) image according to given device sizes below.'))
 
+    crop = forms.BooleanField(
+        label=_('Crop'), initial=True, required=False,
+        help_text=_('Cut image before scale to given device size.'))
+
+    crop_spec = forms.CharField(
+        label=_('Crop Specifiaction'), initial='', required=False,
+        help_text=_('Specifiy cropping, e.g.: smart | scale | 0,10 | ,0) - leave empty for default behavior.'))
+
+    upscale = forms.BooleanField(
+        label=_('Upscale'), initial=False, required=False,
+        help_text=_('Upscale image during scaling to given device size.'))
+
+    # img_dev_width - fields are added below
     bottom_margin = forms.ChoiceField(
         label=u'Bottom Margin',
         required=False, choices=cps.CNT_BOTTOM_MARGIN_CHOICES,
@@ -954,16 +965,6 @@ class BackgroundImagePlugin(BootstrapPluginBase):
                 'image_filter', 'bottom_margin'),
         }),
 
-        (_('Responsive options'), {
-            'description': _(
-                'Maximum responsive width per device used to '
-                'provide optimal image size for each device with respect to '
-                'loading time.'),
-            'fields': (
-                [field_name for field_name, field in get_img_dev_width_fields()],
-            ),
-        }),
-
         (_('Module settings'), {
             'fields': (
                 'extra_style', 'extra_classes', 'label',
@@ -975,6 +976,20 @@ class BackgroundImagePlugin(BootstrapPluginBase):
                 'extra_css',
             )
         }),
+
+        (_('Responsive options'), {
+            'classes': ('collapse',),
+            'description': _(
+                'Maximum responsive width per device used to '
+                'provide optimal image size for each device with respect to '
+                'loading time.'),
+            'fields': (
+                'do_thumbnail',
+                ('crop', 'crop_spec', 'upscale'),
+                [field_name for field_name, field in get_img_dev_width_fields()],
+            ),
+        }),
+
     ]
 
     def render(self, context, instance, placeholder):
@@ -987,6 +1002,9 @@ class BackgroundImagePlugin(BootstrapPluginBase):
         # shorty
         igg = instance.glossary.get
 
+        if not igg('do_thumbnail', False):
+            return {}
+
         # scoped style background image widths
         bgimgwidths = {}
         ratio = igg('img_dev_width_xs') or '1/4'
@@ -996,13 +1014,17 @@ class BackgroundImagePlugin(BootstrapPluginBase):
                 ratio = igg(width_key)
             k = cps.DEVICE_MIN_WIDTH_MAP.get(dev)
             w = cps.DEVICE_MAX_WIDTH_MAP.get(dev)
-            # e.g. 0: 288, 768 : 384
+            # e.g. for md -> k=768, w=991, ratio=1/2: v = 991*1/2=496
             bgimgwidths[k] = '%dx0' % round(w * eval(ratio))
+
+        if igg('crop', False) and igg('crop_spec', ''):
+            crop = igg('crop_spec')  # smart or scale or 0,10 or ,10 ...
+        else:
+            crop = igg('crop')  # True or False
 
         return {
             'bgimgwidths': bgimgwidths,
-            'crop': True,
-            'upscale': True,
+            'crop': crop,  # boolean or str
         }
 
 

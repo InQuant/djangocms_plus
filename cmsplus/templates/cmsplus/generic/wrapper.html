@@ -1,0 +1,17 @@
+{% load l10n cms_tags %}
+{% with tag_type=instance.tag_type css_classes=instance.css_classes element_id=instance.element_id %}
+
+{% block "wrapper-header" %}{% endblock "wrapper-header" %}
+<{{ tag_type }}{% block "wrapper-attrs" %}{% endblock %}{{ instance.html_tag_attributes }}{% if element_id %} id="{{ element_id|unlocalize }}"{% endif %}{% if css_classes %} class="{{ css_classes }}"{% endif %}>
+{% block "plugins-pre" %}{% endblock "plugins-pre" %}
+{% for plugin in instance.child_plugin_instances %}
+	{% render_plugin plugin %}
+{% endfor %}
+{% block "plugins-post" %}{% endblock "plugins-post" %}
+</{{ tag_type }}>
+{% block "wrapper-footer" %}{% endblock "wrapper-footer" %}
+{% endwith %}
+
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

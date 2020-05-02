@@ -7,9 +7,9 @@
 
 
   {% if ifilter %}
-    {% include 'cmsplus/bootstrap/background-image/_bg_img_src_set.html' with img=glossary.image_file id=i.id imgwidths=bgimgwidths crop=crop upscale=upscale after='::after' %}
+    {% include 'cmsplus/bootstrap/background-image/_bg_img_src_set.html' with img=glossary.image_file id=i.id imgwidths=bgimgwidths crop=crop upscale=glossary.upscale after='::after' %}
   {% else %}
-    {% include 'cmsplus/bootstrap/background-image/_bg_img_src_set.html' with img=glossary.image_file id=i.id imgwidths=bgimgwidths crop=crop upscale=upscale %}
+    {% include 'cmsplus/bootstrap/background-image/_bg_img_src_set.html' with img=glossary.image_file id=i.id imgwidths=bgimgwidths crop=crop upscale=glossary.upscale %}
   {% endif %}
 
   {% for child in instance.child_plugin_instances %}

@@ -6,8 +6,12 @@
 <style>
 
 #div-{{ id }}{{ after }} {
+{% if imgwidths %}
   {% thumbnail img imgwidths.0 crop=crop upscale=upscale as thumb %}
   background-image: url({{ thumb.url }});
+{% else %}
+  background-image: url({{ img.url }});
+{% endif %}
 }
 
 {% for k, size in imgwidths.items %}

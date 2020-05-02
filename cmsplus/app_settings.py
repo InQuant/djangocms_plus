@@ -5,6 +5,8 @@ DEFAULTS = {
         'cmsplus.cms_plugins.generic.MultiColumnTextPlugin',
         'cmsplus.cms_plugins.generic.SnippetPlugin',
         'cmsplus.cms_plugins.generic.TextLinkPlugin',
+        'cmsplus.cms_plugins.generic.SvgImagePlugin',
+        'cmsplus.cms_plugins.generic.VerticalRatioSpacerPlugin',
         'cmsplus.cms_plugins.generic.slider.SliderChildPlugin',
         'cmsplus.cms_plugins.generic.slider.SliderPlugin',
         'cmsplus.cms_plugins.generic.icon.IconPlugin',
