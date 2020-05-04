@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'menus',
     'treebeard',
     'sekizai',
+    'filer',
 
     'cmsplus',
     'cmsplus.tests',

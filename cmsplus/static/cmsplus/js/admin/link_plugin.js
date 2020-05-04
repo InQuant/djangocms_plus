@@ -1,9 +1,10 @@
 $(function () {
-    let form = $('form#textlinkpluginmodel_form');
+    let form = $('form');
     let select = form.find('select#id_link_type');
 
     // map select values to fields
     let fieldMapping = {
+        '': '',
         'cmspage': ['.field-cms_page', '.field-section'],
         'download': ['.field-download_file'],
         'exturl': ['.field-ext_url'],
@@ -20,8 +21,10 @@ $(function () {
     }
 
     let toggleFields = (mappingKey) => {
+        // Iterate fields and make visible fields with class names defined in mapping
         $.each(allFields(), (key, val) => {
-            if (fieldMapping && fieldMapping.hasOwnProperty(mappingKey) && fieldMapping[mappingKey].indexOf(val) < 0) {
+            // Check if value exists for key in mapping
+            if (fieldMapping.hasOwnProperty(mappingKey) && fieldMapping[mappingKey].indexOf(val) < 0) {
                 $(val).fadeOut('fast');
             } else {
                 $(val).fadeIn('fast');
