@@ -1,5 +1,3 @@
-django~=2.2.12
-django-cms==3.7.2
-django-jsonfield~=1.4.0
-djangocms-text-ckeditor
+django-cms
+jsonfield
 django-filer
