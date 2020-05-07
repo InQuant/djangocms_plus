@@ -1,5 +1,7 @@
 from django.conf import settings
 
+from cmsplus.utils import JSONEncoder
+
 DEFAULTS = {
     'PLUGINS': (
         'cmsplus.cms_plugins.generic.MultiColumnTextPlugin',
@@ -30,6 +32,8 @@ DEFAULTS = {
         'cmsplus.cms_plugins.bootstrap.card.BootstrapCardFooterPlugin',
         'cmsplus.cms_plugins.bootstrap.card.BootstrapCardPlugin',
         ),
+
+    'JSON_ENCODER_CLASS': JSONEncoder,
 
     'MAP_LAYER_CHOICES': (
         ('', 'None'),

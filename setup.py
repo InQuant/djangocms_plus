@@ -43,7 +43,7 @@ setup(
     zip_safe=False,
     include_package_data=True,
     package_data={'': ['README.md'], },
-    install_requires=['django-cms~=3.7.2', 'django~=2.2.12', 'django-jsonfield~=1.4.0', 'django-filer'],
+    install_requires=['django-cms', 'jsonfield', 'django-filer'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',

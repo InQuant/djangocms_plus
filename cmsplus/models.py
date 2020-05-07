@@ -1,16 +1,18 @@
-from cms.models import CMSPlugin
 from django.utils.functional import cached_property
 from django.utils.html import mark_safe, format_html_join
+
+from cms.models import CMSPlugin
+
 from jsonfield import JSONField
 
-from cmsplus.utils import JSONEncoder
+from cmsplus.app_settings import cmsplus_settings as cps
 
 
 class PlusPlugin(CMSPlugin):
     """
     BaseModel for plugins including the important json field.
     """
-    _json = JSONField(encoder_class=JSONEncoder)
+    _json = JSONField(dump_kwargs={'cls': cps.JSON_ENCODER_CLASS})
 
     def __str__(self):
         return self.plugin_class.get_identifier(self)
