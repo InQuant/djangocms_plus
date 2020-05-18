@@ -17,8 +17,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'proxy': True,
-                'indexes': [],
-                'constraints': [],
             },
             bases=('cmsplus.plusplugin', cmsplus.models.LinkPluginMixin),
         ),
@@ -28,8 +26,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'proxy': True,
-                'indexes': [],
-                'constraints': [],
             },
             bases=('cmsplus.plusplugin',),
         ),
@@ -39,8 +35,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'proxy': True,
-                'indexes': [],
-                'constraints': [],
             },
             bases=('cmsplus.plusplugin', cmsplus.models.LinkPluginMixin),
         ),
