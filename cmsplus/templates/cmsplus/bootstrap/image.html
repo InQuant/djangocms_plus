@@ -36,7 +36,14 @@
     {% if instance.glossary.link_target %} target="{{ instance.glossary.link_target }}"{% endif %}>
 {% endif %}
 
-<img id="img-{{ instance.id}}"
+{% if is_gif %}
+    <img id="img-{{ instance.id}}"
+  {{ instance.html_tag_attributes }}
+  {% if css_classes %} class="{{ css_classes }}"{% endif %}
+  {% if inline_styles %} style="{{ inline_styles }}"{% endif %}
+       src="{{ instance.glossary.image_file.url }}"/>
+{% else %}
+  <img id="img-{{ instance.id}}"
   {{ instance.html_tag_attributes }}
   {% if css_classes %} class="{{ css_classes }}"{% endif %}
   {% if inline_styles %} style="{{ inline_styles }}"{% endif %}
@@ -48,6 +55,7 @@
 	  {% endfor %}"
 	{% thumbnail instance.glossary.image_file src_size crop=crop upscale=upscale as thumb %}
 	src="{{ thumb.url }}"/>
+{% endif %}
 
 {% if instance.link %}</a>{% endif %}
 

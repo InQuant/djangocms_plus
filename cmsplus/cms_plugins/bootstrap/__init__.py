@@ -702,6 +702,13 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         media_queries, easy_thumb_sizes = self._get_media_sizes(
             instance)
 
+        # no srcsets for gifs
+        if glossary.get('image_file'):
+            _file = glossary.get('image_file')
+            if _file.extension == 'gif':
+                context['is_gif'] = True
+                return context
+
         # srcset sizes
         context['sizes'] = [media_queries[dev] for dev in cps.DEVICES]
 

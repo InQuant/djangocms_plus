@@ -30,7 +30,17 @@ function cxngOpenstreetMapCtrl($scope, $element, $attrs, leafletData) {
 
         leafletData.getMap().then(function(map) {
 
-            if (ctrl.config.layer) {
+            if (ctrl.config.layer == 'stamen') {
+                var StamenToner = L.tileLayer(
+                    'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}',
+                    {
+                        attribution: '<a href="http://stamen.com">Stamen</a>',
+                        //minZoom: 0,
+                        //maxZoom: 20,
+                        ext: 'png'
+                    });
+                map.addLayer(StamenToner);
+            } else if (ctrl.config.layer) {
                 var gl = L.mapboxGL({
                     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OSM contributors</a>',
                     accessToken: 'not-needed',

@@ -37,6 +37,7 @@ DEFAULTS = {
 
     'MAP_LAYER_CHOICES': (
         ('', 'None'),
+        ('stamen', 'Stamen'),
         ('black', 'Black'),
         ),
 
