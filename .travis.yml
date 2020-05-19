@@ -38,5 +38,6 @@ matrix:
 
 install:
   - pip install tox-travis
+  - pip install Faker
   - pip install -r requirements.txt
 script: tox

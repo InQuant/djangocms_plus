@@ -84,4 +84,4 @@ class ModuleTest(CMSTestCase):
         test_html = render_to_string(template_name=IconPlugin.render_template,
                                      context=test_context, request=RequestFactory())
 
-        self.assertHTMLEqual(test_html, html, "Rendered html differs from what it should be")
+        self.assertHTMLEqual(test_html, html, "Rendered HTML differs from what it should be")
