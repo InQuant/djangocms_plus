@@ -1,9 +1,10 @@
 from pprint import pprint
 
 from cms.api import add_plugin
-from cms.models import Placeholder
+from cms.models import Placeholder, UserSettings
 from cms.plugin_rendering import ContentRenderer
 from cms.test_utils.testcases import CMSTestCase
+from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.test import RequestFactory
 
@@ -19,6 +20,12 @@ class ModuleTest(CMSTestCase):
         )
         self.t2 = Test.objects.create(
             message='Test Message 2',
+        )
+        User.objects.create(
+            username="admin",
+            password="test",
+            first_name="test",
+            last_name="test",
         )
 
     def test_serialize_and_deserialize(self):

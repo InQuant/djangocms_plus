@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'cms',
+    'djangocms_text_ckeditor',
     'menus',
     'treebeard',
     'sekizai',
