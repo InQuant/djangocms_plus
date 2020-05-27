@@ -1,4 +1,6 @@
+import logging
 import urllib.parse
+from pprint import pformat
 
 from django import forms
 from django.forms import widgets
@@ -12,6 +14,7 @@ from cmsplus.forms import (PlusPluginFormBase, LinkFormBase, get_style_form_fiel
 from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin, LinkPluginBase)
 
+logger = logging.getLogger(__name__)
 
 class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
     module = 'Bootstrap'
@@ -699,8 +702,12 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         context = super().render(context, instance, placeholder)
 
         glossary = instance.glossary
-        media_queries, easy_thumb_sizes = self._get_media_sizes(
-            instance)
+        if not glossary.get('image_file'):
+            logger.error("Image not found for instance:")
+            logger.error(pformat(instance.__dict__))
+            return
+
+        media_queries, easy_thumb_sizes = self._get_media_sizes(instance)
 
         # no srcsets for gifs
         if glossary.get('image_file'):
@@ -770,6 +777,9 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
             if width > dev_max_width:
                 return dev_max_width
             return round(width)
+
+        if not image:
+            return
 
         aspect_ratio = _compute_aspect_ratio(image)
         fallback_width = round(dev_max_width * dev_img_fraction)

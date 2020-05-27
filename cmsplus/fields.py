@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from abc import abstractmethod, ABC
 from six import string_types, u
@@ -7,7 +8,7 @@ from cms.models.pagemodel import Page
 from cms.utils import get_current_site
 from django import forms
 from django.contrib.admin.sites import site as admin_site
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import ProhibitNullCharactersValidator, RegexValidator
 from django.db.models.fields.related import ManyToOneRel
 from django.forms.fields import Field
@@ -19,6 +20,9 @@ from filer.models.filemodels import File as FilerFileModel
 from filer.models.imagemodels import Image as FilerImageModel
 
 from cmsplus.widgets import KeyValueWidget
+
+
+logger = logging.getLogger(__name__)
 
 
 class BaseFieldMixIn(ABC):
@@ -44,7 +48,13 @@ class PlusModelChoiceField(forms.ModelChoiceField, BaseFieldMixIn):
         return getattr(obj, "pk", None)
 
     def deserialize_field(self, value):
-        return self.queryset.get(pk=value)
+        try:
+            return self.queryset.get(pk=value)
+        except:
+            import traceback
+            tb = traceback.format_exc()
+            logger.error(tb)
+            logger.error("PlusModelChoiceField Deserialization Error: Could not find object with pk '%s'" % value)
 
 
 class PageChoiceIterator(forms.models.ModelChoiceIterator):

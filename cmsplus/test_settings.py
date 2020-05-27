@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'cmsplus',
     'cmsplus.tests',
     'easy_thumbnails',
+    'djangocms_text_ckeditor',
 ]
 
 
