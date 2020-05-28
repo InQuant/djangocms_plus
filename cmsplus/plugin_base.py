@@ -233,7 +233,7 @@ class LinkPluginBase(PlusPluginBase):
     require_parent = False
 
     class Media:
-        js = ('cmsplus/js/admin/link_plugin.js', )
+        js = ('cmsplus/admin/link_plugin/js/link_plugin.js', )
 
     @classmethod
     def get_link(cls, instance):

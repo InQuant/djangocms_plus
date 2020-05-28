@@ -1,3 +1,16 @@
-  <div>
-    <textarea style="width: 100%; height: 99%" readonly>{{ content }}</textarea>
+{% extends 'cmsplus/admin/clipboard_base.html' %}
+
+{% block style %}
+  <style>
+    .clipboard-export {
+      width: 100%;
+      height: 99%
+    }
+  </style>
+{% endblock style %}
+
+{% block content %}
+  <div class="clipboard-export">
+    <textarea readonly>{{ content }}</textarea>
   </div>
+{% endblock content %}

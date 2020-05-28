@@ -1,23 +1,44 @@
+{% extends 'cmsplus/admin/clipboard_base.html' %}
 {% load i18n %}
-<form action="" method="post">
-  {% csrf_token %}
-  {% for error in errors %}
-    <p style="color: red;">{{ error }}</p>
-  {% endfor %}
 
-  {% if not request.POST or not success %}
-    <textarea style="width: 100%; height: 70%" name="json_data"></textarea>
+{% block style %}
+  <style>
+    .clipboard-import textarea {
+      width: 100%;
+      height: 70%
+    }
+    .text-success {
+      color: darkgreen;
+      font-weight: bold;
+    }
+    .error-text {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+{% endblock style %}
 
-    <small>Submitting will clear the current clipboard</small>
-    <button type="submit" class="cms-btn">Submit</button>
-  {% else %}
-    <h3>{% blocktrans with p_length=plugins|length %}Successfully imported {{ p_length }} Plugins{% endblocktrans %}</h3>
-    <h1>{% trans 'Your clipboard was updated!' %}</h1>
-    <ul>
-      {% for plugin in plugins %}
-        <li>{{ plugin }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block content %}
+  <form action="" method="post" class="clipboard-import">
+    {% csrf_token %}
+    {% for error in errors %}
+      <p class="error-text">{{ error }}</p>
+    {% endfor %}
 
-</form>
+    {% if not request.POST or not success %}
+      <textarea name="json_data"></textarea>
+
+      <small>{% trans 'Submitting will clear the current clipboard' %}</small>
+      <button type="submit" class="cms-btn">{% trans 'Submit' %}</button>
+    {% else %}
+      <h3 class="text-success">{% blocktrans with p_length=plugins|length %}Successfully imported {{ p_length }} Plugins{% endblocktrans %}</h3>
+      <h1>{% trans 'Your clipboard was updated! Please refresh page to refresh your clipboard!' %}</h1>
+      <ul>
+        {% for plugin in plugins %}
+          <li>{{ plugin }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+  </form>
+{% endblock content %}
