@@ -1,6 +1,5 @@
 import logging
 import urllib.parse
-from pprint import pformat
 
 from django import forms
 from django.forms import widgets
@@ -703,8 +702,7 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
 
         glossary = instance.glossary
         if not glossary.get('image_file'):
-            logger.error("Image not found for instance:")
-            logger.error(pformat(instance.__dict__))
+            logger.error(_('Filer image not found for instance id: %s' % instance.id))
             return
 
         media_queries, easy_thumb_sizes = self._get_media_sizes(instance)

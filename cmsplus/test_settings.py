@@ -65,6 +65,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    'cmsplus',
+    'cmsplus.tests',
+
     'cms',
     'djangocms_text_ckeditor',
     'menus',
@@ -72,8 +75,6 @@ INSTALLED_APPS = [
     'sekizai',
     'filer',
 
-    'cmsplus',
-    'cmsplus.tests',
     'easy_thumbnails',
 ]
 

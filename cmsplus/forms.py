@@ -18,6 +18,7 @@ class PlusPluginFormBase(forms.ModelForm):
     This ModelForm references to a PlusPlugin Model in order to write and read
     from the glossary (JSONField) attribute.
     """
+
     class Meta:
         model = PlusPlugin
         exclude = ["_json"]  # Do not show json Field in Edit Form

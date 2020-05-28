@@ -1,8 +1,6 @@
+from cms.models import CMSPlugin
 from django.utils.functional import cached_property
 from django.utils.html import mark_safe, format_html_join
-
-from cms.models import CMSPlugin
-
 from jsonfield import JSONField
 
 from cmsplus.app_settings import cmsplus_settings as cps
@@ -36,6 +34,12 @@ class PlusPlugin(CMSPlugin):
         if not getattr(self, '_glossary', None):
             self._glossary = self.plugin_class.get_glossary(self)
         return self._glossary
+
+    @property
+    def errors(self):
+        glossary = self.plugin_class.get_glossary(self)
+        form = self.plugin_class.form(data=glossary)
+        return form.errors
 
     @property
     def label(self):
@@ -76,12 +80,12 @@ class PlusPlugin(CMSPlugin):
 
     @property
     def extra_css(self):
-        '''
+        """
         returns e.g: [
             ('default', 'margin-bottom:2rem;border:2px solid black'),
             ('@media (min-width: 768px)', 'margin-bottom:3rem)'
         ]
-        '''
+        """
         css = []
         for media, css_lines in self.plugin_class.get_extra_css(self).items():
             _css = ';'.join(['%s:%s' % (k, v) for k, v in css_lines])
