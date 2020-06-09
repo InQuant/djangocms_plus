@@ -31,7 +31,7 @@ DEFAULTS = {
         'cmsplus.cms_plugins.bootstrap.card.BootstrapCardBodyPlugin',
         'cmsplus.cms_plugins.bootstrap.card.BootstrapCardFooterPlugin',
         'cmsplus.cms_plugins.bootstrap.card.BootstrapCardPlugin',
-        ),
+    ),
 
     'JSON_ENCODER_CLASS': JSONEncoder,
 
@@ -39,7 +39,7 @@ DEFAULTS = {
         ('', 'None'),
         ('stamen', 'Stamen'),
         ('black', 'Black'),
-        ),
+    ),
 
     'DEVICES': ('xs', 'sm', 'md', 'lg', 'xl'),
     'DEVICE_MAP': {'xs': 'phone', 'sm': 'tablet sm', 'md': 'tablet', 'lg': 'desktop', 'xl': 'desktop xl', },
@@ -56,7 +56,7 @@ DEFAULTS = {
         ('text-success', 'Success'),
         ('text-warning', 'Warning'),
         ('text-danger', 'Danger'),
-        ),
+    ),
     'BG_COLOR_CHOICES': (
         ('', 'Transparent'),
         ('bg-primary', 'Primary'),
@@ -67,7 +67,7 @@ DEFAULTS = {
         ('bg-success', 'Success'),
         ('bg-warning', 'Warning'),
         ('bg-danger', 'Danger'),
-        ),
+    ),
     'RL_MARGIN_CHOICES': (
         ('1cw', '1 Col'),
         ('160', '10 Unit (160)'),
@@ -97,7 +97,7 @@ DEFAULTS = {
         ('-120', '-7.5 Unit (120)'),
         ('-160', '-10 Unit (160)'),
         ('-1cw', '-1 Col'),
-        ),
+    ),
     'TB_MARGIN_CHOICES': (
         ('160', '10 Unit (160)'),
         ('120', '7.5 Unit (120)'),
@@ -122,7 +122,7 @@ DEFAULTS = {
         ('-80', '-5 Unit (80)'),
         ('-120', '-7.5 Unit (120)'),
         ('-160', '-10 Unit (160)'),
-        ),
+    ),
     'PADDING_CHOICES': (
         ('160', '10 Unit (160)'),
         ('120', '7.5 Unit (120)'),
@@ -138,29 +138,29 @@ DEFAULTS = {
         ('8', '.5 Unit (8)'),
         ('4', '.25 Unit (4)'),
         ('0', '0'),
-        ),
+    ),
 
     'CNT_BOTTOM_MARGIN_CHOICES': (
         ('mb-3 mb-md-5', 'Default'),
         ('mb-2 mb-md-3', 'Small'),
         ('', 'None'),
-        ),
+    ),
     'ROW_BOTTOM_MARGIN_CHOICES': (
         ('', 'None'),
         ('mb-3 mb-md-5', 'Default'),
         ('mb-2 mb-md-3', 'Small'),
-        ),
+    ),
     'COL_BOTTOM_MARGIN_CHOICES': (
         ('mb-3 mb-md-5', 'Default'),
         ('mb-2 mb-md-3', 'Small'),
         ('', 'None'),
-        ),
+    ),
 
     'TX_COL_CHOICES': (
         ('2', '2 Text Columns'),
         ('3', '3 Text Columns'),
         # remember to inc col no in scss
-        ),
+    ),
 
     'IMG_DEV_WIDTH_CHOICES': (
         ('1', 'full screen'),
@@ -171,18 +171,42 @@ DEFAULTS = {
         ('1/4', '1/4 screen'),
         ('1/5', '1/5 screen'),
         ('1/6', '1/6 screen'),
-        ),
+    ),
 
     'BGIMG_FILTER_CHOICES': (
         ('', 'None'),
-        ),
+    ),
 
     'ICONS_DIR': {
         'FONTAWESOME': {
             'meta': 'cmsplus/icons/fontawesome/metadata/icons.json',
             'css': 'cmsplus/icons/fontawesome/css/all.css',
-            },
         },
+    },
+
+    'MAGIC_WRAPPER_STYLES': (
+        ('', 'None'),
+    ),
+
+    'MOD_CONTAINER_STYLES': (
+        ('', 'None'),
+    ),
+
+    'MOD_ROW_STYLES': (
+        ('', 'None'),
+    ),
+
+    'MOD_COL_STYLES': (
+        ('', 'None'),
+    ),
+
+    'IMAGE_STYLES': (
+        ('', 'None'),
+    ),
+
+    'BACKGROUND_IMAGE_STYLES': (
+        ('', 'None'),
+    ),
 }
 
 
