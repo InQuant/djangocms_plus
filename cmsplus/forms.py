@@ -2,7 +2,7 @@ import logging
 from collections import OrderedDict
 
 from django import forms
-from django.conf import settings
+from cmsplus.app_settings import cmsplus_settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
@@ -107,7 +107,7 @@ def get_style_form_fields(style_config_key=None, style_multiple=False):
         form = MyCustomForm
         render_template = 'custom/snippet.html'
 
-    style_config_key should be a django.conf.settings - key which holds the
+    style_config_key should be a cmsplus_settings - key which holds the
     style choices, e.g.: ('c-text-white', 'Text White'), ...
     """
     style_choices = (
@@ -115,7 +115,7 @@ def get_style_form_fields(style_config_key=None, style_multiple=False):
     )
 
     if style_config_key:
-        sc = getattr(settings, style_config_key, style_choices)
+        sc = getattr(cmsplus_settings, style_config_key, style_choices)
     else:
         sc = style_choices
 
