@@ -9,3 +9,7 @@
 ## TODO 
 - Clipboard: Refresh page when Clipboard import was successful
     - modal on_close=REFRESH_PAGE is not working 
+
+
+## Known Issuesb
+- Icon Plugin is not working in CKTextEditor-Preview. Fonts need to be included in ckeditor js files, but how?
