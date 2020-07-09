@@ -1,2 +1,10 @@
 {% load static %}
 {% include 'cmsplus/includes/_extra_css.html' %}
+
+{# Add Media of defined icon dirs in app_settins.py to template (vars from context_processor) #}
+{% for css in CMSPLUS_FONT_CSS %}
+  <link rel="stylesheet" href="{% static css %}">
+{% endfor %}
+{% for js in CMSPLUS_FONT_JS %}
+  <script type="text/javascript" src="{% static js %}"></script>
+{% endfor %}

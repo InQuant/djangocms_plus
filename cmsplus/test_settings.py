@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    'debug_toolbar',
+
     'cmsplus',
     'cmsplus.tests',
 
@@ -76,6 +78,7 @@ INSTALLED_APPS = [
     'filer',
 
     'easy_thumbnails',
+
 ]
 
 
@@ -86,6 +89,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.page.CurrentPageMiddleware',
@@ -109,6 +114,7 @@ TEMPLATES = [
                 'cms.context_processors.cms_settings',
                 'sekizai.context_processors.sekizai',
                 'django.template.context_processors.i18n',
+                'cmsplus.context_processors.font_assets',
             ],
         },
     },
@@ -126,3 +132,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/m/'
 
 MEDIA_ROOT = 'media/'
+
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
