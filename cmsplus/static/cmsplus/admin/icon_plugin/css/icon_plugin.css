@@ -3,9 +3,7 @@ body {
 }
 
 button.field-plugin-icon-select {
-    margin: 0.3rem;
-    height: 3rem;
-    width: 3rem;
+    margin: 0.1rem;
     display: inline-block;
 }
 
