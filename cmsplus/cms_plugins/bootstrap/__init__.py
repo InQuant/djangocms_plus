@@ -1330,14 +1330,11 @@ class BootstrapButtonPlugin(StylePluginMixin, LinkPluginBase):
     def render(self, context, instance, placeholder):
         context = super().render(context, instance, placeholder)
         icon_pos = instance.glossary.get('icon_position')
-        print(instance.glossary.icon)
+        icon = instance.glossary.get('icon')
         if icon_pos == 'icon-top':
-            context['icon_top'] = format_html(
-                '<i class="{0}"></i></br>', context['icon'])
+            context['icon_top'] = icon
         elif icon_pos == 'icon-left':
-            context['icon_left'] = format_html(
-                '<i class="{0}"></i>&nbsp;', context['icon'])
+            context['icon_left'] = icon
         elif icon_pos == 'icon-right':
-            context['icon_right'] = format_html(
-                '&nbsp;<i class="{0}"></i>', context['icon_font_class'])
+            context['icon_right'] = icon
         return context
