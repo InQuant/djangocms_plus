@@ -20,12 +20,19 @@ class IconFieldWidget(forms.Widget):
 
     def __init__(self, attrs=None):
         super().__init__(attrs)
+
         # add fontawesome icons
         self.icons += self.get_fontawesome_icons
 
     def render(self, name, value, add_to_class=None, attrs=None, renderer=None):
         if renderer is None:
             renderer = get_default_renderer()
+
+        icons = IconFieldWidget.icons
+
+        # add no icon if not required
+        if not attrs.get('required'):
+            icons.insert(0, None)
 
         context = self.get_context(name, value, attrs)
         context['widget']['icons'] = IconFieldWidget.icons
@@ -85,7 +92,7 @@ class IconForm(PlusPluginFormBase):
     STYLE_CHOICES = 'MOD_ICON_STYLES'
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
-    icon = IconField()
+    icon = IconField(required=True)
 
 
 def get_icon_style_paths():

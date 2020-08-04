@@ -2,3 +2,4 @@ django-cms
 jsonfield
 django-filer
 easy-thumbnails
+djangocms_text_ckeditor

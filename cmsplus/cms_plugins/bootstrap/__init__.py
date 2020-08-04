@@ -1264,7 +1264,7 @@ class BootstrapButtonForm(LinkFormBase):
         help_text=_("Select icon position related to content."),
     )
 
-    icon = IconField(required=True)
+    icon = IconField(required=False)
 
     STYLE_CHOICES = 'BOOTSTRAP_BUTTON_STYLES'
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
@@ -1331,10 +1331,13 @@ class BootstrapButtonPlugin(StylePluginMixin, LinkPluginBase):
         context = super().render(context, instance, placeholder)
         icon_pos = instance.glossary.get('icon_position')
         icon = instance.glossary.get('icon')
-        if icon_pos == 'icon-top':
-            context['icon_top'] = icon
-        elif icon_pos == 'icon-left':
-            context['icon_left'] = icon
-        elif icon_pos == 'icon-right':
-            context['icon_right'] = icon
+
+        if icon:
+            if icon_pos == 'icon-top':
+                context['icon_top'] = format_html('&nbsp; <i class="{}"></i><br>'.format(icon))
+            elif icon_pos == 'icon-left':
+                context['icon_left'] = format_html('&nbsp; <i class="{}"></i>'.format(icon))
+            elif icon_pos == 'icon-right':
+                context['icon_right'] = format_html('&nbsp; <i class="{}"></i>'.format(icon))
+
         return context
