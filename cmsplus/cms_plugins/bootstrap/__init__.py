@@ -12,7 +12,7 @@ from cmsplus.fields import SizeField, PlusFilerImageSearchField
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase, get_style_form_fields, get_image_form_fields)
 from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin, LinkPluginBase)
-from cmsplus.cms_plugins.generic import IconField, get_icon_style_paths
+from cmsplus.cms_plugins.generic.icon import IconField, get_icon_style_paths
 
 logger = logging.getLogger(__name__)
 
