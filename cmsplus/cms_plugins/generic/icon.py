@@ -103,6 +103,7 @@ class IconPlugin(StylePluginMixin, PlusPluginBase):
     allow_children = False
     text_enabled = True
 
+    # TODO: check css_styles - it is not used in template
     def render(self, context, instance, placeholder):
         context['css_styles'] = get_icon_style_paths()
         return super().render(context, instance, placeholder)
