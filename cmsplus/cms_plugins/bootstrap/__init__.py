@@ -12,6 +12,7 @@ from cmsplus.fields import SizeField, PlusFilerImageSearchField
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase, get_style_form_fields, get_image_form_fields)
 from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin, LinkPluginBase)
+from cmsplus.cms_plugins.generic import IconField, get_icon_style_paths
 
 logger = logging.getLogger(__name__)
 
@@ -1217,4 +1218,90 @@ class BootstrapEmbedPlugin(BootstrapPluginBase):
             'embed_url': '%s?%s' % (url, q),
             'allowfullscreen': 'allowfullscreen' if instance.glossary.get('allow_fullscreen') else '',
         })
+        return context
+
+
+# Button Plugin
+# -------------
+#
+class BootstrapButtonForm(LinkFormBase):
+
+    icon = IconField(required=True)
+
+    STYLE_CHOICES = 'BOOTSTRAP_BUTTON_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
+
+
+class BootstrapButtonPluginModel(PlusPlugin, LinkPluginMixin):
+    class Meta:
+        proxy = True
+
+
+class BootstrapButtonPlugin(StylePluginMixin, LinkPluginBase):
+    footnote_html = """
+        renders a bootstrap button with various styles. The button may trigger a
+        internal or external page link, a download oder mailto link.
+    """
+    module = 'Bootstrap'
+    name = _('Button')
+    parent_classes = None
+    require_parent = False
+    allow_children = False
+    default_css_class = 'btn'
+    render_template = 'cmsplus/bootstrap/button.html'
+
+    form = BootstrapButtonForm
+    model = BootstrapButtonPluginModel
+
+    css_class_fields = StylePluginMixin.css_class_fields + ['button_size', 'button_block']
+
+    class Media:
+        css = {'all': ['cmsplus/admin/icon_plugin/css/icon_plugin.css'] + get_icon_style_paths()}
+        js = ['cmsplus/admin/icon_plugin/js/icon_plugin.js']
+
+    fieldsets = [
+        (None, {
+            'fields': ('glossary', 'content'),
+        }),
+        (_('Styles'), {
+            'fields': (
+                ('extra_style', 'button_size', 'button_block'),
+            ),
+        }),
+        (_('Link settings'), {
+            'fields': (
+                'link_type', 'cms_page', 'section', 'download_file', 'ext_url',
+                'mail_to', 'link_target', 'link_title'
+            )
+        }),
+        (_('Icon settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'icon_position',
+                'icon_font',
+                'symbol',
+            )
+        }),
+        (_('Extra settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_classes',
+                'label',
+            )
+        }),
+    ]
+
+    def render(self, context, instance, placeholder):
+        context = super().render(context, instance, placeholder)
+        if 'icon_font_class' in context:
+            icon_pos = instance.glossary.get('icon_position')
+            if icon_pos == 'icon-top':
+                context['icon_top'] = format_html(
+                    '<i class="{0}"></i></br>', context['icon_font_class'])
+            elif icon_pos == 'icon-left':
+                context['icon_left'] = format_html(
+                    '<i class="{0}"></i>&nbsp;', context['icon_font_class'])
+            elif icon_pos == 'icon-right':
+                context['icon_right'] = format_html(
+                    '&nbsp;<i class="{0}"></i>', context['icon_font_class'])
         return context

@@ -25,6 +25,7 @@ DEFAULTS = {
         'cmsplus.cms_plugins.bootstrap.HeadingPlugin',
         'cmsplus.cms_plugins.bootstrap.BootstrapFigurePlugin',
         'cmsplus.cms_plugins.bootstrap.BootstrapEmbedPlugin',
+        'cmsplus.cms_plugins.bootstrap.BootstrapButtonPlugin',
         'cmsplus.cms_plugins.bootstrap.accordion.BootstrapAccordionPlugin',
         'cmsplus.cms_plugins.bootstrap.accordion.BootstrapAccordionGroupPlugin',
         'cmsplus.cms_plugins.bootstrap.card.BootstrapCardHeaderPlugin',
