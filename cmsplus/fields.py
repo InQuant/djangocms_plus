@@ -2,13 +2,12 @@ import json
 import logging
 import re
 from abc import abstractmethod, ABC
-from six import string_types, u
 
 from cms.models.pagemodel import Page
 from cms.utils import get_current_site
 from django import forms
 from django.contrib.admin.sites import site as admin_site
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 from django.core.validators import ProhibitNullCharactersValidator, RegexValidator
 from django.db.models.fields.related import ManyToOneRel
 from django.forms.fields import Field
@@ -18,9 +17,9 @@ from filer.fields.file import AdminFileWidget, FilerFileField
 from filer.fields.image import FilerImageField
 from filer.models.filemodels import File as FilerFileModel
 from filer.models.imagemodels import Image as FilerImageModel
+from six import string_types, u
 
 from cmsplus.widgets import KeyValueWidget
-
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +81,20 @@ class PageSearchField(PlusModelChoiceField):
         Display value is the absolute url, sorted via iterator above.
         """
         return obj.get_absolute_url()
+
+    def to_python(self, value):
+        # fix for invalid choice error
+        # TypeError: int() argument must be a string, a bytes-like object or a number, not 'Page')
+        value_pk = getattr(value, 'pk', None)
+
+        if value in self.empty_values:
+            return None
+        try:
+            key = self.to_field_name or 'pk'
+            value = self.queryset.get(**{key: value_pk})
+        except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+            raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice')
+        return value
 
 
 class PlusFilerFileSearchField(PlusModelChoiceField):
