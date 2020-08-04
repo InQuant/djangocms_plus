@@ -300,7 +300,7 @@ class BackgroundVideoPlugin(StylePluginMixin, PlusPluginBase):
 
     fieldsets = [
         (None, {
-            'fields': ('glossary', 'video_file', 'image_filter', 'bottom_margin'),
+            'fields': ('video_file', 'image_filter', 'bottom_margin'),
         }),
         (_('Module settings'), {
             'fields': (
