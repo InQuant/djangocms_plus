@@ -75,7 +75,7 @@
   {% if plugin.errors %}
     <div class="cmsplus-plugin-error--text">
       {% for key, value in plugin.errors.items %}
-        <small>{% blocktrans %}Found error in '{{ key }}'{% endblocktrans %}</small>
+          <small>{% blocktrans %}Found error in '{{ key }}'{% endblocktrans %} - {{ value|join:", " }}</small>
       {% endfor %}
     </div>
   {% endif %}

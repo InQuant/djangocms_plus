@@ -55,6 +55,25 @@ class PlusModelChoiceField(forms.ModelChoiceField, BaseFieldMixIn):
             logger.error(tb)
             logger.error("PlusModelChoiceField Deserialization Error: Could not find object with pk '%s'" % value)
 
+    def to_python(self, value):
+        key = self.to_field_name or 'pk'
+
+        # fix for invalid choice error; sometimes value is an object instead pk
+        # TypeError: int() argument must be a string, a bytes-like object or a number, not 'Page')
+        value_pk = getattr(value, key, None)
+        if not value_pk:
+            value_pk = value
+
+        if value in self.empty_values:
+            return None
+
+        try:
+            key = self.to_field_name or 'pk'
+            value = self.queryset.get(**{key: value_pk})
+        except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+            raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice')
+        return value
+
 
 class PageChoiceIterator(forms.models.ModelChoiceIterator):
     """ Sort pages by absolute url. """
@@ -81,20 +100,6 @@ class PageSearchField(PlusModelChoiceField):
         Display value is the absolute url, sorted via iterator above.
         """
         return obj.get_absolute_url()
-
-    def to_python(self, value):
-        # fix for invalid choice error
-        # TypeError: int() argument must be a string, a bytes-like object or a number, not 'Page')
-        value_pk = getattr(value, 'pk', None)
-
-        if value in self.empty_values:
-            return None
-        try:
-            key = self.to_field_name or 'pk'
-            value = self.queryset.get(**{key: value_pk})
-        except (ValueError, TypeError, self.queryset.model.DoesNotExist):
-            raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice')
-        return value
 
 
 class PlusFilerFileSearchField(PlusModelChoiceField):
