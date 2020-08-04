@@ -1,3 +1,3 @@
 {% spaceless %}
-<i class="{{ instance.glossary.icon }}{% if instance.glossary.attributes.class %}{{ instance.glossary.attributes.class }}{% endif %}" aria-hidden="true" {% for key, value in instance.glossary.attributes.items %}{% if key != 'class' %}{{ key }}="{{ value }}" {% endif %}{% endfor %}></i>
+<i class="{{ instance.glossary.icon }}{% if instance.glossary.attributes.class %}{{ instance.glossary.attributes.class }}{% endif %}" aria-hidden="true" {% for key, value in instance.glossary.attributes.items %}{% if key != 'class' %}{{ key }}="{{ value }}" {% endif %}{% endfor %}>&nbsp;</i>
 {% endspaceless %}

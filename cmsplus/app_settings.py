@@ -179,12 +179,17 @@ DEFAULTS = {
         ('', 'None'),
     ),
 
-    'ICONS_DIR': {
-        'FONTAWESOME': {
-            'meta': 'cmsplus/icons/fontawesome/metadata/icons.json',
-            'css': 'cmsplus/icons/fontawesome/css/all.css',
-        },
+    'ICONS_FONTAWESOME': {
+        'meta': 'cmsplus/icons/fontawesome/metadata/icons.json',
+        'css': 'cmsplus/icons/fontawesome/css/all.css',
     },
+    # show and hide icons in project
+    'ICONS_FONTAWESOME_SHOW': True,
+
+    # custom fontello font packs
+    'ICONS_FONTELLO': [
+        # { 'meta': '', 'css': '' }
+    ],
 
     'MAGIC_WRAPPER_STYLES': (
         ('', 'None'),

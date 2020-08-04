@@ -21,8 +21,13 @@ class IconFieldWidget(forms.Widget):
     def __init__(self, attrs=None):
         super().__init__(attrs)
 
-        # add fontawesome icons
-        self.icons += self.get_fontawesome_icons
+        # add fontawesome
+        if cps.ICONS_FONTAWESOME and cps.ICONS_FONTAWESOME_SHOW:
+            self.icons += self.get_fontawesome_icons
+
+        # add icons
+        for font in cps.ICONS_FONTELLO:
+            self.icons += self.get_fontello(font)
 
     def render(self, name, value, add_to_class=None, attrs=None, renderer=None):
         if renderer is None:
@@ -50,9 +55,9 @@ class IconFieldWidget(forms.Widget):
         #   'label': '',
         #   'font_class_name': '', }
 
-        path = finders.find(cps.ICONS_DIR['FONTAWESOME']['meta'])
+        path = finders.find(cps.ICONS_FONTAWESOME['meta'])
         if not os.path.exists(path):
-            raise ImproperlyConfigured('ICONS_DIR: FONTAWESOME: meta path is not existing (%s)' % path)
+            raise ImproperlyConfigured('ICONS_FONTAWESOME: meta path is not existing (%s)' % path)
 
         with open(path, 'rb') as f:
             raw_data = f.read()
@@ -81,7 +86,32 @@ class IconFieldWidget(forms.Widget):
                 })
         return icons
 
-    # TODO: fontello implementieren
+    @staticmethod
+    def get_fontello(attrs):
+        icons = []
+        path = finders.find(attrs.get('meta'))
+        if not os.path.exists(path):
+            raise ImproperlyConfigured('CMSPLUS SETTINGS - ICONS: path is not existing (%s)' % path)
+
+        with open(path, 'rb') as f:
+            raw_data = f.read()
+        try:
+            data = json.loads(raw_data)
+        except TypeError:
+            # Python 3.5 compatibility
+            data = json.loads(raw_data.decode('utf-8'))
+
+        prefix = data.get('css_prefix_text', 'icon-')
+        for glyph in data.get('glyphs', []):
+            if not glyph.get('css'):
+                continue
+
+            icons.append({
+                'name': glyph.get('css'),
+                'label': glyph.get('css'),
+                'font_class_name': "%s%s" % (prefix, glyph.get('css')),
+            })
+        return icons
 
 
 class IconField(forms.CharField):
@@ -96,8 +126,14 @@ class IconForm(PlusPluginFormBase):
 
 
 def get_icon_style_paths():
-    fontawesome_path = cps.ICONS_DIR['FONTAWESOME']['css']
-    return [fontawesome_path, ]
+    paths = []
+    if cps.ICONS_FONTAWESOME and cps.ICONS_FONTAWESOME_SHOW:
+        paths.append(cps.ICONS_FONTAWESOME.get('css'))
+
+    for font in cps.ICONS_FONTELLO:
+        if font.get('css'):
+            paths.append(font.get('css'))
+    return paths
 
 
 class IconPlugin(StylePluginMixin, PlusPluginBase):

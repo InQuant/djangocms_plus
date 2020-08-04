@@ -5,10 +5,16 @@ def font_assets(request):
     css = []
     js = []
 
-    for icon_dir_str in cmsplus_settings.ICONS_DIR:
-        icon_dir = cmsplus_settings.ICONS_DIR[icon_dir_str]
-        css.append(icon_dir.get('css')) if icon_dir.get('css') else None
-        css.append(icon_dir.get('js')) if icon_dir.get('js') else None
+    if cmsplus_settings.ICONS_FONTAWESOME_SHOW:
+        _css = cmsplus_settings.ICONS_FONTAWESOME.get('css')
+        _js = cmsplus_settings.ICONS_FONTAWESOME.get('js')
+
+        css.append(_css) if _css else None
+        js.append(_js) if _js else None
+
+    for f in cmsplus_settings.ICONS_FONTELLO:
+        css.append(f.get('css')) if f.get('css') else None
+        js.append(f.get('js')) if f.get('js') else None
 
     return {
         'CMSPLUS_FONT_CSS': css,
