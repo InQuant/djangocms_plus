@@ -219,9 +219,10 @@ class CmsPlusSettings:
         self.defaults = defaults
 
     def __getattr__(self, attr):
-        if attr not in self.defaults:
-            raise AttributeError("Invalid setting key: '%s'" % attr)
-        return self.site_settings.get(attr, self.defaults[attr])
+        ret = self.site_settings.get(attr, self.defaults.get(attr))
+        if not ret:
+            raise AttributeError
+        return ret
 
     def get_all(self):
         return [(k, getattr(self, k)) for k in self.defaults.keys()]

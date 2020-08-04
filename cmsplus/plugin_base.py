@@ -1,5 +1,4 @@
 from cms.plugin_base import CMSPluginBase
-from django.conf import settings
 from django.utils.safestring import mark_safe
 from filer.models.filemodels import File as FilerFileModel
 
@@ -128,8 +127,7 @@ class StylePluginMixin(object):
             return self.render_template
 
         style_template = getattr(
-            settings, 'EXTRA_STYLE_TEMPLATES',
-            {}).get(instance.glossary.get('extra_style'))
+            cps, 'EXTRA_STYLE_TEMPLATES', {}).get(instance.glossary.get('extra_style'))
         if not style_template:
             return self.render_template
 
@@ -145,7 +143,7 @@ class StylePluginMixin(object):
             try:
                 form = getattr(cls, 'form')
                 choice_key = getattr(form, 'STYLE_CHOICES')
-                style_map = dict(getattr(settings, choice_key))
+                style_map = dict(getattr(cps, choice_key))
                 return style_map[instance.glossary.get('extra_style')]
             except Exception:
                 return instance.glossary.get('extra_style')
