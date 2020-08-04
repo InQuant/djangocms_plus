@@ -1299,7 +1299,7 @@ class BootstrapButtonPlugin(StylePluginMixin, LinkPluginBase):
 
     fieldsets = [
         (None, {
-            'fields': ('glossary', 'content'),
+            'fields': ('content', ),
         }),
         (_('Styles'), {
             'fields': (
