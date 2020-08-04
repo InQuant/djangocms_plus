@@ -15,6 +15,7 @@ from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin, LinkPluginBas
 
 logger = logging.getLogger(__name__)
 
+
 class BootstrapPluginBase(StylePluginMixin, PlusPluginBase):
     module = 'Bootstrap'
 
@@ -959,7 +960,40 @@ class BackgroundImageForm(PlusPluginFormBase):
 BackgroundImageForm.extend_form_fields()
 
 
-class BackgroundImagePlugin(BootstrapPluginBase):
+class BackgroundImagePropertiesMixin():
+
+    @staticmethod
+    def eval_background_image_props(instance):
+        # shorty
+        igg = instance.glossary.get
+
+        if not igg('do_thumbnail', False):
+            return {}
+
+        # scoped style background image widths
+        bgimgwidths = {}
+        ratio = igg('img_dev_width_xs') or '1/4'
+        for dev in cps.DEVICES:
+            width_key = 'img_dev_width_%s' % dev
+            if igg(width_key):
+                ratio = igg(width_key)
+            k = cps.DEVICE_MIN_WIDTH_MAP.get(dev)
+            w = cps.DEVICE_MAX_WIDTH_MAP.get(dev)
+            # e.g. for md -> k=768, w=991, ratio=1/2: v = 991*1/2=496
+            bgimgwidths[k] = '%dx0' % round(w * eval(ratio))
+
+        if igg('crop', False) and igg('crop_spec', ''):
+            crop = igg('crop_spec')  # smart or scale or 0,10 or ,10 ...
+        else:
+            crop = igg('crop')  # True or False
+
+        return {
+            'bgimgwidths': bgimgwidths,
+            'crop': crop,  # boolean or str
+        }
+
+
+class BackgroundImagePlugin(BackgroundImagePropertiesMixin, BootstrapPluginBase):
     footnote_html = """
         Renders a div container with a background image.
         <br>
@@ -1011,36 +1045,6 @@ class BackgroundImagePlugin(BootstrapPluginBase):
         context = super().render(context, instance, placeholder)
         context.update(self.eval_background_image_props(instance))
         return context
-
-    @staticmethod
-    def eval_background_image_props(instance):
-        # shorty
-        igg = instance.glossary.get
-
-        if not igg('do_thumbnail', False):
-            return {}
-
-        # scoped style background image widths
-        bgimgwidths = {}
-        ratio = igg('img_dev_width_xs') or '1/4'
-        for dev in cps.DEVICES:
-            width_key = 'img_dev_width_%s' % dev
-            if igg(width_key):
-                ratio = igg(width_key)
-            k = cps.DEVICE_MIN_WIDTH_MAP.get(dev)
-            w = cps.DEVICE_MAX_WIDTH_MAP.get(dev)
-            # e.g. for md -> k=768, w=991, ratio=1/2: v = 991*1/2=496
-            bgimgwidths[k] = '%dx0' % round(w * eval(ratio))
-
-        if igg('crop', False) and igg('crop_spec', ''):
-            crop = igg('crop_spec')  # smart or scale or 0,10 or ,10 ...
-        else:
-            crop = igg('crop')  # True or False
-
-        return {
-            'bgimgwidths': bgimgwidths,
-            'crop': crop,  # boolean or str
-        }
 
 
 # HeadingPlugin
