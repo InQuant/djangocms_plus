@@ -85,13 +85,13 @@ class PageSearchField(PlusModelChoiceField):
     def to_python(self, value):
         # fix for invalid choice error
         # TypeError: int() argument must be a string, a bytes-like object or a number, not 'Page')
-        value = getattr(value, 'pk', None)
+        value_pk = getattr(value, 'pk', None)
 
         if value in self.empty_values:
             return None
         try:
             key = self.to_field_name or 'pk'
-            value = self.queryset.get(**{key: value})
+            value = self.queryset.get(**{key: value_pk})
         except (ValueError, TypeError, self.queryset.model.DoesNotExist):
             raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice')
         return value
