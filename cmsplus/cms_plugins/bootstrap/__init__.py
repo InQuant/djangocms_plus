@@ -1225,6 +1225,44 @@ class BootstrapEmbedPlugin(BootstrapPluginBase):
 # -------------
 #
 class BootstrapButtonForm(LinkFormBase):
+    content = forms.CharField(label=_('Content'), required=False,
+            help_text='Button content, e.g.: Click me, or nothing for icon only button')
+
+    BUTTON_SIZES = [
+        ('btn-lg', _("Large button")),
+        ('', _("Default button")),
+        ('btn-sm', _("Small button")),
+    ]
+
+    button_size = forms.ChoiceField(
+        label=_("Button Size"),
+        choices=BUTTON_SIZES,
+        initial='',
+        required=False,
+        help_text=_("Button Size to use.")
+    )
+
+    button_block = forms.ChoiceField(
+        label=_("Button Block"),
+        choices=[
+            ('', _('No')),
+            ('btn-block', _('Block level button')),
+        ],
+        required=False,
+        initial='',
+        help_text=_("Use button block option (span left to right)?")
+    )
+
+    icon_position = forms.ChoiceField(
+        label=_("Icon position"),
+        choices=[
+            ('icon-top', _("Icon top")),
+            ('icon-right', _("Icon right")),
+            ('icon-left', _("Icon left")),
+        ],
+        initial='icon-right',
+        help_text=_("Select icon position related to content."),
+    )
 
     icon = IconField(required=True)
 
