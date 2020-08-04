@@ -1,0 +1,20 @@
+{% load cms_tags static %}
+
+{% with i=instance ifilter=instance.glossary.image_filter %}
+<div id="div-{{ i.id }}" class="{{ instance.css_classes }} position-relative overflow-hidden">
+  
+  <video id="video-{{ i.id }}" autoplay loop muted class="c-bg-video">
+    <source src="{{ video_url }}" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  {% for child in instance.child_plugin_instances %}
+    {% render_plugin child %}
+  {% endfor %}
+
+  {% if ifilter %}
+    <div class="{{ ifilter }}"></div>
+  {% endif %}
+
+</div>
+{% endwith %}

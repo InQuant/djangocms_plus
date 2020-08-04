@@ -262,3 +262,56 @@ class VerticalRatioSpacerPlugin(StylePluginMixin, PlusPluginBase):
         css_classes = super().get_css_classes(instance)
         css_classes.append('c-vertical-ratio-spacer-%s' % instance.id)
         return css_classes
+
+
+# Background Video
+# ----------------
+#
+class BackgroundVideoForm(PlusPluginFormBase):
+
+    video_file = PlusFilerFileSearchField(
+        label='Video file',
+        help_text=_("An internal link onto an video file"),
+    )
+
+    image_filter = forms.ChoiceField(
+        label='Image Filter', required=False,
+        choices=cps.BGIMG_FILTER_CHOICES, initial='',
+        help_text='The color filter to be applied over the unhovered video.')
+
+    bottom_margin = forms.ChoiceField(
+        label=u'Bottom Margin',
+        required=False, choices=cps.CNT_BOTTOM_MARGIN_CHOICES,
+        initial='',
+        help_text='Select the default bottom margin to be applied?')
+
+    STYLE_CHOICES = 'BACKGROUND_VIDEO_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
+
+
+class BackgroundVideoPlugin(StylePluginMixin, PlusPluginBase):
+    name = _("Background Video")
+    allow_children = True
+    admin_preview = False
+    form = BackgroundVideoForm
+    render_template = 'cmsplus/generic/background-video.html'
+
+    css_class_fields = StylePluginMixin.css_class_fields + ['bottom_margin']
+
+    fieldsets = [
+        (None, {
+            'fields': ('glossary', 'video_file', 'image_filter', 'bottom_margin'),
+        }),
+        (_('Module settings'), {
+            'fields': (
+                'extra_style', 'extra_classes', 'label',
+            )
+        }),
+    ]
+
+    def render(self, context, instance, placeholder):
+        context = super().render(context, instance, placeholder)
+        video = instance.glossary.get('video_file', None)
+        if video:
+            context['video_url'] = video.url
+        return context
