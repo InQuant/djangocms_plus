@@ -137,3 +137,12 @@ MEDIA_ROOT = 'media/'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+CMSPLUS = {
+    'ICONS_FONTELLO': [
+        {
+            'css': 'test_fontello/fontello/css/fontello.css',
+            'meta': 'test_fontello/fontello/config.json',
+        },
+    ],
+}
