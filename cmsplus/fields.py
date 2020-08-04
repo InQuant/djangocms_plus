@@ -66,14 +66,14 @@ class PageChoiceIterator(forms.models.ModelChoiceIterator):
 
 class PageSearchField(PlusModelChoiceField):
     iterator = PageChoiceIterator
-    queryset = Page.objects.public()
 
     def __init__(self, *args, **kwargs):
+        queryset = Page.objects.public()
         try:
-            queryset = self.queryset.on_site(get_current_site())
+            queryset = queryset.on_site(get_current_site())
         except Exception:
             pass  # can happen if database is not ready yet
-        kwargs.setdefault('queryset', self.queryset)
+        kwargs.setdefault('queryset', queryset)
         super().__init__(*args, **kwargs)
 
     def label_from_instance(self, obj):
