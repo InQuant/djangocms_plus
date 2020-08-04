@@ -1315,7 +1315,7 @@ class BootstrapButtonPlugin(StylePluginMixin, LinkPluginBase):
         (_('Icon settings'), {
             'classes': ('collapse',),
             'fields': (
-                'icon_position',
+                'icon_position', 'icon',
             )
         }),
         (_('Extra settings'), {
