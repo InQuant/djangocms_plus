@@ -36,9 +36,14 @@ class IconFieldWidget(forms.Widget):
 
         icons = IconFieldWidget.icons
 
-        # add no icon if not required
+        # add "no-icon" if not required
         if not attrs.get('required'):
-            icons.insert(0, None)
+            if not any(f['font_class_name'] == 'cmsplus-icon-none' for f in icons):
+                icons.insert(0, {
+                    'name': _('No icon'),
+                    'label': _('No icon'),
+                    'font_class_name': 'cmsplus-icon-none'
+                })
 
         context = self.get_context(name, value, attrs)
         context['widget']['icons'] = IconFieldWidget.icons

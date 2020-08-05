@@ -2,6 +2,11 @@ body {
     padding-bottom: 8rem;
 }
 
+.cmsplus-icon-none {
+    padding: .2rem 1rem;
+    background-color: lightgray;
+}
+
 button.field-plugin-icon-select {
     margin: 0.1rem;
     display: inline-block;
@@ -11,15 +16,11 @@ button.field-plugin-icon-select {
 }
 
 .highlight-selected-icon {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    width: 100%;
     background: white;
     text-align: center;
     padding: 1rem;
     max-height: 8rem;
-    border-top: solid 1px black;
 }
 .highlight-selected-icon > i {
     font-size: 4rem;

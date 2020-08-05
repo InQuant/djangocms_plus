@@ -1,13 +1,13 @@
 {% load i18n l10n cms_tags %}
 
 <style>
-  div.cms .cms-structure .cms-draggable.cmsplus-plugin-error .cms-dragitem {
-    background-color: rgba(255, 67, 97, 1) !important;
-  }
-  div.cms .cms-structure .cmsplus-plugin-error--text {
-    color: rgba(255, 67, 97, 1);
-    text-align: center;
-  }
+    div.cms .cms-structure .cms-draggable.cmsplus-plugin-error .cms-dragitem {
+        background-color: rgba(255, 67, 97, 1) !important;
+    }
+    div.cms .cms-structure .cmsplus-plugin-error--text {
+        color: rgba(255, 67, 97, 1);
+        text-align: center;
+    }
 </style>
 
 {% with allow_children=plugin.get_plugin_class.allow_children disable_child_plugins=plugin.get_plugin_class.disable_child_plugins %}
@@ -64,6 +64,13 @@
 
     <div class="cms-collapsable-container cms-hidden
         {% if allow_children %} cms-draggables{% endif %}">
+      {% if plugin.errors %}
+        <div class="cmsplus-plugin-error--text">
+          {% for key, value in plugin.errors.items %}
+            <small>{% blocktrans %}Found error in '{{ key }}'{% endblocktrans %} - {{ value|join:", " }}</small>
+          {% endfor %}
+        </div>
+      {% endif %}
       {% if plugin.child_plugin_instances %}
         {% for child in plugin.child_plugin_instances %}
           {% include cms_toolbar.templates.drag_item_template with plugin=child disabled_child=disable_child_plugins %}
@@ -71,12 +78,4 @@
       {% endif %}
     </div>
   </div>
-
-  {% if plugin.errors %}
-    <div class="cmsplus-plugin-error--text">
-      {% for key, value in plugin.errors.items %}
-          <small>{% blocktrans %}Found error in '{{ key }}'{% endblocktrans %} - {{ value|join:", " }}</small>
-      {% endfor %}
-    </div>
-  {% endif %}
 {% endwith %}
