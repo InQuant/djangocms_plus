@@ -3,7 +3,7 @@
 {% addtoblock 'js' %}<script src="{% static 'cmsplus/ext/glidejs/glide.min.js' %}"></script>{% endaddtoblock %}
 {% addtoblock 'js' %}
   <script>
-      let glide = new Glide('#glide-{{ instance.id }}', {
+      let glide{{ instance.id }} = new Glide('#glide-{{ instance.id }}', {
           focusAt: "center",
 
           {% if  instance.glossary.n_slides_xl %}
@@ -31,7 +31,7 @@
           animationDuration: {{ instance.glossary.animation_duration|default_if_none:400 }},
           animationTimingFunc: "{{ instance.glossary.animation_timing_func|default_if_none:'cubic-bezier(0.165, 0.840, 0.440, 1.000)' }}",
       });
-      glide.mount();
+      glide{{ instance.id }}.mount();
   </script>
 {% endaddtoblock %}
 

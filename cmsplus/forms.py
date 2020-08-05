@@ -75,8 +75,6 @@ class PlusPluginFormBase(forms.ModelForm):
 
         for field_name in cls.declared_fields:
             value = obj.get(field_name, None)
-            if not value:
-                continue
 
             field = cls.declared_fields.get(field_name)
             if hasattr(field, "deserialize_field"):
@@ -87,6 +85,7 @@ class PlusPluginFormBase(forms.ModelForm):
                 parsed_dict[field_name] = value
 
         return parsed_dict
+
 
 # StylePluginMixin form fields
 # ----------------------------

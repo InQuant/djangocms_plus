@@ -146,18 +146,21 @@ class SliderPlugin(StylePluginMixin, LinkPluginBase):
         return True
 
 
-class SliderChildForm(SliderForm, LinkFormBase):
+class SlideForm(LinkFormBase):
     require_link = False
 
+    STYLE_CHOICES = 'SLIDE_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
-class SliderChildPlugin(StylePluginMixin, LinkPluginBase):
-    name = _("Slider Child")
+
+class SlidePlugin(StylePluginMixin, LinkPluginBase):
+    name = _("Slide")
     parent_classes = ['SliderPlugin', ]
     allow_children = True
     alien_child_classes = True
     render_template = 'cmsplus/generic/slider/slider_child.html'
 
-    form = SliderChildForm
+    form = SlideForm
 
     class Media:
         js = [
