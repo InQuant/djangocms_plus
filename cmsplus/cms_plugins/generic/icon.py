@@ -10,8 +10,9 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings as cps
-from cmsplus.forms import PlusPluginFormBase, get_style_form_fields
-from cmsplus.plugin_base import PlusPluginBase, StylePluginMixin
+from cmsplus.models import PlusPlugin, LinkPluginMixin
+from cmsplus.forms import LinkFormBase, get_style_form_fields
+from cmsplus.plugin_base import LinkPluginBase, StylePluginMixin
 
 
 class IconFieldWidget(forms.Widget):
@@ -26,7 +27,7 @@ class IconFieldWidget(forms.Widget):
             self.icons += self.get_fontawesome_icons
 
         # add icons
-        for font in cps.ICONS_FONTELLO:
+        for font in getattr(cps, 'ICONS_FONTELLO', []):
             self.icons += self.get_fontello(font)
 
     def render(self, name, value, add_to_class=None, attrs=None, renderer=None):
@@ -118,7 +119,9 @@ class IconField(forms.CharField):
     widget = IconFieldWidget
 
 
-class IconForm(PlusPluginFormBase):
+class IconForm(LinkFormBase):
+    require_link = False
+
     STYLE_CHOICES = 'MOD_ICON_STYLES'
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
@@ -130,27 +133,55 @@ def get_icon_style_paths():
     if cps.ICONS_FONTAWESOME and cps.ICONS_FONTAWESOME_SHOW:
         paths.append(cps.ICONS_FONTAWESOME.get('css'))
 
-    for font in cps.ICONS_FONTELLO:
+    for font in getattr(cps, 'ICONS_FONTELLO', []):
         if font.get('css'):
             paths.append(font.get('css'))
     return paths
 
 
-class IconPlugin(StylePluginMixin, PlusPluginBase):
+class IconPluginModel(PlusPlugin, LinkPluginMixin):
+    class Meta:
+        proxy = True
+
+
+class IconPlugin(StylePluginMixin, LinkPluginBase):
     footnote_html = """
     Choose icon from font defined in the settings
     """
     name = _('Icon')
+    model = IconPluginModel
     form = IconForm
     render_template = "cmsplus/generic/icon.html"
     allow_children = False
     text_enabled = True
 
-    # TODO: check css_styles - it is not used in template
-    def render(self, context, instance, placeholder):
-        context['css_styles'] = get_icon_style_paths()
-        return super().render(context, instance, placeholder)
-
     class Media:
         css = {'all': ['cmsplus/admin/icon_plugin/css/icon_plugin.css'] + get_icon_style_paths()}
         js = ['cmsplus/admin/icon_plugin/js/icon_plugin.js']
+
+    fieldsets = [
+        (None, {
+            'fields': (
+                'extra_style',
+                'extra_classes',
+                'extra_css',
+                'label',
+            ),
+        }),
+        (_('Link settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'link_type', 'cms_page', 'section', 'download_file', 'ext_url',
+                'mail_to', 'link_target', 'link_title'
+            )
+        }),
+        (_('Icon settings'), {
+            'fields': (
+                'icon',
+            )
+        }),
+    ]
+
+    @classmethod
+    def get_identifier(cls, instance):
+        return instance.glossary.get('icon')

@@ -225,7 +225,7 @@ class CmsPlusSettings:
 
     def __getattr__(self, attr):
         ret = self.site_settings.get(attr, self.defaults.get(attr))
-        if not ret:
+        if ret is None and attr not in self.site_settings and attr not in self.defaults:
             raise AttributeError
         return ret
 

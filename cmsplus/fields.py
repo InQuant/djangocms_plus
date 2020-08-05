@@ -47,12 +47,12 @@ class PlusModelChoiceField(forms.ModelChoiceField, BaseFieldMixIn):
         return getattr(obj, "pk", None)
 
     def deserialize_field(self, value):
+        if value is None:
+            return None
         try:
             return self.queryset.get(pk=value)
-        except:
-            import traceback
-            tb = traceback.format_exc()
-            logger.error(tb)
+        except Exception as e:
+            logger.exception(str(e))
             logger.error("PlusModelChoiceField Deserialization Error: Could not find object with pk '%s'" % value)
 
     def to_python(self, value):

@@ -12,7 +12,7 @@ def font_assets(request):
         css.append(_css) if _css else None
         js.append(_js) if _js else None
 
-    for f in cmsplus_settings.ICONS_FONTELLO:
+    for f in getattr(cmsplus_settings, 'ICONS_FONTELLO', []):
         css.append(f.get('css')) if f.get('css') else None
         js.append(f.get('js')) if f.get('js') else None
 
