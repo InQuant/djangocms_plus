@@ -16,9 +16,7 @@
 
       var jsaccordion = {
           self: null,
-          first_is_open,
           init : function (target, first_is_open) {
-              this.first_is_open = first_is_open;
               // init() : initialize accordion
               // PARAM target : ID of accordion wrapper
               //       single : Only one drawer will only at a time
@@ -62,7 +60,7 @@
                   if (contents.length > 0) {
                       for (var content of contents) {
                           content.classList.remove("open");
-                          content.previousElementSibling.remove("open");
+                          content.previousElementSibling.classList.remove("open");
                           content.style.maxHeight = null;
                       }
                   }
@@ -71,7 +69,7 @@
               // Open selected drawer
               let c = this.nextElementSibling;
               c.classList.toggle("open");
-              c.previousElementSibling.classList.toggle("open");
+              c.previousElementSibling.classList.toggle("open")
 
               jsaccordion.openTabs();
           },
