@@ -7,10 +7,12 @@ from cms.models.pagemodel import Page
 from cms.utils import get_current_site
 from django import forms
 from django.contrib.admin.sites import site as admin_site
+from django.contrib.admin.widgets import AdminSplitDateTime
 from django.core.exceptions import ValidationError
 from django.core.validators import ProhibitNullCharactersValidator, RegexValidator
 from django.db.models.fields.related import ManyToOneRel
 from django.forms.fields import Field
+from django.utils.datetime_safe import datetime
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext_lazy as _, ugettext
 from filer.fields.file import AdminFileWidget, FilerFileField
@@ -231,3 +233,23 @@ class KeyValueField(forms.CharField):
                 )
         else:
             return value
+
+
+class PlusSplitDateTimeField(forms.SplitDateTimeField, BaseFieldMixIn):
+    widget = AdminSplitDateTime
+
+    def deserialize_field(self, value):
+        return datetime.fromisoformat(value)
+
+    def serialize_field(self, value: datetime):
+        return value.isoformat()
+
+
+class PlusDateTimeField(forms.DateTimeField, BaseFieldMixIn):
+    widget = AdminSplitDateTime
+
+    def deserialize_field(self, value):
+        return datetime.fromisoformat(value)
+
+    def serialize_field(self, value: datetime):
+        return value.isoformat()
