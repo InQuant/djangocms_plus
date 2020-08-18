@@ -239,7 +239,10 @@ class PlusSplitDateTimeField(forms.SplitDateTimeField, BaseFieldMixIn):
     widget = AdminSplitDateTime
 
     def deserialize_field(self, value):
-        return datetime.fromisoformat(value)
+        try:
+            return datetime.fromisoformat(value)
+        except ValueError:
+            return None
 
     def serialize_field(self, value: datetime):
         return value.isoformat()
@@ -249,7 +252,10 @@ class PlusDateTimeField(forms.DateTimeField, BaseFieldMixIn):
     widget = AdminSplitDateTime
 
     def deserialize_field(self, value):
-        return datetime.fromisoformat(value)
+        try:
+            return datetime.fromisoformat(value)
+        except ValueError:
+            return None
 
     def serialize_field(self, value: datetime):
         return value.isoformat()
