@@ -247,6 +247,8 @@ class PlusSplitDateTimeField(forms.SplitDateTimeField, BaseFieldMixIn):
             pass
 
     def serialize_field(self, value: datetime):
+        if not value or value == "":
+            return
         return value.isoformat()
 
 
@@ -262,4 +264,6 @@ class PlusDateTimeField(forms.DateTimeField, BaseFieldMixIn):
             pass
 
     def serialize_field(self, value: datetime):
+        if not value or value == "":
+            return
         return value.isoformat()
