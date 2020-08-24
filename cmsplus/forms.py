@@ -34,14 +34,14 @@ class PlusPluginFormBase(forms.ModelForm):
                 initial[field_name] = kwargs.get('instance').glossary.get(field_name)
 
             kwargs['initial'] = initial
-        super().__init__(*args, **kwargs)
+        super(PlusPluginFormBase, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
         """
         Put serialized data to glossary (_json) field, then save.
         """
         self.instance.data = self.serialize_data()
-        return super().save(commit)
+        return super(PlusPluginFormBase, self).save(commit)
 
     def serialize_data(self):
         """
@@ -215,10 +215,10 @@ class LinkFormBase(PlusPluginFormBase):
         link_type_choices.extend(self.LINK_TYPE_CHOICES)
         self.declared_fields['link_type'].choices = link_type_choices
         self.declared_fields['link_type'].initial = link_type_choices[0][0]
-        super().__init__(*args, **kwargs)
+        super(LinkFormBase, self).__init__(*args, **kwargs)
 
     def clean(self):
-        cleaned_data = super().clean()
+        cleaned_data = super(LinkFormBase, self).clean()
         link_type = cleaned_data.get('link_type')
 
         if link_type == 'cmspage' and not self.has_error('cms_page'):
