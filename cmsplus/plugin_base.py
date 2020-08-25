@@ -13,7 +13,8 @@ class PlusPluginBase(CMSPluginBase):
 
     @classmethod
     def get_glossary(cls, instance):
-        return cls.form.deserialize(instance.data)
+        form = cls.form(instance.data)
+        return form.deserialize()
 
     def save_form(self, request, form, change):
         """

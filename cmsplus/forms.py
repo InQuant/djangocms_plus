@@ -63,24 +63,26 @@ class PlusPluginFormBase(forms.ModelForm):
                 parsed_data[key] = value
         return parsed_data
 
-    @classmethod
-    def deserialize(cls, obj):
+    def deserialize(self):
         """
         Deserialize data from Json field into dict. Opposite of serialize function (see above)
-        :param obj:
         :return: Data
         :rtype: dict:
         """
         parsed_dict = OrderedDict()
 
-        for field_name in cls.declared_fields:
-            value = obj.get(field_name, None)
+        for field_name in self.declared_fields:
+            value = self.data.get(field_name, None)
 
-            field = cls.declared_fields.get(field_name)
+            field = self.declared_fields.get(field_name)
             if hasattr(field, "deserialize_field"):
                 deserialize_field = getattr(field, "deserialize_field")
                 if callable(deserialize_field):
-                    parsed_dict[field_name] = deserialize_field(value)
+                    try:
+                        parsed_dict[field_name] = deserialize_field(value)
+                    except ValidationError as e:
+                        print(e)
+                        self._update_errors(e)
             else:
                 parsed_dict[field_name] = value
 

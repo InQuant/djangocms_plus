@@ -17,6 +17,13 @@
     {% if not allow_children %} cms-draggable-disabled{% endif %}
     {% if clipboard %} cms-draggable-from-clipboard{% endif %}">
 
+    {% if plugin.errors %}
+      <div class="cmsplus-plugin-error--text">
+        {% for key, value in plugin.errors.items %}
+          <small>{% blocktrans %}Found error in '{{ key }}'{% endblocktrans %} - {{ value|join:", " }}</small>
+        {% endfor %}
+      </div>
+    {% endif %}
     <div class="cms-dragitem cms-dragitem-handler
         {% if plugin.child_plugin_instances %} cms-dragitem-collapsable{% endif %}">
       {% if not disabled_child %}
@@ -64,13 +71,6 @@
 
     <div class="cms-collapsable-container cms-hidden
         {% if allow_children %} cms-draggables{% endif %}">
-      {% if plugin.errors %}
-        <div class="cmsplus-plugin-error--text">
-          {% for key, value in plugin.errors.items %}
-            <small>{% blocktrans %}Found error in '{{ key }}'{% endblocktrans %} - {{ value|join:", " }}</small>
-          {% endfor %}
-        </div>
-      {% endif %}
       {% if plugin.child_plugin_instances %}
         {% for child in plugin.child_plugin_instances %}
           {% include cms_toolbar.templates.drag_item_template with plugin=child disabled_child=disable_child_plugins %}

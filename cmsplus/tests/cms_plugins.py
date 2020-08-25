@@ -17,6 +17,8 @@ from cmsplus.tests.forms import TestForm
 class ExamplePlugin(PlusPluginBase):
     form = TestForm
     render_template = "test_plugin.html"
+    name = 'Test'
+    module = 'test'
 
 
 class TestAllIncludedPlugins(TestCase):

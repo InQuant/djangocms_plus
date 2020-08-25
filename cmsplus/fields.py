@@ -2,13 +2,14 @@ import json
 import logging
 import re
 from abc import abstractmethod, ABC
+from pprint import pprint
 
 from cms.models.pagemodel import Page
 from cms.utils import get_current_site
 from django import forms
 from django.contrib.admin.sites import site as admin_site
 from django.contrib.admin.widgets import AdminSplitDateTime
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import ProhibitNullCharactersValidator, RegexValidator
 from django.db.models.fields.related import ManyToOneRel
 from django.forms.fields import Field
@@ -40,7 +41,7 @@ class PlusModelMultipleChoiceField(forms.ModelMultipleChoiceField, BaseFieldMixI
     def serialize_field(self, qs):
         return list(qs.values_list("pk", flat=True))
 
-    def deserialize_field(self, value: list):  # noqa E999
+    def deserialize_field(self, value: list):
         return self.queryset.filter(pk__in=value)
 
 
@@ -53,9 +54,9 @@ class PlusModelChoiceField(forms.ModelChoiceField, BaseFieldMixIn):
             return None
         try:
             return self.queryset.get(pk=value)
-        except Exception as e:
-            logger.exception(str(e))
-            logger.error("PlusModelChoiceField Deserialization Error: Could not find object with pk '%s'" % value)
+        except ObjectDoesNotExist as e:
+            raise ValidationError('PlusModelChoiceField Deserialization Error: Could not find %s object with pk %s' %
+                                  (self.queryset.model.__name__, value))
 
     def to_python(self, value):
         key = self.to_field_name or 'pk'
@@ -79,6 +80,7 @@ class PlusModelChoiceField(forms.ModelChoiceField, BaseFieldMixIn):
 
 class PageChoiceIterator(forms.models.ModelChoiceIterator):
     """ Sort pages by absolute url. """
+
     def __iter__(self):
         pages = sorted(self.queryset.all(), key=lambda p: p.get_absolute_url())
         for obj in pages:
@@ -107,26 +109,24 @@ class PageSearchField(PlusModelChoiceField):
 class PlusFilerFileSearchField(PlusModelChoiceField):
 
     def __init__(
-        self,
-        queryset=FilerFileModel.objects.all(),
-        widget=AdminFileWidget(
-            ManyToOneRel(FilerFileField, FilerFileModel, 'id'), admin_site),
-        *args, **kwargs
+            self,
+            queryset=FilerFileModel.objects.all(),
+            widget=AdminFileWidget(
+                ManyToOneRel(FilerFileField, FilerFileModel, 'id'), admin_site),
+            *args, **kwargs
     ):
-
         super().__init__(queryset=queryset, widget=widget, *args, **kwargs)
 
 
 class PlusFilerImageSearchField(PlusModelChoiceField):
 
     def __init__(
-        self,
-        queryset=FilerImageModel.objects.all(),
-        widget=AdminFileWidget(
-            ManyToOneRel(FilerImageField, FilerImageModel, 'id'), admin_site),
-        *args, **kwargs
+            self,
+            queryset=FilerImageModel.objects.all(),
+            widget=AdminFileWidget(
+                ManyToOneRel(FilerImageField, FilerImageModel, 'id'), admin_site),
+            *args, **kwargs
     ):
-
         super().__init__(queryset=queryset, widget=widget, *args, **kwargs)
 
 
@@ -176,10 +176,10 @@ class SizeUnitValidator:
 
     def __eq__(self, other):
         return (
-            isinstance(other, self.__class__) and
-            self.allowed_units == other.allowed_units and
-            self.message == other.message and
-            self.code == other.code
+                isinstance(other, self.__class__) and
+                self.allowed_units == other.allowed_units and
+                self.message == other.message and
+                self.code == other.code
         )
 
 
