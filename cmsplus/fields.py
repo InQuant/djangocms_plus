@@ -2,7 +2,6 @@ import json
 import logging
 import re
 from abc import abstractmethod, ABC
-from pprint import pprint
 
 from cms.models.pagemodel import Page
 from cms.utils import get_current_site

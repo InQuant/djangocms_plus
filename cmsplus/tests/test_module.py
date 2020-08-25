@@ -1,7 +1,5 @@
-from pprint import pprint
-
 from cms.api import add_plugin
-from cms.models import Placeholder, UserSettings
+from cms.models import Placeholder
 from cms.plugin_rendering import ContentRenderer
 from cms.test_utils.testcases import CMSTestCase
 from django.contrib.auth.models import User

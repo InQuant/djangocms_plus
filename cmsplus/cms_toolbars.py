@@ -1,8 +1,6 @@
-from pprint import pprint
-
 from cms.cms_toolbars import ADMIN_MENU_IDENTIFIER
 from cms.constants import REFRESH_PAGE
-from cms.toolbar.items import LinkItem, ModalItem
+from cms.toolbar.items import LinkItem
 from cms.toolbar_base import CMSToolbar
 from cms.toolbar_pool import toolbar_pool
 from django.urls import reverse

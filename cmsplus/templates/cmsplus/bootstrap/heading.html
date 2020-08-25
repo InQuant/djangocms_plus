@@ -2,7 +2,7 @@
 {% with tag_type=instance.tag_type bg_color=instance.glossary.background_color bottom_margin=instance.glossary.bottom_margin css_classes=instance.css_classes inline_styles=instance.inline_styles element_id=instance.element_id %}
 {% if  bottom_margin %}<div class="{{ bottom_margin }}">{% endif %}
 {% if bg_color %}<div class="c-heading-box {{ bg_color }} py-2 px-3">{% endif %}
-<{{ tag_type }}{% if element_id %} id="{{ element_id|unlocalize }}"{% endif %}{% if css_classes %} class="{{ css_classes }}"{% endif %}{% if inline_styles %} style="{{ inline_styles }}"{% endif %}>{{ content }}</{{ tag_type }}>
+<{{ tag_type }}{% if instance.glossary.element_id %} id="{{ instance.glossary.element_id|unlocalize }}"{% endif %}{% if css_classes %} class="{{ css_classes }}"{% endif %}{% if inline_styles %} style="{{ inline_styles }}"{% endif %}>{{ content }}</{{ tag_type }}>
 {% if bg_color %}</div>{% endif %}
 {% if  bottom_margin %}</div>{% endif %}
 {% endwith %}

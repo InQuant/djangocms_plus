@@ -8,11 +8,11 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings as cps
+from cmsplus.cms_plugins.generic.icon import IconField, get_icon_style_paths
 from cmsplus.fields import SizeField, PlusFilerImageSearchField
 from cmsplus.forms import (PlusPluginFormBase, LinkFormBase, get_style_form_fields, get_image_form_fields)
 from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import (PlusPluginBase, StylePluginMixin, LinkPluginBase)
-from cmsplus.cms_plugins.generic.icon import IconField, get_icon_style_paths
 
 logger = logging.getLogger(__name__)
 
@@ -90,11 +90,13 @@ class MagicWrapperForm(PlusPluginFormBase):
 
     # margin and padding fields are added in _extend_form_fields below
 
+    element_id = forms.CharField(label=_('Element ID'), max_length=255, required=False)
+
     STYLE_CHOICES = 'MAGIC_WRAPPER_STYLES'
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(MagicWrapperForm, self).__init__(*args, **kwargs)
 
     @staticmethod
     def get_margin_keys(for_dev=None):
@@ -158,7 +160,7 @@ class MagicWrapperPlugin(BootstrapPluginBase):
 
     fieldsets = [
         (None, {
-            'fields': ('tag_type',),
+            'fields': ('tag_type', 'element_id'),
         }),
 
         (_('Module settings'), {
@@ -1078,6 +1080,8 @@ class HeadingForm(PlusPluginFormBase):
         required=False, choices=cps.CNT_BOTTOM_MARGIN_CHOICES,
         initial='',
         help_text='Select the default bottom margin to be applied?')
+
+    element_id = forms.CharField(label=_('Element ID'), max_length=255, required=False)
 
     STYLE_CHOICES = 'HEADING_STYLES'
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)

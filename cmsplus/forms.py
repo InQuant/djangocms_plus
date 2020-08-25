@@ -81,7 +81,6 @@ class PlusPluginFormBase(forms.ModelForm):
                     try:
                         parsed_dict[field_name] = deserialize_field(value)
                     except ValidationError as e:
-                        print(e)
                         self._update_errors(e)
             else:
                 parsed_dict[field_name] = value

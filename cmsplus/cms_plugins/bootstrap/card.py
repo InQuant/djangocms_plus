@@ -1,3 +1,4 @@
+from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.forms import PlusPluginFormBase, get_style_form_fields
@@ -6,6 +7,8 @@ from cmsplus.plugin_base import PlusPluginBase, StylePluginMixin
 
 class CardChildForm(PlusPluginFormBase):
     STYLE_CHOICES = 'SLIDE_STYLES'
+
+    element_id = forms.CharField(label=_('Element ID'), max_length=255, required=False)
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
