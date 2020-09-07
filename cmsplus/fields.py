@@ -81,6 +81,9 @@ class PageChoiceIterator(forms.models.ModelChoiceIterator):
     """ Sort pages by absolute url. """
 
     def __iter__(self):
+        if self.field.empty_label is not None:
+            yield "", self.field.empty_label
+
         pages = sorted(self.queryset.all(), key=lambda p: p.get_absolute_url())
         for obj in pages:
             yield self.choice(obj)
