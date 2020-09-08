@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings
 from cmsplus.forms import PlusPluginFormBase, get_style_form_fields, LinkFormBase
+from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import LinkPluginBase, StylePluginMixin
 
 
@@ -153,12 +154,18 @@ class SlideForm(LinkFormBase):
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
+class SlidePluginModel(PlusPlugin, LinkPluginMixin):
+    class Meta:
+        proxy = True
+
+
 class SlidePlugin(StylePluginMixin, LinkPluginBase):
     name = _("Slide")
     parent_classes = ['SliderPlugin', ]
     allow_children = True
     alien_child_classes = True
     render_template = 'cmsplus/generic/slider/slider_child.html'
+    model = SlidePluginModel
 
     form = SlideForm
 
