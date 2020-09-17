@@ -2,7 +2,6 @@
 
 {% with id=id img=img imgwidths=imgwidths crop=crop upscale=upscale after=after %}
 
-{% addtoblock 'css' %}
 <style>
 
 #div-{{ id }}{{ after }} {
@@ -25,6 +24,5 @@
   {% endif %}
 {% endfor %}
 </style>
-{% endaddtoblock %}
 
 {% endwith %}
