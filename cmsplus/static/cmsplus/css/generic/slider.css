@@ -28,3 +28,10 @@
     position: absolute;
     left: 100%;
 }
+
+.glide__slide {
+ height:auto!important
+}
+.glide__slide a {
+ text-decoration:initial
+}
