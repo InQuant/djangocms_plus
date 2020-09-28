@@ -98,7 +98,7 @@ class SliderForm(PlusPluginFormBase):
 class SliderPlugin(StylePluginMixin, LinkPluginBase):
     name = _("Slider")
     require_parent = False
-    child_classes = ['SliderChildPlugin', ]
+    child_classes = ['SlidePlugin', ]
     allow_children = True
     alien_child_classes = False
     form = SliderForm
