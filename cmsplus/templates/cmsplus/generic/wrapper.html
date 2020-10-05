@@ -1,8 +1,8 @@
 {% load l10n cms_tags %}
-{% with tag_type=instance.tag_type css_classes=instance.css_classes element_id=instance.element_id %}
+{% with tag_type=instance.tag_type css_classes=instance.css_classes element_id=instance.element_id inline_styles=instance.inline_styles %}
 
 {% block "wrapper-header" %}{% endblock "wrapper-header" %}
-<{{ tag_type }}{% block "wrapper-attrs" %}{% endblock %}{{ instance.html_tag_attributes }}{% if instance.glossary.element_id %} id="{{ instance.glossary.element_id|unlocalize }}"{% endif %}{% if css_classes %} class="{{ css_classes }}"{% endif %}>
+<{{ tag_type }}{% block "wrapper-attrs" %}{% endblock %}{{ instance.html_tag_attributes }}{% if instance.glossary.element_id %} id="{{ instance.glossary.element_id|unlocalize }}"{% endif %}{% if css_classes %} class="{{ css_classes }}"{% endif %}{% if inline_styles %} style="{{ inline_styles }}"{% endif %}>
 {% block "plugins-pre" %}{% endblock "plugins-pre" %}
 {% for plugin in instance.child_plugin_instances %}
 	{% render_plugin plugin %}
