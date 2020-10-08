@@ -172,7 +172,7 @@ class LinkFormBase(PlusPluginFormBase):
         help_text=_("An anchor or bookmark on the internal linked page."),
     )
 
-    ext_url = forms.URLField(
+    ext_url = forms.CharField(
         required=False,
         label=_("URL"),
         help_text=_("Link onto external page"),
