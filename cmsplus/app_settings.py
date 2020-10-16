@@ -214,6 +214,19 @@ DEFAULTS = {
     'BACKGROUND_IMAGE_STYLES': (
         ('', 'None'),
     ),
+
+    'CARD_STYLES': (
+        ('', 'Default'),
+    ),
+    'CARD_HEADER_STYLES': (
+        ('', 'Default'),
+    ),
+    'CARD_BODY_STYLES': (
+        ('', 'Default'),
+    ),
+    'CARD_FOOTER_STYLES': (
+        ('', 'Default'),
+    ),
 }
 
 
