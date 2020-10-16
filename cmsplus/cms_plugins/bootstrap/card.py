@@ -6,10 +6,7 @@ from cmsplus.plugin_base import PlusPluginBase, StylePluginMixin
 
 
 class CardChildBaseForm(PlusPluginFormBase):
-    STYLE_CHOICES = ''
-
     element_id = forms.CharField(label=_('Element ID'), max_length=255, required=False)
-    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class CardChildBase(PlusPluginBase):
@@ -22,6 +19,7 @@ class CardChildBase(PlusPluginBase):
 
 class CardHeaderForm(CardChildBaseForm):
     STYLE_CHOICES = 'CARD_HEADER_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class BootstrapCardHeaderPlugin(StylePluginMixin, CardChildBase):
@@ -32,6 +30,7 @@ class BootstrapCardHeaderPlugin(StylePluginMixin, CardChildBase):
 
 class CardBodyForm(CardChildBaseForm):
     STYLE_CHOICES = 'CARD_BODY_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class BootstrapCardBodyPlugin(StylePluginMixin, CardChildBase):
@@ -42,6 +41,7 @@ class BootstrapCardBodyPlugin(StylePluginMixin, CardChildBase):
 
 class CardFooterForm(CardChildBaseForm):
     STYLE_CHOICES = 'CARD_FOOTER_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class BootstrapCardFooterPlugin(StylePluginMixin, CardChildBase):
@@ -52,6 +52,7 @@ class BootstrapCardFooterPlugin(StylePluginMixin, CardChildBase):
 
 class CardForm(CardChildBaseForm):
     STYLE_CHOICES = 'CARD_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class BootstrapCardPlugin(StylePluginMixin, PlusPluginBase):
