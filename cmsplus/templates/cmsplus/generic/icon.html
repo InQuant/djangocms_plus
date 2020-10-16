@@ -2,7 +2,11 @@
 {% if instance.link %}<a href="{{ instance.link }}"{{ instance.html_tag_attributes }}
 {% if instance.download_name %} download="{{ instance.download_name }}"{% endif %}
 {% if instance.glossary.link_target %}target="{{ instance.glossary.link_target }}"{% endif %}>{% endif %}
-<i class="{{ instance.glossary.icon }}{% if instance.glossary.attributes.class %}{{ instance.glossary.attributes.class }}{% endif %}" aria-hidden="true" {% for key, value in instance.glossary.attributes.items %}{% if key != 'class' %}{{ key }}="{{ value }}" {% endif %}{% endfor %}>&nbsp;</i>
+<i class="{{ instance.glossary.icon }} {{ instance.css_classes }}" {% if instance.inline_styles %} style="{{
+  instance.inline_styles }}"{% endif%} aria-hidden="true" {% for key, value in instance.glossary.attributes.items %}{% if key != 'class' %}{{ key }}="{{ value }}" {% endif %}{% endfor %}>&nbsp;</i>
 {% if instance_link %}</a>{% endif %}
 {% endspaceless %}
 
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}
