@@ -1,1 +1,1 @@
-<a href="{{ instance.link }}" {{ instance.html_tag_attributes }}{% if instance.css_classes %} class="{{ instance.css_classes }}"{% endif %}>{% block link_content %}{{ instance.content }}{% endblock %}</a>
+<a href="{{ instance.link }}" {% if instance.glossary.link_target %} target="{{ instance.glossary.link_target }}"{% endif %} {{ instance.html_tag_attributes }}{% if instance.css_classes %} class="{{ instance.css_classes }}"{% endif %}>{% block link_content %}{{ instance.content }}{% endblock %}</a>
