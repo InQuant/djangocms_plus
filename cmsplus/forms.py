@@ -2,10 +2,10 @@ import logging
 from collections import OrderedDict
 
 from django import forms
-from cmsplus.app_settings import cmsplus_settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
+from cmsplus.app_settings import cmsplus_settings
 from cmsplus.fields import (PageSearchField, PlusFilerFileSearchField, PlusFilerImageSearchField, KeyValueField)
 from cmsplus.models import PlusPlugin
 
@@ -182,6 +182,12 @@ class LinkFormBase(PlusPluginFormBase):
         label='Download file',
         required=False,
         help_text=_("An internal link onto a file from filer"),
+    )
+    file_as_page = forms.BooleanField(
+        initial=False,
+        label=_('Serve file as webpage'),
+        required=False,
+        help_text=_('e.g. PDF will be visible in browser instead of a download')
     )
 
     mail_to = forms.EmailField(

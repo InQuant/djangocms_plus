@@ -6,7 +6,7 @@ $(function () {
     let fieldMapping = {
         '': '',
         'cmspage': ['.field-cms_page', '.field-section'],
-        'download': ['.field-download_file'],
+        'download': ['.field-download_file', '.field-file_as_page'],
         'exturl': ['.field-ext_url'],
         'email': ['.field-mail_to'],
     }

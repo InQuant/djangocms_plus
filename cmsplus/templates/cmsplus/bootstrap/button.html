@@ -1,6 +1,6 @@
-{% with instance_link=instance.link download=instance.download_name target=instance.glossary.link_target %}
+{% with instance_link=instance.link download=instance.download download_name=instance.download_name target=instance.glossary.link_target %}
     <a href="{{ instance_link }}" class="{{ instance.css_classes }}" role="button"
-    {% if download %} download="{{ download }}"{% endif %}
+    {% if download %} download="{{ download_name }}"{% endif %}
     {% if target %}target="{{ target }}"{% endif %}>
       {{ icon_top }}{{ icon_left }}{{ instance.glossary.content }}{{ icon_right }}
     </a>

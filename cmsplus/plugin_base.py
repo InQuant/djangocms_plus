@@ -198,6 +198,7 @@ class StylePluginMixin(object):
                 ],
             ]
         """
+
         def _get_media_and_css_key(key):
             """
             from e.g: margin-bottom:md ->  returns '@media (min-width: 768px)', margin-bottom
@@ -232,7 +233,7 @@ class LinkPluginBase(PlusPluginBase):
     require_parent = False
 
     class Media:
-        js = ('cmsplus/admin/link_plugin/js/link_plugin.js', )
+        js = ('cmsplus/admin/link_plugin/js/link_plugin.js',)
 
     @classmethod
     def get_link(cls, instance):
@@ -264,3 +265,10 @@ class LinkPluginBase(PlusPluginBase):
             relobj = instance.glossary.get('download_file', None)
             if isinstance(relobj, FilerFileModel):
                 return mark_safe(relobj.original_filename)
+
+    @classmethod
+    def is_download(cls, instance):
+        link_type = instance.glossary.get('link_type', '')
+        if link_type == 'download' and not instance.glossary.get('file_as_page'):
+            return True
+        return False

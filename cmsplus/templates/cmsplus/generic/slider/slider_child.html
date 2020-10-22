@@ -2,7 +2,7 @@
 
 {% if instance.link %}
   <a href="{{ instance.link }}" class="c-slide-link"
-    {% if instance.download %} download="{{ instance.download }}"{% endif %}
+    {% if instance.download %} download="{{ instance.download_name }}"{% endif %}
     {% if instance.glossary.link_target %} target="{{ instance.glossary.link_target }}"{% endif %}>
 {% endif %}
 

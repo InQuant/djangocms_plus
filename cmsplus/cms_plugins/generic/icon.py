@@ -10,8 +10,8 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings as cps
-from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.forms import LinkFormBase, get_style_form_fields
+from cmsplus.models import PlusPlugin, LinkPluginMixin
 from cmsplus.plugin_base import LinkPluginBase, StylePluginMixin
 
 
@@ -176,7 +176,7 @@ class IconPlugin(StylePluginMixin, LinkPluginBase):
         (_('Link settings'), {
             'classes': ('collapse',),
             'fields': (
-                'link_type', 'cms_page', 'section', 'download_file', 'ext_url',
+                'link_type', 'cms_page', 'section', 'download_file', 'file_as_page', 'ext_url',
                 'mail_to', 'link_target', 'link_title'
             )
         }),

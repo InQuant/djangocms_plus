@@ -119,6 +119,10 @@ class LinkPluginMixin(object):
         return self.plugin_class.get_link(self)
 
     @property
+    def download(self):
+        return self.plugin_class.is_download(self)
+
+    @property
     def content(self):
         return mark_safe(self.glossary.get('link_content', '') if self.glossary else None)
 

@@ -681,7 +681,7 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
         (_('Link settings'), {
             'classes': ('collapse',),
             'fields': (
-                'link_type', 'cms_page', 'section', 'download_file', 'ext_url',
+                'link_type', 'cms_page', 'section', 'download_file', 'file_as_page', 'ext_url',
                 'mail_to', 'link_target', 'link_title'
             )
         }),
@@ -1312,7 +1312,7 @@ class BootstrapButtonPlugin(StylePluginMixin, LinkPluginBase):
         }),
         (_('Link settings'), {
             'fields': (
-                'link_type', 'cms_page', 'section', 'download_file', 'ext_url',
+                'link_type', 'cms_page', 'section', 'download_file', 'file_as_page', 'ext_url',
                 'mail_to', 'link_target', 'link_title'
             )
         }),
