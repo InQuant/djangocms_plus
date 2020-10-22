@@ -2,6 +2,7 @@ import sys
 
 from django import forms
 from django import template
+from django.forms import widgets
 from django.template.context import Context
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -315,3 +316,47 @@ class BackgroundVideoPlugin(StylePluginMixin, PlusPluginBase):
         if video:
             context['video_url'] = video.url
         return context
+
+
+class AudioEmbedForm(PlusPluginFormBase):
+    src = forms.CharField(
+        label=_("Audio URL"),
+        widget=widgets.Input(),
+        help_text=_(
+            'Audio URL to an external audio file e.g.: '
+            'https://www.example.com/sample.mp3'),
+    )
+
+    figcaption = forms.CharField(
+        label=_('Figcaption for Audio'),
+        required=False,
+    )
+
+    controls = forms.BooleanField(
+        label=_("Display Controls"),
+        required=False,
+        initial=True,
+    )
+
+    muted = forms.BooleanField(
+        label=_("Start muted"),
+        required=False,
+    )
+
+    autoplay = forms.BooleanField(
+        label=_("Autoplay"),
+        required=False,
+        help_text=_('Will be blocked by browser by default.')
+    )
+
+    loop = forms.BooleanField(
+        label=_("Enable Looping"),
+        required=False,
+        help_text=_('Inifinte loop playing.'),
+    )
+
+
+class AudioEmbedPlugin(StylePluginMixin, PlusPluginBase):
+    name = _('Embed Audio')
+    form = AudioEmbedForm
+    render_template = 'cmsplus/generic/audio-embed.html'

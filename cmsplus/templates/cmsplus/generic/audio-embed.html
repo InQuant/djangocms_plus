@@ -1,0 +1,14 @@
+<figure>
+  {% if instance.glossary.figcaption %}
+    <figcaption>{{ instance.glossary.figcaption }}</figcaption>
+  {% endif %}
+  <audio {% if instance.glossary.controls %} controls{% endif %}
+      {% if instance.glossary.loop %} loop{% endif %}
+      {% if instance.glossary.muted %} muted{% endif %}
+      {% if instance.glossary.autoplay %} autoplay{% endif %}
+      src="{{ instance.glossary.src }}">
+    Your browser does not support the
+    <code>audio</code> element.
+  </audio>
+</figure>
+{{ instance.glossary.figcaption }}

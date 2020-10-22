@@ -13,6 +13,7 @@ DEFAULTS = {
         'cmsplus.cms_plugins.generic.slider.SlidePlugin',
         'cmsplus.cms_plugins.generic.slider.SliderPlugin',
         'cmsplus.cms_plugins.generic.icon.IconPlugin',
+        'cmsplus.cms_plugins.generic.AudioEmbedPlugin',
 
         'cmsplus.cms_plugins.osm.OsmPlugin',
         'cmsplus.cms_plugins.osm.OsmMarkerPlugin',
