@@ -140,7 +140,9 @@ class StylePluginMixin(object):
         If there is a choice field 'extra_styles' in the plugins form: try to get plugins identifier via the current
         selected extra style name.
         """
-        if instance.glossary.get('extra_style'):
+        if instance.label:
+            return instance.label
+        elif instance.glossary.get('extra_style'):
             try:
                 form = getattr(cls, 'form')
                 choice_key = getattr(form, 'STYLE_CHOICES')
@@ -148,7 +150,9 @@ class StylePluginMixin(object):
                 return style_map[instance.glossary.get('extra_style')]
             except Exception:
                 return instance.glossary.get('extra_style')
-        return super().get_identifier(instance)
+        elif instance.glossary.get('extra_classes'):
+                return instance.glossary.get('extra_classes')
+        return ''
 
     @classmethod
     def get_css_classes(cls, instance):
