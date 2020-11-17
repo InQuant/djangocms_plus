@@ -1,4 +1,10 @@
+
 # DjangoCMS Plus
+
+## Info
+IconPlugin:
+- include icon css in projects head
+- include css in CKEDITOR Settings in `settings.py`
 
 ## Features
 - Plugin Data stored as JSON, no need for migrations if plugin changes
