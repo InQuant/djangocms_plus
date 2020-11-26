@@ -1,13 +1,9 @@
-{% load cms_tags sekizai_tags %}
+{% load cms_tags static sekizai_tags %}
 <div id="cmsplus-accordion-{{ instance.id }}" class="cmsplus-accordion {{ instance.glossary.extra_classes }}" >
   {% for child in instance.child_plugin_instances %}
     {% render_plugin child %}
   {% endfor %}
 </div>
-
-{% if instance.glossary.extra_css %}
-  {% include "cmsplus/includes/_extra_css.html" %}
-{% endif %}
 
 {% addtoblock 'js' %}
   <script>
@@ -82,17 +78,11 @@
       });
   </script>
 {% endaddtoblock 'js' %}
+
 {% addtoblock 'css' %}
-  <style>
-      .cmsplus-accordion-head {
-          cursor: pointer;
-          width: 100%;
-          transition: 0.4s;
-      }
-      .cmsplus-accordion-body {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.2s ease-out;
-      }
-  </style>
+<link href="{% static 'cmsplus/css/bootstrap/accordion.css' %}" media="screen" rel="stylesheet" type="text/css" />
 {% endaddtoblock 'css' %}
+
+{% if instance.glossary.extra_css %}
+  {% include "cmsplus/includes/_extra_css.html" %}
+{% endif %}

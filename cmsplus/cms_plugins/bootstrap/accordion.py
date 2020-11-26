@@ -94,7 +94,6 @@ class BootstrapAccordionGroupPlugin(StylePluginMixin, PlusPluginBase):
             'fields': ('heading', ),
         }),
         (_('Module settings'), {
-            'classes': ('collapse',),
             'fields': (
                 'extra_style', 'extra_classes', 'label',
             )

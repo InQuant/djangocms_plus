@@ -1,7 +1,6 @@
 {% load cms_tags %}
-{{ extra_classes }}
-<div class="cmsplus-accordion-head">{{ heading }}</div>
-<div class="cmsplus-accordion-body" class="{{ instance.glossary.extra_classes }}">
+<div class="cmsplus-accordion-head {{ instance.css_classes }}">{{ heading }}</div>
+<div class="cmsplus-accordion-body">
   {% for child in instance.child_plugin_instances %}
     {% render_plugin child %}
   {% endfor %}

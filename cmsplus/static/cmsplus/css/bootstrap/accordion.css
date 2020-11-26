@@ -1,0 +1,10 @@
+.cmsplus-accordion-head {
+    cursor: pointer;
+    width: 100%;
+    transition: 0.4s;
+}
+.cmsplus-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
