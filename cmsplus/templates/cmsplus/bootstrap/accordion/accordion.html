@@ -1,80 +1,19 @@
 {% load cms_tags static sekizai_tags %}
-<div id="cmsplus-accordion-{{ instance.id }}" class="cmsplus-accordion {{ instance.glossary.extra_classes }}" >
+<div id="cmsplus-accordion-{{ instance.id }}" class="cmsplus-accordion {{ instance.glossary.extra_classes }}"
+     data-close-others="{{ close_others|yesno:"true,false,null" }}"
+     data-first-open="{{ first_is_open|yesno:"true,false,null" }}">
   {% for child in instance.child_plugin_instances %}
     {% render_plugin child %}
   {% endfor %}
 </div>
 
+{% addtoblock 'js' %}<script src="{% static 'cmsplus/js/bootstrap/accordion.js' %}"></script>{% endaddtoblock 'js' %}
 {% addtoblock 'js' %}
   <script>
       // ACCORDION MECHANICS
-      let first_is_open = {{ first_is_open|yesno:"true,false,null" }};
-
-      var jsaccordion = {
-          self: null,
-          init : function (target, first_is_open) {
-              // init() : initialize accordion
-              // PARAM target : ID of accordion wrapper
-              //       single : Only one drawer will only at a time
-              this.self = document.querySelector(target);
-
-              var headers = document.querySelectorAll(target + " .cmsplus-accordion-head");
-              if (headers.length > 0) {
-                  // Single is false by default
-                  // Attach onclick event to headers
-                  for (var head of headers) { head.addEventListener("click", jsaccordion.select); }
-              }
-              if (first_is_open) {
-                  var contents = this.self.getElementsByClassName("cmsplus-accordion-body");
-                  if (contents.length > 0) {
-                      contents[0].classList.add("open");
-                      contents[0].previousElementSibling.classList.add("open");
-                  }
-              }
-              this.openTabs();
-          },
-
-          openTabs: function () {
-              var contents = this.self.parentElement.getElementsByClassName("cmsplus-accordion-body");
-              if (contents.length > 0) {
-                  for (let c of contents) {
-                      if (!c.classList.contains('open')) {
-                          c.style.maxHeight = null;
-                      } else {
-                          c.style.maxHeight = c.scrollHeight + "px";
-                      }
-                  }
-              }
-
-          },
-
-          select : function () {
-              // Close all first
-              var close_others = {{ close_others|yesno:"true,false,null" }};
-              if (close_others) {
-                  var contents = this.parentElement.getElementsByClassName("cmsplus-accordion-body");
-                  if (contents.length > 0) {
-                      for (var content of contents) {
-                          content.classList.remove("open");
-                          content.previousElementSibling.classList.remove("open");
-                          content.style.maxHeight = null;
-                      }
-                  }
-              }
-
-              // Open selected drawer
-              let c = this.nextElementSibling;
-              c.classList.toggle("open");
-              c.previousElementSibling.classList.toggle("open")
-
-              jsaccordion.openTabs();
-          },
-
-      };
-
       // ON PAGE LOAD
       window.addEventListener('load', function(){
-          jsaccordion.init("#cmsplus-accordion-{{ instance.id }}", first_is_open);
+          jsaccordion.init("#cmsplus-accordion-{{ instance.id }}");
       });
   </script>
 {% endaddtoblock 'js' %}
