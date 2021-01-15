@@ -320,4 +320,3 @@ def generate_structure(structure: List[dict], parent: object = None, force: obje
         # create plugins
         if children:
             generate_structure(children, parent=p, force=force)
-

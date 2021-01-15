@@ -5,7 +5,7 @@ from json import JSONDecodeError
 
 from django.core.management import BaseCommand, CommandError
 
-from cmsplus.utils import PageUtils, JSONEncoder
+from cmsplus.utils import PageUtils
 
 logger = logging.getLogger('django')
 
@@ -74,11 +74,11 @@ class Command(BaseCommand):
                     data = PageUtils.export_whole_site()
 
                 if not options.get('output'):
-                    print(data)
+                    self.stdout.write(data)
                     return
 
                 f_path = options.get('output')
-                json_data = json.dumps(data, indent=True, ensure_ascii=False, cls=JSONEncoder)
+                json_data = json.dumps(data, indent=True, ensure_ascii=False)
                 with open(f_path, 'w') as file:
                     file.write(json_data)
 
