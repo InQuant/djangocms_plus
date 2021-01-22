@@ -41,6 +41,8 @@ class PlusModelMultipleChoiceField(forms.ModelMultipleChoiceField, BaseFieldMixI
         return list(qs.values_list("pk", flat=True))
 
     def deserialize_field(self, value: list):
+        if value is None:
+            return None
         return self.queryset.filter(pk__in=value)
 
 
