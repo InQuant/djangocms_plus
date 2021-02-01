@@ -29,21 +29,41 @@ class TextLinkForm(LinkFormBase):
         widget=forms.widgets.TextInput(attrs={'id': 'id_name'}),  # replace
         # auto-generated id so that CKEditor automatically transfers the text into
         # this input field
+        required=False,
         help_text=_("Content of Link"),
     )
+
+    STYLE_CHOICES = 'LINK_STYLES'
+    extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
 
 class TextLinkPlugin(LinkPluginBase):
     name = _("Link")
     model = TextLinkPluginModel
     form = TextLinkForm
+    allow_children = True
 
     text_enabled = True
     render_template = 'cmsplus/generic/text-link.html'
-    parent_classes = ['TextPlugin', ]
+    # parent_classes = ['TextPlugin', ]
 
     # class Media:
     #   js = ['admin/js/jquery.init.js', 'cmsplus/js/admin/textlinkplugin.js']
+
+    fieldsets = [
+        (None, {
+            'fields': (
+                'link_type', 'cms_page', 'section', 'download_file', 'file_as_page', 'ext_url',
+                'mail_to', 'link_target', 'link_title'
+            )
+        }),
+        (_('Module settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_style', 'extra_classes', 'label', 'extra_css',
+            )
+        }),
+    ]
 
     @classmethod
     def get_identifier(cls, obj):

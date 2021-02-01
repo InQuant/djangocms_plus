@@ -151,8 +151,19 @@ class StylePluginMixin(object):
             except Exception:
                 return instance.glossary.get('extra_style')
         elif instance.glossary.get('extra_classes'):
-                return instance.glossary.get('extra_classes')
+            return instance.glossary.get('extra_classes')
         return ''
+
+    @classmethod
+    def get_css_classes_from_class_fields(cls, instance):
+        css_classes = []
+        for k in getattr(cls, 'css_class_fields', []):
+            xc = instance.glossary.get(k)
+            if isinstance(xc, str):
+                css_classes.append(xc)
+            elif isinstance(xc, list):
+                css_classes.extend(xc)
+        return css_classes
 
     @classmethod
     def get_css_classes(cls, instance):
@@ -165,12 +176,8 @@ class StylePluginMixin(object):
             # add a class for instance specific css
             css_classes.append('c-extra-%s' % instance.id)
 
-        for k in getattr(cls, 'css_class_fields', []):
-            xc = instance.glossary.get(k)
-            if isinstance(xc, str):
-                css_classes.append(xc)
-            elif isinstance(xc, list):
-                css_classes.extend(xc)
+        css_classes.extend(cls.get_css_classes_from_class_fields(instance))
+
         return css_classes
 
     @classmethod

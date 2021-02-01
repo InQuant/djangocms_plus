@@ -140,6 +140,30 @@ WF_MARGIN_KEYS = MagicWrapperForm.get_margin_keys
 WF_PADDING_KEYS = MagicWrapperForm.get_padding_keys
 
 
+def get_wrapper_margin_fieldsets():
+    if cps.TB_MARGIN_CHOICES:
+        return [
+            (_('Margin settings'), {
+                'classes': ('collapse',),
+                'fields': [WF_MARGIN_KEYS(for_dev=[dev]) for dev in cps.DEVICES],
+            }),
+        ]
+    else:
+        return []
+
+
+def get_wrapper_padding_fieldsets():
+    if cps.PADDING_CHOICES:
+        return [
+            (_('Padding settings'), {
+                'classes': ('collapse',),
+                'fields': [WF_PADDING_KEYS(for_dev=[dev]) for dev in cps.DEVICES],
+            }),
+        ]
+    else:
+        return []
+
+
 class MagicWrapperPlugin(BootstrapPluginBase):
     footnote_html = """
     <p>renders a magic wrapper (e.g. div) which can be used to:</p>
@@ -172,22 +196,14 @@ class MagicWrapperPlugin(BootstrapPluginBase):
             )
         }),
 
-        (_('Margin settings'), {
-            'classes': ('collapse',),
-            'fields': [WF_MARGIN_KEYS(for_dev=[dev]) for dev in cps.DEVICES],
-        }),
 
-        (_('Padding settings'), {
-            'classes': ('collapse',),
-            'fields': [WF_PADDING_KEYS(for_dev=[dev]) for dev in cps.DEVICES],
-        }),
         (_('Extra CSS'), {
             'classes': ('collapse',),
             'fields': (
                 'extra_css',
             )
         }),
-    ]
+    ] + get_wrapper_margin_fieldsets() + get_wrapper_padding_fieldsets()
 
 
 # BootstrapContainerForm
@@ -514,6 +530,20 @@ class BootstrapCol10Plugin(BootstrapColPlugin):
 # Image Plugin
 # ------------
 #
+def get_img_dev_width_mapping(column_width):
+    """
+    returns a img_dev_width mapping for a given column_dev_width, e.g.
+        - col-md-12 -->: 1
+        - col-lg-6 -->: 1/2
+    """
+    wmap = {
+        '1': '1/6', '2': '1/5', '3': '1/4', '4': '1/3', '5': '1/2', '6': '1/2',
+        '7': '2/3', '8': '2/3', '9': '3/4', '10': '1', '11': '1', '12': '1',
+    }
+    k = column_width.rsplit('-', 1)[1]
+    return wmap.get(k)
+
+
 def get_img_dev_width_fields(initials=None):
     initials = {} if not initials else initials
     for dev in cps.DEVICES:
@@ -625,145 +655,7 @@ class BootstrapImagePluginModel(PlusPlugin, LinkPluginMixin):
         proxy = True
 
 
-class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
-    footnote_html = """
-        renders a bootstrap responsive (fluid) image.
-    """
-    name = 'Image'
-    model = BootstrapImagePluginModel
-    form = BootstrapImageForm
-    parent_classes = None
-    require_parent = False
-
-    text_enabled = True  # enable in CK_EDITOR
-    render_template = 'cmsplus/bootstrap/image.html'
-
-    default_css_class = 'img-fluid'
-    css_class_fields = StylePluginMixin.css_class_fields + [
-        'image_shapes', 'image_alignment']
-    tag_attr_map = {'image_title': 'title', 'image_alt': 'alt'}
-
-    fieldsets = [
-        (None, {
-            'fields': ('image_file', 'image_title', 'image_alt'),
-        }),
-        (_('Shape and alignment settings'), {
-            'classes': ('collapse',),
-            'fields': (
-                ('image_shapes', 'image_alignment',),
-            )
-        }),
-        (_('Fixed Dimension'), {
-            'classes': ('collapse',),
-            'description': _('Set one or both image dimensions to fixed [px, %, rem, vw, vh].'),
-            'fields': (
-                [field_name for field_name, field in get_fixed_dim_fields('width')],
-                [field_name for field_name, field in get_fixed_dim_fields('height')],
-            ),
-        }),
-        (_('Responsive options'), {
-            'classes': ('collapse',),
-            'description': _(
-                'Maximum responsive width per device if no fixed '
-                '(px) width or height given. Used to provide optimal image size '
-                'for each device with respect to loading time.'),
-            'fields': (
-                [field_name for field_name, field in get_img_dev_width_fields()],
-                ('resize_options',),
-            ),
-        }),
-        (_('Module settings'), {
-            'classes': ('collapse',),
-            'fields': (
-                'extra_style', 'extra_classes', 'label',
-            )
-        }),
-        (_('Link settings'), {
-            'classes': ('collapse',),
-            'fields': (
-                'link_type', 'cms_page', 'section', 'download_file', 'file_as_page', 'ext_url',
-                'mail_to', 'link_target', 'link_title'
-            )
-        }),
-        (_('Extra CSS'), {
-            'classes': ('collapse',),
-            'fields': (
-                'extra_css',
-            )
-        }),
-    ]
-
-    @classmethod
-    def get_identifier(cls, instance):
-        try:
-            name = str(instance.glossary.get('image_file'))
-        except AttributeError:
-            name = _("No Image")
-        return mark_safe(name)
-
-    def render(self, context, instance, placeholder):
-        context = super().render(context, instance, placeholder)
-
-        glossary = instance.glossary
-        if not glossary.get('image_file'):
-            logger.error(_('Filer image not found for instance id: %s' % instance.id))
-            return
-
-        media_queries, easy_thumb_sizes = self._get_media_sizes(instance)
-
-        # no srcsets for gifs
-        if glossary.get('image_file'):
-            _file = glossary.get('image_file')
-            if _file.extension == 'gif':
-                context['is_gif'] = True
-                return context
-
-        # srcset sizes
-        context['sizes'] = [media_queries[dev] for dev in cps.DEVICES]
-
-        # srcset
-        srcset = {}
-        v = None
-        for dev in cps.DEVICES:
-            # e.g. srcset['320w'] = '320x200'
-            k = '%dw' % easy_thumb_sizes[dev][0]
-            v = '%dx%d' % (easy_thumb_sizes[dev][0], easy_thumb_sizes[dev][1])
-            srcset[k] = v
-
-        context['srcset'] = srcset
-        context['src_size'] = v
-
-        # crop / upscale options
-        context['crop'] = 'crop' in glossary.get('resize_options')
-        context['upscale'] = 'upscale' in glossary.get('resize_options')
-
-        # scoped styles
-        scopedstyles = {}
-        fixed_sizes = self._get_fixed_sizes(instance)
-        if len(fixed_sizes.keys()) == 1 and 'xs' in fixed_sizes.keys():
-            pass  # no scoped style neeed - see get_inline_styles
-        else:
-            for dev in cps.DEVICES:
-                if fixed_sizes.get(dev):
-                    k = cps.DEVICE_MIN_WIDTH_MAP.get(dev)
-                    scopedstyles[k] = (
-                        fixed_sizes[dev].get('width'),
-                        fixed_sizes[dev].get('height'))
-        context['scopedstyles'] = scopedstyles
-
-        return context
-
-    @classmethod
-    def get_inline_styles(cls, instance):
-        inline_styles = super().get_inline_styles(instance)
-
-        # if only xs is in fixed_sizes, we don't need scoped styles
-        # (see render) as we don't have any media settings in this case
-        fs = cls._get_fixed_sizes(instance)
-        if len(fs.keys()) == 1 and 'xs' in fs.keys():
-            for k, v in fs.get('xs').items():
-                inline_styles[k] = v
-        return inline_styles
+class ImagePluginMixin():
 
     @classmethod
     def _compute_image_size(cls, image, dev_max_width, dev_img_fraction, given_fixed_size):
@@ -903,6 +795,175 @@ class BootstrapImagePlugin(StylePluginMixin, LinkPluginBase):
                 queries[dev] = '%.2fpx' % ets[dev][0]
 
         return queries, ets
+
+    def eval_image_properties(self, instance):
+        context = {}
+        glossary = instance.glossary
+
+        # no srcsets for gifs
+        if glossary.get('image_file'):
+            _file = glossary.get('image_file')
+            if _file.extension == 'gif':
+                context['is_gif'] = True
+                return context
+
+        # prepare srcset
+        media_queries, easy_thumb_sizes = self._get_media_sizes(instance)
+
+        # srcset sizes
+        context['sizes'] = [media_queries[dev] for dev in cps.DEVICES]
+
+        # srcset
+        srcset = {}
+        v = None
+        for dev in cps.DEVICES:
+            # e.g. srcset['320w'] = '320x200'
+            k = '%dw' % easy_thumb_sizes[dev][0]
+            v = '%dx%d' % (easy_thumb_sizes[dev][0], easy_thumb_sizes[dev][1])
+            srcset[k] = v
+
+        context['srcset'] = srcset
+        context['src_size'] = v
+
+        # crop / upscale options
+        context['crop'] = 'crop' in glossary.get('resize_options', {})
+        context['upscale'] = 'upscale' in glossary.get('resize_options', {})
+
+        # scoped styles
+        scopedstyles = {}
+        fixed_sizes = self._get_fixed_sizes(instance)
+        if len(fixed_sizes.keys()) == 1 and 'xs' in fixed_sizes.keys():
+            pass  # no scoped style neeed - see get_inline_styles
+        else:
+            for dev in cps.DEVICES:
+                if fixed_sizes.get(dev):
+                    k = cps.DEVICE_MIN_WIDTH_MAP.get(dev)
+                    scopedstyles[k] = (
+                        fixed_sizes[dev].get('width'),
+                        fixed_sizes[dev].get('height'))
+        context['scopedstyles'] = scopedstyles
+
+        return context
+
+    def image_dev_width_props_from_colum_defs(self, glossary):
+        """
+        returns props evaled from column-width-defs e.g. {
+            img_dev_width_xs: '1',  # from col_width_xs = 'col-12'
+            img_dev_width_md: '1/2',  # from col_width_md = 'col-md-6'
+        }
+        """
+        props = {}
+
+        # put mapped (from col width) image dev width props into props
+        for dev in cps.DEVICES:
+            w = glossary.get(f'col_width_{dev}')
+            if w:
+                mapped_w = get_img_dev_width_mapping(w)
+                if mapped_w:
+                    props[f'img_dev_width_{dev}'] = mapped_w
+                elif dev == 'xs':
+                    props['img_dev_width_xs'] = '1/2'  # fallback is 1/2
+        return props
+
+
+class BootstrapImagePlugin(StylePluginMixin, ImagePluginMixin, LinkPluginBase):
+    footnote_html = """
+        renders a bootstrap responsive (fluid) image.
+    """
+    name = 'Image'
+    model = BootstrapImagePluginModel
+    form = BootstrapImageForm
+    parent_classes = None
+    require_parent = False
+
+    text_enabled = True  # enable in CK_EDITOR
+    render_template = 'cmsplus/bootstrap/image.html'
+
+    default_css_class = 'img-fluid'
+    css_class_fields = StylePluginMixin.css_class_fields + [
+        'image_shapes', 'image_alignment']
+    tag_attr_map = {'image_title': 'title', 'image_alt': 'alt'}
+
+    fieldsets = [
+        (None, {
+            'fields': ('image_file', 'image_title', 'image_alt'),
+        }),
+        (_('Shape and alignment settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                ('image_shapes', 'image_alignment',),
+            )
+        }),
+        (_('Fixed Dimension'), {
+            'classes': ('collapse',),
+            'description': _('Set one or both image dimensions to fixed [px, %, rem, vw, vh].'),
+            'fields': (
+                [field_name for field_name, field in get_fixed_dim_fields('width')],
+                [field_name for field_name, field in get_fixed_dim_fields('height')],
+            ),
+        }),
+        (_('Responsive options'), {
+            'classes': ('collapse',),
+            'description': _(
+                'Maximum responsive width per device if no fixed '
+                '(px) width or height given. Used to provide optimal image size '
+                'for each device with respect to loading time.'),
+            'fields': (
+                [field_name for field_name, field in get_img_dev_width_fields()],
+                ('resize_options',),
+            ),
+        }),
+        (_('Module settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_style', 'extra_classes', 'label',
+            )
+        }),
+        (_('Link settings'), {
+            'classes': ('collapse',),
+            'fields': (
+                'link_type', 'cms_page', 'section', 'download_file', 'file_as_page', 'ext_url',
+                'mail_to', 'link_target', 'link_title'
+            )
+        }),
+        (_('Extra CSS'), {
+            'classes': ('collapse',),
+            'fields': (
+                'extra_css',
+            )
+        }),
+    ]
+
+    @classmethod
+    def get_identifier(cls, instance):
+        try:
+            name = str(instance.glossary.get('image_file'))
+        except AttributeError:
+            name = _("No Image")
+        return mark_safe(name)
+
+    def render(self, context, instance, placeholder):
+        context = super().render(context, instance, placeholder)
+
+        if not instance.glossary.get('image_file'):
+            logger.error(_('Filer image not found for instance id: %s' % instance.id))
+            return
+
+        props = self.eval_image_properties(instance)
+        context.update(props)
+        return context
+
+    @classmethod
+    def get_inline_styles(cls, instance):
+        inline_styles = super().get_inline_styles(instance)
+
+        # if only xs is in fixed_sizes, we don't need scoped styles
+        # (see render) as we don't have any media settings in this case
+        fs = cls._get_fixed_sizes(instance)
+        if len(fs.keys()) == 1 and 'xs' in fs.keys():
+            for k, v in fs.get('xs').items():
+                inline_styles[k] = v
+        return inline_styles
 
 
 # Background Image
@@ -1229,8 +1290,9 @@ class BootstrapEmbedPlugin(BootstrapPluginBase):
 # -------------
 #
 class BootstrapButtonForm(LinkFormBase):
-    content = forms.CharField(label=_('Content'), required=False,
-            help_text='Button content, e.g.: Click me, or nothing for icon only button')
+    content = forms.CharField(
+        label=_('Content'), required=False,
+        help_text='Button content, e.g.: Click me, or nothing for icon only button')
 
     BUTTON_SIZES = [
         ('btn-lg', _("Large button")),
