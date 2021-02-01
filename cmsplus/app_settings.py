@@ -180,12 +180,19 @@ DEFAULTS = {
         ('', 'None'),
     ),
 
+    # show and hide icons in project
+    'ICONS_FONTAWESOME_SHOW': False,
     'ICONS_FONTAWESOME': {
         'meta': 'cmsplus/icons/fontawesome/metadata/icons.json',
         'css': 'cmsplus/icons/fontawesome/css/all.css',
     },
-    # show and hide icons in project
-    'ICONS_FONTAWESOME_SHOW': True,
+
+    # https://github.com/twbs/icons
+    'ICONS_BOOTSTRAP_SHOW': True,
+    'ICONS_BOOTSTRAP': {
+        'meta': 'cmsplus/icons/bs/bootstrap-icons.json',
+        'css': 'cmsplus/icons/bs/bootstrap-icons.css',
+    },
 
     # custom fontello font packs
     'ICONS_FONTELLO': [

@@ -16,6 +16,7 @@ button.field-plugin-icon-select {
 }
 
 .highlight-selected-icon {
+    display: inline-block;
     width: 100%;
     background: white;
     text-align: center;

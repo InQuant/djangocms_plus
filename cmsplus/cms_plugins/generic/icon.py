@@ -26,6 +26,10 @@ class IconFieldWidget(forms.Widget):
         if cps.ICONS_FONTAWESOME and cps.ICONS_FONTAWESOME_SHOW:
             self.icons += self.get_fontawesome_icons
 
+        # add bootstrap
+        if cps.ICONS_BOOTSTRAP and cps.ICONS_BOOTSTRAP_SHOW:
+            self.icons += self.get_bootstrap_icons
+
         # add icons
         for font in getattr(cps, 'ICONS_FONTELLO', []):
             self.icons += self.get_fontello(font)
@@ -52,6 +56,29 @@ class IconFieldWidget(forms.Widget):
         context['widget']['attrs'] = attrs
         context['widget']['add_to_class'] = add_to_class
         return mark_safe(renderer.render(self.template_name, context))
+
+    @cached_property
+    def get_bootstrap_icons(self):
+        icons = []
+        path = finders.find(cps.ICONS_BOOTSTRAP['meta'])
+        if not os.path.exists(path):
+            raise ImproperlyConfigured('ICONS_FONTAWESOME: meta path is not existing (%s)' % path)
+
+        with open(path, 'rb') as f:
+            raw_data = f.read()
+        try:
+            data = json.loads(raw_data)
+        except TypeError:
+            # Python 3.5 compatibility
+            data = json.loads(raw_data.decode('utf-8'))
+
+        for key, value in data.items():
+            icons.append({
+                'name': key,
+                'label': key,
+                'font_class_name': f'bi bi-{key}',
+            })
+        return icons
 
     @cached_property
     def get_fontawesome_icons(self):
@@ -137,6 +164,9 @@ def get_icon_style_paths():
     paths = []
     if cps.ICONS_FONTAWESOME and cps.ICONS_FONTAWESOME_SHOW:
         paths.append(cps.ICONS_FONTAWESOME.get('css'))
+
+    if cps.ICONS_BOOTSTRAP and cps.ICONS_BOOTSTRAP_SHOW:
+        paths.append(cps.ICONS_BOOTSTRAP.get('css'))
 
     for font in getattr(cps, 'ICONS_FONTELLO', []):
         if font.get('css'):
