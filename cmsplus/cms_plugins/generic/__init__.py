@@ -54,7 +54,7 @@ class TextLinkPlugin(LinkPluginBase):
         (None, {
             'fields': (
                 'link_type', 'cms_page', 'section', 'download_file', 'file_as_page', 'ext_url',
-                'mail_to', 'link_target', 'link_title'
+                'mail_to', 'link_target', 'link_title', 'link_content'
             )
         }),
         (_('Module settings'), {
