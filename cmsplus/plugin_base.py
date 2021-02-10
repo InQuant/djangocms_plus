@@ -10,6 +10,8 @@ from cmsplus.models import PlusPlugin
 class PlusPluginBase(CMSPluginBase):
     form = PlusPluginFormBase
     model = PlusPlugin
+    change_form_template = "cmsplus/admin/plugin/change_form.html"
+    footnote_html = None
 
     @classmethod
     def get_glossary(cls, instance):

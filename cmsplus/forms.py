@@ -127,17 +127,17 @@ def get_style_form_fields(style_config_key=None, style_multiple=False):
     return (
         style_field(
             label=_('Style'), required=False, choices=sc,
-            initial=sc[0][0], help_text='Extra CSS predefined style class for plugin.'),
+            initial=sc[0][0], help_text=_('Extra CSS predefined style class for plugin.')),
         forms.CharField(
-            label=u'Extra Classes', required=False, initial='',
+            label=_('Extra Classes'), required=False, initial='',
             widget=forms.widgets.TextInput(attrs={'style': 'width: 70vw'}),
-            help_text='Extra CSS Classes (space separated) for plugin.'),
+            help_text=_('Extra CSS Classes (space separated) for plugin.')),
         forms.CharField(
-            label=u'Label', required=False, initial='',
-            help_text='Label to identify this plugin in page-structure.'),
+            label=_('Label'), required=False, initial='',
+            help_text=_('Label to identify this plugin in page-structure.')),
         KeyValueField(
-            label=u'Extra CSS', required=False, initial='',
-            help_text='Add extra (device specific) css key, values, e.g: margin or margin:md or transform:xl'),
+            label=_('Extra CSS'), required=False, initial='',
+            help_text=_('Add extra (device specific) css key, values, e.g: margin or margin:md or transform:xl')),
     )
 
 
@@ -162,13 +162,13 @@ class LinkFormBase(PlusPluginFormBase):
 
     cms_page = PageSearchField(
         required=False,
-        label='Internal Page',
+        label=_('Internal Page'),
         help_text=_("An internal link onto any CMS page."),
     )
 
     section = forms.CharField(
         required=False,
-        label='Anchor',
+        label=_('Anchor'),
         help_text=_("An anchor or bookmark on the internal linked page."),
     )
 
@@ -179,7 +179,7 @@ class LinkFormBase(PlusPluginFormBase):
     )
 
     download_file = PlusFilerFileSearchField(
-        label='Download file',
+        label=_('Download file'),
         required=False,
         help_text=_("An internal link onto a file from filer"),
     )
