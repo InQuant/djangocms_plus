@@ -13,8 +13,8 @@
           {% if instance.glossary.type %}
               type: "{{ instance.glossary.type }}",
           {% endif %}
-          {% if instance.glossary.breakpoints %}
-              breakpoints: {{ instance.glossary.breakpoints }},
+          {% if instance.data.breakpoints %}
+              breakpoints: {{ instance.data.breakpoints|safe }},
           {% endif %}
           {% if instance.glossary.gap %}
               gap: {{ instance.glossary.gap }},

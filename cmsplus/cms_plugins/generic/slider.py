@@ -143,7 +143,7 @@ class SliderPlugin(StylePluginMixin, LinkPluginBase):
             width = cmsplus_settings.DEVICE_MAX_WIDTH_MAP[dev]
             if obj.glossary.get(key):
                 breakpoints[width] = {'perView': int(obj.glossary[key])}
-        obj.glossary['breakpoints'] = breakpoints
+        obj.data['breakpoints'] = breakpoints
         return True
 
 
