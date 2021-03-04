@@ -187,15 +187,15 @@ class PageUtils:
         return count
 
     @staticmethod
-    def count_plugins(pages_data: list, count=0) -> int:
-        for page in pages_data:
-            placeholders = page.get('plugins')
+    def count_plugins(plugins_data: list, count=0) -> int:
+        for plugin in plugins_data:
+            placeholders = plugin.get('plugins')
             for placeholder, plugins in placeholders.items():
-                logger.debug(f'-> Page "{page.get("title")}"')
+                logger.debug(f'-> Page "{plugin.get("title")}"')
                 count = PageUtils._count_plugins_helper(plugins, count)
 
-            if page.get('children'):
-                PageUtils.count_plugins(page, count)
+            if plugin.get('children'):
+                PageUtils.count_plugins(plugin['children'], count)
         return count
 
 
@@ -232,7 +232,8 @@ def generate_plugin_tree(placeholder, language=None):
             plugin_fields = p.form.base_fields
             data = {}
             for field in plugin_fields:
-                data[field] = getattr(instance, field)
+                if hasattr(instance, field):
+                    data[field] = getattr(instance, field)
             plugin_data['data'] = data
 
         _plugins.append(plugin_data)
