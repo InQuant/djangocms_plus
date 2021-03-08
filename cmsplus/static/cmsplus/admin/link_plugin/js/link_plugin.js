@@ -1,4 +1,4 @@
-$(function () {
+jQuery(document).ready(function ($) {
     let form = $('form');
     let select = form.find('select#id_link_type');
 
