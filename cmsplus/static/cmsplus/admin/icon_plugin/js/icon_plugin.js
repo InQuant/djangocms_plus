@@ -1,4 +1,4 @@
-$(function () {
+jQuery(document).ready(function ($) {
     let selected_icon = $(document).find('.highlight-selected-icon');
     let hidden_input = $('#hidden-icon-field');
 
