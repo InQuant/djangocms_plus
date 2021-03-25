@@ -8,8 +8,9 @@ var jsaccordion = {
         //       single : Only one drawer will only at a time
         self = document.querySelector(target);
         this.self = self;
-        first_is_open = this.self.getAttribute('data-first-open');
-        close_others = this.self.getAttribute('data-close-others');
+
+        let first_is_open = this.self.getAttribute('data-first-open') !== "false";
+        let close_others = this.self.getAttribute('data-close-others') !== "false";
 
         var headers = document.querySelectorAll(target + " .cmsplus-accordion-head");
         if (headers.length > 0) {
