@@ -1,12 +1,12 @@
 from django import forms
-from django.forms import widgets
-from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 
+from djangocms_text_ckeditor.fields import HTMLFormField
 from cmsplus.forms import PlusPluginFormBase, get_style_form_fields
 from cmsplus.plugin_base import PlusPluginBase, StylePluginMixin
+from cmsplus.utils import strip_html_tags
 
 
 class BootstrapAccordionPluginForm(PlusPluginFormBase):
@@ -67,20 +67,14 @@ class BootstrapAccordionPlugin(StylePluginMixin, PlusPluginBase):
 
 
 class BootstrapAccordionGroupForm(PlusPluginFormBase):
-    heading = forms.CharField(
-        label=_("Heading"),
-        widget=widgets.TextInput(attrs={'size': 80}),
-    )
+    heading = HTMLFormField(label=_("Heading"))
 
     STYLE_CHOICES = 'ACCORDION_GROUP_STYLES'
     extra_style, extra_classes, label, extra_css = get_style_form_fields(STYLE_CHOICES)
 
-    def clean_heading(self):
-        return escape(self.cleaned_data['heading'])
-
 
 class BootstrapAccordionGroupPlugin(StylePluginMixin, PlusPluginBase):
-    name = _("Accordion Group")
+    name = _("A. Group")
     module = 'Bootstrap'
     direct_parent_classes = parent_classes = ['BootstrapAccordionPlugin']
     render_template = 'cmsplus/bootstrap/accordion/accordion-group.html'
@@ -116,7 +110,7 @@ class BootstrapAccordionGroupPlugin(StylePluginMixin, PlusPluginBase):
 
     @classmethod
     def get_identifier(cls, instance):
-        heading = instance.glossary.get('heading', '')
+        heading = strip_html_tags(instance.glossary.get('heading', ''))
         return Truncator(heading).words(3, truncate=' ...')
 
     def render(self, context, instance, placeholder):

@@ -6,6 +6,9 @@ import logging
 import uuid
 from typing import List
 
+from io import StringIO
+from html.parser import HTMLParser
+
 from cms.api import create_page, create_title, add_plugin
 from cms.models import Page, Placeholder
 from django.core.exceptions import FieldError
@@ -256,7 +259,7 @@ def generate_plugin_tree(placeholder, language=None):
 def generate_structure(structure: List[dict], parent: object = None, force: object = False, skip_plugins=None):
     _structure = copy.deepcopy(structure)
     if not parent:
-        logger.debug(f'\n--- Root Level ---')
+        logger.debug('\n--- Root Level ---')
     else:
         logger.debug(f'\n--- Parent: {parent} ---')
     logger.debug(f'Found {len(structure)} pages')
@@ -321,3 +324,24 @@ def generate_structure(structure: List[dict], parent: object = None, force: obje
         # create plugins
         if children:
             generate_structure(children, parent=p, force=force)
+
+
+class HtmlTagStripper(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self.strict = False
+        self.convert_charrefs = True
+        self.text = StringIO()
+
+    def handle_data(self, d):
+        self.text.write(d)
+
+    def get_data(self):
+        return self.text.getvalue()
+
+
+def strip_html_tags(html):
+    s = HtmlTagStripper()
+    s.feed(html)
+    return s.get_data()
