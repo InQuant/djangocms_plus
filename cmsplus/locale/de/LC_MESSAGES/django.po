@@ -1,0 +1,981 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-10 07:42-0600\n"
+"PO-Revision-Date: 2021-02-10 14:41+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.4.2\n"
+
+#: admin.py:58
+msgid "Given json could not be converted"
+msgstr "Das JSON konnte nicht konvertiert werden"
+
+#: apps.py:11
+msgid "DjangoCMS Plus"
+msgstr "DjangoCMS Plus"
+
+#: cms_plugins/bootstrap/__init__.py:76
+msgid "<{}> – Element"
+msgstr "<{}> – Element"
+
+#: cms_plugins/bootstrap/__init__.py:80 cms_plugins/bootstrap/__init__.py:1122
+msgid "HTML element tag"
+msgstr "HTML element tag"
+
+#: cms_plugins/bootstrap/__init__.py:81 cms_plugins/bootstrap/__init__.py:1123
+msgid "Choose a tag type for this HTML element."
+msgstr "Wählen Sie ein HTML Tag Typ für dieses Element."
+
+#: cms_plugins/bootstrap/__init__.py:86 cms_plugins/bootstrap/__init__.py:230
+#: cms_plugins/bootstrap/__init__.py:1134
+msgid "Background Color"
+msgstr "Hintergrundfarbe"
+
+#: cms_plugins/bootstrap/__init__.py:88 cms_plugins/bootstrap/__init__.py:232
+#: cms_plugins/bootstrap/__init__.py:1136
+msgid "Select a background color."
+msgstr "Wählen Sie eine Hintergrundfarbe."
+
+#: cms_plugins/bootstrap/__init__.py:93 cms_plugins/bootstrap/__init__.py:1145
+#: cms_plugins/bootstrap/card.py:9
+msgid "Element ID"
+msgstr "Element ID"
+
+#: cms_plugins/bootstrap/__init__.py:146
+msgid "Margin settings"
+msgstr "Margin Einstellungen"
+
+#: cms_plugins/bootstrap/__init__.py:158
+msgid "Padding settings"
+msgstr "Padding Einstellungen"
+
+#: cms_plugins/bootstrap/__init__.py:178
+msgid "Wrapper"
+msgstr "Wrapper"
+
+#: cms_plugins/bootstrap/__init__.py:190 cms_plugins/bootstrap/__init__.py:494
+#: cms_plugins/bootstrap/__init__.py:916 cms_plugins/bootstrap/__init__.py:1081
+#: cms_plugins/bootstrap/accordion.py:46 cms_plugins/bootstrap/accordion.py:96
+#: cms_plugins/generic/__init__.py:60 cms_plugins/generic/__init__.py:217
+#: cms_plugins/generic/__init__.py:326 cms_plugins/generic/slider.py:119
+msgid "Module settings"
+msgstr "Modul Einstellungen"
+
+#: cms_plugins/bootstrap/__init__.py:200 cms_plugins/bootstrap/__init__.py:502
+#: cms_plugins/bootstrap/__init__.py:929 cms_plugins/bootstrap/__init__.py:1086
+#: cms_plugins/bootstrap/accordion.py:52 cms_plugins/bootstrap/accordion.py:101
+#: cms_plugins/generic/__init__.py:229 cms_plugins/generic/slider.py:125
+#: forms.py:139
+msgid "Extra CSS"
+msgstr "Zusätzliches CSS"
+
+#: cms_plugins/bootstrap/__init__.py:215
+msgid "Fixed"
+msgstr "Fixed"
+
+#: cms_plugins/bootstrap/__init__.py:216
+msgid "Fluid"
+msgstr "Fluid"
+
+#: cms_plugins/bootstrap/__init__.py:219
+msgid "Container Type"
+msgstr "Container Typ"
+
+#: cms_plugins/bootstrap/__init__.py:224
+msgid ""
+"Changing your container from \"fixed content with fluid margin\" to \"fluid "
+"content with fixed margin\"."
+msgstr ""
+"Ändern Sie Ihren  Container von \"fixed content with fluid margin\" zu "
+"\"fluid content with fixed margin\"."
+
+#: cms_plugins/bootstrap/__init__.py:468
+msgid "Column"
+msgstr "Spalte"
+
+#: cms_plugins/bootstrap/__init__.py:481
+msgid "Column settings"
+msgstr "Spalteneinstellungen"
+
+#: cms_plugins/bootstrap/__init__.py:487
+msgid "Extra Column settings"
+msgstr "Zusätzliche Spalteneinstellungen"
+
+#: cms_plugins/bootstrap/__init__.py:526
+msgid "Column 1/10"
+msgstr "Spalte 1/10"
+
+#: cms_plugins/bootstrap/__init__.py:597 cms_plugins/bootstrap/__init__.py:610
+msgid "None"
+msgstr "Keine"
+
+#: cms_plugins/bootstrap/__init__.py:598
+msgid "Rounded"
+msgstr "Abgerundet"
+
+#: cms_plugins/bootstrap/__init__.py:599
+msgid "Circle"
+msgstr "Kreis"
+
+#: cms_plugins/bootstrap/__init__.py:600
+msgid "Thumbnail"
+msgstr "Miniaturansicht"
+
+#: cms_plugins/bootstrap/__init__.py:603
+msgid "Image Shapes"
+msgstr "Bildformen"
+
+#: cms_plugins/bootstrap/__init__.py:611
+msgid "Left"
+msgstr "Links"
+
+#: cms_plugins/bootstrap/__init__.py:612
+msgid "Right"
+msgstr "Rechts"
+
+#: cms_plugins/bootstrap/__init__.py:613
+msgid "Center"
+msgstr "Mitte"
+
+#: cms_plugins/bootstrap/__init__.py:616
+msgid "Image Alignment"
+msgstr "Bildausrichting"
+
+#: cms_plugins/bootstrap/__init__.py:620
+msgid ""
+"How to align the image (this choice only applies if the image is fixed size "
+"(none repsonsive)."
+msgstr ""
+"Wie das Bild ausgerichtet werden soll (nur wenn das Bild fixed size ist "
+"(none responsive))."
+
+#: cms_plugins/bootstrap/__init__.py:626
+msgid "Crop image"
+msgstr "Bild zuschneiden"
+
+#: cms_plugins/bootstrap/__init__.py:627
+msgid "Upscale image"
+msgstr "Bild upscaling"
+
+#: cms_plugins/bootstrap/__init__.py:630
+msgid "Resize Options"
+msgstr "Größe ändern Optionen"
+
+#: cms_plugins/bootstrap/__init__.py:635
+msgid ""
+"Options to use when calculating the cached size device specific version of "
+"the image."
+msgstr ""
+"Optionen, die bei der Berechnung der gecachten Größe der gerätespezifischen "
+"Version des Bildes verwendet werden sollen."
+
+#: cms_plugins/bootstrap/__init__.py:891
+msgid "Shape and alignment settings"
+msgstr "Form- und Ausrichtungseinstellungen"
+
+#: cms_plugins/bootstrap/__init__.py:897
+msgid "Fixed Dimension"
+msgstr "Feste Abmessungen"
+
+#: cms_plugins/bootstrap/__init__.py:899
+msgid "Set one or both image dimensions to fixed [px, %, rem, vw, vh]."
+msgstr ""
+"Eine oder beide Bildabmessungen auf fixed stellen [px, %, rem, vw, vh]."
+
+#: cms_plugins/bootstrap/__init__.py:905 cms_plugins/bootstrap/__init__.py:1093
+msgid "Responsive options"
+msgstr "Responsive Optionen"
+
+#: cms_plugins/bootstrap/__init__.py:908
+msgid ""
+"Maximum responsive width per device if no fixed (px) width or height given. "
+"Used to provide optimal image size for each device with respect to loading "
+"time."
+msgstr ""
+"Maximale responsive Breite pro Gerät, wenn keine feste (px) Breite oder Höhe "
+"angegeben ist. Wird verwendet, um für jedes Gerät eine optimale Bildgröße im "
+"Bezug auf die Ladezeit bereitzustellen."
+
+#: cms_plugins/bootstrap/__init__.py:922 cms_plugins/bootstrap/__init__.py:1375
+#: cms_plugins/generic/__init__.py:222 cms_plugins/generic/icon.py:206
+msgid "Link settings"
+msgstr "Link Einstellungen"
+
+#: cms_plugins/bootstrap/__init__.py:942 cms_plugins/generic/__init__.py:242
+msgid "No Image"
+msgstr "Kein Bild"
+
+#: cms_plugins/bootstrap/__init__.py:949
+#, python-format
+msgid "Filer image not found for instance id: %s"
+msgstr "Filer Bild nicht gefunden für Instanz id: %s"
+
+#: cms_plugins/bootstrap/__init__.py:975
+msgid "Background Image File"
+msgstr "Hintergrundbilddatei"
+
+#: cms_plugins/bootstrap/__init__.py:980
+msgid "Background Image Title"
+msgstr "Hintergrundbildtitel"
+
+#: cms_plugins/bootstrap/__init__.py:983
+msgid ""
+"Caption text added to the \"title\" attribute of the <div> background image "
+"container element."
+msgstr ""
+"Beschreibung die als \"title\" Attribut im <div> Hintergrundbild-Container-"
+"Element hinzugefügt wird."
+
+#: cms_plugins/bootstrap/__init__.py:993
+msgid "Do thumbnail"
+msgstr "Miniaturbild erstellen"
+
+#: cms_plugins/bootstrap/__init__.py:994
+msgid "Scale (thumbnail) image according to given device sizes below."
+msgstr ""
+"Skalieren Sie das Bild (Miniaturbild) gemäß den unten angegebenen "
+"Gerätegrößen."
+
+#: cms_plugins/bootstrap/__init__.py:997
+msgid "Crop"
+msgstr "Zuschneiden"
+
+#: cms_plugins/bootstrap/__init__.py:998
+msgid "Cut image before scale to given device size."
+msgstr ""
+"Schneiden Sie das Bild vor dem Skalieren auf die angegebene Gerätegröße."
+
+#: cms_plugins/bootstrap/__init__.py:1001
+msgid "Crop Specifiaction"
+msgstr "Zuschnittspezifikationen"
+
+#: cms_plugins/bootstrap/__init__.py:1002
+msgid ""
+"Specifiy cropping, e.g.: smart | scale | 0,10 | ,0) - leave empty for "
+"default behavior."
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1005
+msgid "Upscale"
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1006
+msgid "Upscale image during scaling to given device size."
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1066
+msgid "Background Img"
+msgstr "Hintergrundbild"
+
+#: cms_plugins/bootstrap/__init__.py:1096
+msgid ""
+"Maximum responsive width per device used to provide optimal image size for "
+"each device with respect to loading time."
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1118
+msgid "Heading {}"
+msgstr "Überschrift {}"
+
+#: cms_plugins/bootstrap/__init__.py:1127
+msgid "Heading content"
+msgstr "Überschriftsinhalt"
+
+#: cms_plugins/bootstrap/__init__.py:1155 cms_plugins/bootstrap/accordion.py:71
+msgid "Heading"
+msgstr "Überschrift"
+
+#: cms_plugins/bootstrap/__init__.py:1181
+msgid "Figure Caption"
+msgstr "Abbildungsbeschreibung"
+
+#: cms_plugins/bootstrap/__init__.py:1193
+msgid "Figure"
+msgstr "Abbildung"
+
+#: cms_plugins/bootstrap/__init__.py:1207
+msgid "Media URL"
+msgstr "Media URL"
+
+#: cms_plugins/bootstrap/__init__.py:1210
+msgid ""
+"Video Url to an external service w/o query params such as YouTube, Vimeo or "
+"others, e.g.: https://www.youtube.com/embed/vZw35VUBdzo"
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1215
+msgid "Responsive 21:9"
+msgstr "Responsive 21:9"
+
+#: cms_plugins/bootstrap/__init__.py:1216
+msgid "Responsive 16:9"
+msgstr "Responsive 16:9"
+
+#: cms_plugins/bootstrap/__init__.py:1217
+msgid "Responsive 4:3"
+msgstr "Responsive 4:3"
+
+#: cms_plugins/bootstrap/__init__.py:1218
+msgid "Responsive 1:1"
+msgstr "Responsive 1:1"
+
+#: cms_plugins/bootstrap/__init__.py:1221
+msgid "Aspect Ratio"
+msgstr "Seitenverhältnis"
+
+#: cms_plugins/bootstrap/__init__.py:1229
+msgid "Allow Fullscreen"
+msgstr "Erlaube Vollbild"
+
+#: cms_plugins/bootstrap/__init__.py:1235 cms_plugins/generic/__init__.py:367
+#: cms_plugins/generic/slider.py:52
+msgid "Autoplay"
+msgstr "Automatisches Abspielen"
+
+#: cms_plugins/bootstrap/__init__.py:1240 cms_plugins/generic/__init__.py:356
+msgid "Display Controls"
+msgstr "Steuerelemente anzeigen"
+
+#: cms_plugins/bootstrap/__init__.py:1245 cms_plugins/generic/__init__.py:373
+msgid "Enable Looping"
+msgstr "Looping aktivieren"
+
+#: cms_plugins/bootstrap/__init__.py:1247 cms_plugins/generic/__init__.py:375
+msgid "Inifinte loop playing."
+msgstr "Endlosschleifen spielen."
+
+#: cms_plugins/bootstrap/__init__.py:1251
+msgid "Show related"
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1253
+msgid "Show related media content"
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1266
+msgid "Embed Video"
+msgstr "Video einbetten"
+
+#: cms_plugins/bootstrap/__init__.py:1294
+msgid "Content"
+msgstr "Inhalt"
+
+#: cms_plugins/bootstrap/__init__.py:1298
+msgid "Large button"
+msgstr "Große Schaltfläche"
+
+#: cms_plugins/bootstrap/__init__.py:1299
+msgid "Default button"
+msgstr "Standard Schaltfläche"
+
+#: cms_plugins/bootstrap/__init__.py:1300
+msgid "Small button"
+msgstr "Kleine Schaltfläche"
+
+#: cms_plugins/bootstrap/__init__.py:1304
+msgid "Button Size"
+msgstr "Schaltflächengröße"
+
+#: cms_plugins/bootstrap/__init__.py:1308
+msgid "Button Size to use."
+msgstr "Verwendete Schaltflächengröße."
+
+#: cms_plugins/bootstrap/__init__.py:1312
+msgid "Button Block"
+msgstr "Schaltflächen Block"
+
+#: cms_plugins/bootstrap/__init__.py:1314
+msgid "No"
+msgstr "Nein"
+
+#: cms_plugins/bootstrap/__init__.py:1315
+msgid "Block level button"
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1319
+msgid "Use button block option (span left to right)?"
+msgstr ""
+
+#: cms_plugins/bootstrap/__init__.py:1323
+msgid "Icon position"
+msgstr "Icon Position"
+
+#: cms_plugins/bootstrap/__init__.py:1325
+msgid "Icon top"
+msgstr "Icon Oben"
+
+#: cms_plugins/bootstrap/__init__.py:1326
+msgid "Icon right"
+msgstr "Icon Rechts"
+
+#: cms_plugins/bootstrap/__init__.py:1327
+msgid "Icon left"
+msgstr "Icon Links"
+
+#: cms_plugins/bootstrap/__init__.py:1330
+msgid "Select icon position related to content."
+msgstr "Wählen Sie die Icon-Position relativ zum Inhalt."
+
+#: cms_plugins/bootstrap/__init__.py:1350
+msgid "Button"
+msgstr "Schaltfläche"
+
+#: cms_plugins/bootstrap/__init__.py:1370
+msgid "Styles"
+msgstr "Stile"
+
+#: cms_plugins/bootstrap/__init__.py:1381 cms_plugins/generic/icon.py:213
+msgid "Icon settings"
+msgstr "Icon Einstellungen"
+
+#: cms_plugins/bootstrap/__init__.py:1387
+msgid "Extra settings"
+msgstr "Zusätzliche Einstellungen"
+
+#: cms_plugins/bootstrap/accordion.py:14
+msgid "Close others"
+msgstr "Andere schließen"
+
+#: cms_plugins/bootstrap/accordion.py:17
+msgid "Open only one card at a time."
+msgstr "Nur eine Card gleichzeitig geöffnet."
+
+#: cms_plugins/bootstrap/accordion.py:21
+msgid "First open"
+msgstr "Erste offen"
+
+#: cms_plugins/bootstrap/accordion.py:24
+msgid "Start with the first card open."
+msgstr "Mit der ersten Card geöffnet darstellen."
+
+#: cms_plugins/bootstrap/accordion.py:35
+msgid "Accordion"
+msgstr "Akkordion"
+
+#: cms_plugins/bootstrap/accordion.py:83
+msgid "Accordion Group"
+msgstr "Akkordion Gruppe"
+
+#: cms_plugins/bootstrap/card.py:26
+msgid "Card Header"
+msgstr "Card Überschrift"
+
+#: cms_plugins/bootstrap/card.py:37
+msgid "Card Body"
+msgstr "Card Body"
+
+#: cms_plugins/bootstrap/card.py:48
+msgid "Card Footer"
+msgstr "Card Fusszeile"
+
+#: cms_plugins/bootstrap/card.py:63
+msgid "Card"
+msgstr "Card"
+
+#: cms_plugins/generic/__init__.py:28
+msgid "Link Content"
+msgstr "Link Inhalt"
+
+#: cms_plugins/generic/__init__.py:33
+msgid "Content of Link"
+msgstr "Inhalt Link"
+
+#: cms_plugins/generic/__init__.py:41 forms.py:159
+msgid "Link"
+msgstr "Link"
+
+#: cms_plugins/generic/__init__.py:116
+msgid "MultiColumnText"
+msgstr "MultiColumnText"
+
+#: cms_plugins/generic/__init__.py:128
+msgid "HTML"
+msgstr "HTML"
+
+#: cms_plugins/generic/__init__.py:144
+msgid "Snippet"
+msgstr "Snippet"
+
+#: cms_plugins/generic/__init__.py:171
+msgid "SVG Image File"
+msgstr "SVG Bilddatei"
+
+#: cms_plugins/generic/__init__.py:176 forms.py:273
+msgid "Image Title"
+msgstr "Bildtitel"
+
+#: cms_plugins/generic/__init__.py:179 forms.py:276
+msgid "Caption text added to the \"title\" attribute of the <img> element."
+msgstr ""
+"Beschreibung die im <img> Element als Attribut \"title\" hinzugefügt wird."
+
+#: cms_plugins/generic/__init__.py:183 forms.py:280
+msgid "Alternative Description"
+msgstr "Alternative Beschreibung"
+
+#: cms_plugins/generic/__init__.py:186 forms.py:283
+msgid ""
+"Textual description of the image added to the \"alt\" tag of the <img> "
+"element."
+msgstr ""
+
+#: cms_plugins/generic/__init__.py:203
+msgid "SvgImage"
+msgstr "SvgBild"
+
+#: cms_plugins/generic/__init__.py:252
+msgid "Height for landscape screen ratio."
+msgstr "Höhe für das Querformat-Bildschirmverhältnis."
+
+#: cms_plugins/generic/__init__.py:258
+msgid "Height for portrait screen ratio."
+msgstr "Höhe für das Hochformat-Bildschirmverhältnis."
+
+#: cms_plugins/generic/__init__.py:272
+msgid "VerticalRatioSpacer"
+msgstr ""
+
+#: cms_plugins/generic/__init__.py:295
+msgid "An internal link onto an video file"
+msgstr ""
+
+#: cms_plugins/generic/__init__.py:314
+msgid "Background Video"
+msgstr "Hintergrundvideo"
+
+#: cms_plugins/generic/__init__.py:343
+msgid "Audio URL"
+msgstr "Audio URL"
+
+#: cms_plugins/generic/__init__.py:346
+msgid ""
+"Audio URL to an external audio file e.g.: https://www.example.com/sample.mp3"
+msgstr ""
+"Audio URL zu einer externen Audiodatei z. B.: https://www.example.com/sample."
+"mp3"
+
+#: cms_plugins/generic/__init__.py:351
+msgid "Figcaption for Audio"
+msgstr "Beschreibung für Audiodatei"
+
+#: cms_plugins/generic/__init__.py:362
+msgid "Start muted"
+msgstr "Stumm starten"
+
+#: cms_plugins/generic/__init__.py:369
+msgid "Will be blocked by browser by default."
+msgstr ""
+
+#: cms_plugins/generic/__init__.py:380
+msgid "Embed Audio"
+msgstr "Audio einbetten"
+
+#: cms_plugins/generic/icon.py:47 cms_plugins/generic/icon.py:48
+msgid "No icon"
+msgstr "Kein Icon"
+
+#: cms_plugins/generic/icon.py:186
+msgid "Icon"
+msgstr "Icon"
+
+#: cms_plugins/generic/slider.py:24
+#, python-format
+msgid "Num %s"
+msgstr ""
+
+#: cms_plugins/generic/slider.py:39
+msgid "Slider type"
+msgstr ""
+
+#: cms_plugins/generic/slider.py:42
+msgid "slider: rewinds slider to the start/end, carousel: circles."
+msgstr ""
+
+#: cms_plugins/generic/slider.py:46
+msgid "Gap"
+msgstr "Abstand"
+
+#: cms_plugins/generic/slider.py:48
+msgid "Gap (px - default: 10) between slides."
+msgstr "Abstand (px - Standard: 10) zwischen slides."
+
+#: cms_plugins/generic/slider.py:55
+msgid ""
+"Duration (msec - default: 0) for infinite autoplay of slides (0 -> No "
+"autoplay."
+msgstr ""
+
+#: cms_plugins/generic/slider.py:59
+msgid "Animation Duration"
+msgstr "Animationsdauer"
+
+#: cms_plugins/generic/slider.py:62
+msgid ""
+"Animation duration (msec - default: 400) - time between start and end of a "
+"slide change."
+msgstr ""
+"Animationsdauer (msec - Standard: 400) - Zeit zwischen Start und Ende einer "
+"Slide Änderung."
+
+#: cms_plugins/generic/slider.py:75
+msgid "Animation Timing"
+msgstr ""
+
+#: cms_plugins/generic/slider.py:78
+msgid "Animation timing, e.g.: Start: quick - end: slow."
+msgstr ""
+
+#: cms_plugins/generic/slider.py:82
+msgid "Hoverpause"
+msgstr ""
+
+#: cms_plugins/generic/slider.py:85
+msgid "Stop autoplay on mouse over."
+msgstr ""
+
+#: cms_plugins/generic/slider.py:89
+msgid "Peek"
+msgstr ""
+
+#: cms_plugins/generic/slider.py:91
+msgid "Preview width (px) of next and previous hided slides."
+msgstr ""
+
+#: cms_plugins/generic/slider.py:99
+msgid "Slider"
+msgstr ""
+
+#: cms_plugins/generic/slider.py:117
+msgid "Number of visible slides for the different device sizes:"
+msgstr ""
+
+#: cms_plugins/generic/slider.py:163
+msgid "Slide"
+msgstr ""
+
+#: cms_plugins/osm.py:16
+msgid "Center Latitude"
+msgstr ""
+
+#: cms_plugins/osm.py:18
+msgid "Center Longitude"
+msgstr ""
+
+#: cms_plugins/osm.py:20
+msgid "Zoom"
+msgstr "Zoom"
+
+#: cms_plugins/osm.py:22
+msgid "Height"
+msgstr "Höhe"
+
+#: cms_plugins/osm.py:24
+msgid "Scroll Wheel Zoom"
+msgstr "Scroll Wheel Zoom"
+
+#: cms_plugins/osm.py:27
+msgid "Custom Layer"
+msgstr ""
+
+#: cms_plugins/osm.py:31
+msgid "Adds a custom (colored) layer to the map."
+msgstr "Fügt ein benutzerdefinierten (farbigen) Layer der Karte hinzu."
+
+#: cms_plugins/osm.py:40
+msgid "Latitude"
+msgstr "Breitengrad"
+
+#: cms_plugins/osm.py:42
+msgid "Longitude"
+msgstr "Längengrad"
+
+#: cms_plugins/osm.py:58
+msgid "OpenstreetMap"
+msgstr "OpenstreetMap"
+
+#: cms_plugins/osm.py:89
+msgid "OsmMarker"
+msgstr "OsmMarker"
+
+#: cms_toolbars.py:21
+msgid "Export Clipboard"
+msgstr "Zwischenablage exportieren"
+
+#: cms_toolbars.py:29
+msgid "Import Clipboard"
+msgstr "Zwischenablage importieren"
+
+#: fields.py:151
+#, python-format
+msgid ""
+"'%(value)s' is not a valid size unit. Allowed units are: %(allowed_units)s."
+msgstr ""
+"'%(value)s' ist keine gültig Größenangabe. Zugelassene Größen: "
+"%(allowed_units)s."
+
+#: fields.py:177
+msgid "or"
+msgstr "oder"
+
+#: forms.py:129
+msgid "Style"
+msgstr "Stil"
+
+#: forms.py:130
+msgid "Extra CSS predefined style class for plugin."
+msgstr "Zusätzliche vordefinierte CSS Stile für dieses Plugin."
+
+#: forms.py:132
+msgid "Extra Classes"
+msgstr "Zusätzliche Einstellungen"
+
+#: forms.py:134
+msgid "Extra CSS Classes (space separated) for plugin."
+msgstr "Zusätzliche CSS Klassen (Kommatrennung) für dieses Plugin"
+
+#: forms.py:136
+msgid "Label"
+msgstr ""
+
+#: forms.py:137
+msgid "Label to identify this plugin in page-structure."
+msgstr ""
+
+#: forms.py:140
+msgid ""
+"Add extra (device specific) css key, values, e.g: margin or margin:md or "
+"transform:xl"
+msgstr ""
+"Zusätzliche CSS key, values, z.B. margin oder margin:md oder transform:xl"
+
+#: forms.py:152
+msgid "CMS Page"
+msgstr "CMS Seite"
+
+#: forms.py:153
+msgid "Download File"
+msgstr "Download Datei"
+
+#: forms.py:154
+msgid "External URL"
+msgstr "Externe URL"
+
+#: forms.py:155
+msgid "Mail To"
+msgstr "Mail an"
+
+#: forms.py:160
+msgid "Type of link"
+msgstr "Link Typ"
+
+#: forms.py:165
+msgid "Internal Page"
+msgstr "Interne Seite"
+
+#: forms.py:166
+msgid "An internal link onto any CMS page."
+msgstr "Ein interner Link auf eine CMS Seite."
+
+#: forms.py:171
+msgid "Anchor"
+msgstr "Anker"
+
+#: forms.py:172
+msgid "An anchor or bookmark on the internal linked page."
+msgstr "Ein Anker oder Lesezeichen auf eine interne Seite."
+
+#: forms.py:177
+msgid "URL"
+msgstr "URL"
+
+#: forms.py:178
+msgid "Link onto external page"
+msgstr "Link auf eine externe Seite"
+
+#: forms.py:182
+msgid "Download file"
+msgstr "Downloaddatei"
+
+#: forms.py:184
+msgid "An internal link onto a file from filer"
+msgstr "Ein interner Link auf eine Filer Datei"
+
+#: forms.py:188
+msgid "Serve file as webpage"
+msgstr "Datei als Webseite ausliefern"
+
+#: forms.py:190
+msgid "e.g. PDF will be visible in browser instead of a download"
+msgstr "z. B. wird eine PDF im Browser angezeigt statt einem Dateidownload"
+
+#: forms.py:195
+msgid "Email"
+msgstr "Email"
+
+#: forms.py:196
+msgid "Open Email program with this address"
+msgstr "Öffne Email Programm mit dieser Adresse"
+
+#: forms.py:201
+msgid "Same Window"
+msgstr "Gleiches Fenster"
+
+#: forms.py:202
+msgid "New Window"
+msgstr "Neues Fenster"
+
+#: forms.py:203
+msgid "Parent Window"
+msgstr "Übergeordnetes Fenster"
+
+#: forms.py:204
+msgid "Topmost Frame"
+msgstr "Oberster Rahmen"
+
+#: forms.py:206
+msgid "Link Target"
+msgstr "Linkziel"
+
+#: forms.py:208
+msgid "Open Link in other target."
+msgstr "Link in neuem Ziel öffnen."
+
+#: forms.py:212
+msgid "Link title"
+msgstr "Link Titel"
+
+#: forms.py:214
+msgid "Link's title"
+msgstr "Link's Titel"
+
+#: forms.py:220
+msgid "No Link"
+msgstr "Kein Link"
+
+#: forms.py:233
+msgid "CMS page to link to is missing."
+msgstr "CMS Seite für Verlinkung fehlt."
+
+#: forms.py:238
+msgid "File for download is missing."
+msgstr "Datei für den Download fehlt."
+
+#: forms.py:243
+msgid "External link is missing."
+msgstr "Externer Link fehlt."
+
+#: forms.py:248
+msgid "Mailto link is missing."
+msgstr "Mailto Link fehlt."
+
+#: forms.py:267
+msgid "Image File"
+msgstr "Bilddatei"
+
+#: templates/cms/toolbar/dragitem.html:23
+#, python-format
+msgid "Found error in '%(key)s'"
+msgstr "Fehler in '%(key)s' gefunden"
+
+#: templates/cms/toolbar/dragitem.html:31
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: templates/cms/toolbar/dragitem.html:36
+msgid "You cannot add plugins to this plugin."
+msgstr "Es können keine Plugins dem Plugin hinzugefügt werden."
+
+#: templates/cms/toolbar/dragitem.html:38
+msgid "Add plugin"
+msgstr "Plugin hinzufügen"
+
+#: templates/cms/toolbar/dragitem.html:44
+msgid "This plugin cannot be moved or edited outside of its parent"
+msgstr ""
+"Dieses Plugin kann nicht außerhalb des übergeordneten Plugins verschoben "
+"oder bearbeitet werden"
+
+#: templates/cms/toolbar/dragitem.html:50
+msgid "Cut"
+msgstr "Ausschneiden"
+
+#: templates/cms/toolbar/dragitem.html:51
+msgid "Copy"
+msgstr "Kopieren"
+
+#: templates/cms/toolbar/dragitem.html:53
+msgid "Paste"
+msgstr "Einfügen"
+
+#: templates/cms/toolbar/dragitem.html:54
+msgid "Clipboard is empty."
+msgstr "Zwischenablage ist leer."
+
+#: templates/cms/toolbar/dragitem.html:55
+msgid "This plugin does not allow plugins of this type as nested plugins."
+msgstr ""
+"Dieses Plugin erlaubt keine Plugins dieses Typs als verschachteltes Plugins."
+
+#: templates/cms/toolbar/dragitem.html:56
+msgid "This plugin cannot have nested plugins."
+msgstr "Dieses Plugin kann keine verschachtelten Plugins haben."
+
+#: templates/cms/toolbar/dragitem.html:58
+msgid "Delete"
+msgstr "Löschen"
+
+#: templates/cms/toolbar/dragitem.html:64
+msgid "Filter plugins..."
+msgstr "Filter Plugins..."
+
+#: templates/cmsplus/admin/clipboard_import.html:31
+msgid "Submitting will clear the current clipboard"
+msgstr "Das Abschicken leert die aktuelle Zwischenablage"
+
+#: templates/cmsplus/admin/clipboard_import.html:32
+msgid "Submit"
+msgstr "Abschicken"
+
+#: templates/cmsplus/admin/clipboard_import.html:34
+#, python-format
+msgid "Successfully imported %(p_length)s Plugins"
+msgstr "Erfolgreich %(p_length)s Plugins importiert"
+
+#: templates/cmsplus/admin/clipboard_import.html:35
+msgid ""
+"Your clipboard was updated! Please refresh page to refresh your clipboard!"
+msgstr ""
+"Ihre Zwischenablage wurde aktualisiert. Bitte laden Sie die Seite neu um "
+"Ihre Zwischenablage nutzen zu können!"
+
+#: templates/cmsplus/admin/plugin/change_form.html:7
+msgid "Description"
+msgstr "Beschreibung"
+
+#: templates/cmsplus/admin/plugin/change_form.html:12
+msgid "No description"
+msgstr "Keine Beschreibung"
+
+#: widgets.py:55
+msgid "Remove"
+msgstr "Entfernen"
+
+#: widgets.py:91
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: widgets.py:92
+msgid "Add another key/value pair"
+msgstr "Weiteres key/value Paar hinzufügen"
