@@ -1,37 +1,36 @@
-var jsaccordion = {
-    self: null,
-    close_others: null,
-
+const jsaccordion = {
     init : function (target) {
         // init() : initialize accordion
         // PARAM target : ID of accordion wrapper
         //       single : Only one drawer will only at a time
-        self = document.querySelector(target);
-        this.self = self;
+        const self = this
+        const accordion = document.querySelector(target);
 
-        let first_is_open = this.self.getAttribute('data-first-open') !== "false";
-        let close_others = this.self.getAttribute('data-close-others') !== "false";
+        let first_is_open = accordion.getAttribute('data-first-open') !== "false";
+        let close_others = accordion.getAttribute('data-close-others') !== "false";
 
-        var headers = document.querySelectorAll(target + " .cmsplus-accordion-head");
+        var headers = accordion.querySelectorAll(".cmsplus-accordion-head");
+
         if (headers.length > 0) {
             // Single is false by default
             // Attach onclick event to headers
-            for (var head of headers) { head.addEventListener("click", function () {
-                jsaccordion.select(this, close_others);
-            }); }
-        }
-        if (first_is_open) {
-            var contents = this.self.getElementsByClassName("cmsplus-accordion-body");
-            if (contents.length > 0) {
-                contents[0].classList.add("open");
-                contents[0].previousElementSibling.classList.add("open");
+            for (let head of headers) {
+                head.addEventListener("click", function () {
+                    jsaccordion.select(accordion, head, close_others);
+                });
             }
         }
-        this.openTabs();
+        if (first_is_open) {
+            var contents = accordion.getElementsByClassName("cmsplus-accordion-body");
+            if (contents.length > 0) {
+                this.toggleTab(contents[0])
+            }
+        }
+        this.openTabs(accordion);
     },
 
-    openTabs: function () {
-        var contents = this.self.parentElement.getElementsByClassName("cmsplus-accordion-body");
+    openTabs: function (accordion) {
+        var contents = accordion.parentElement.getElementsByClassName("cmsplus-accordion-body");
         if (contents.length > 0) {
             for (let c of contents) {
                 if (!c.classList.contains('open')) {
@@ -48,26 +47,23 @@ var jsaccordion = {
         element.classList.toggle("open");
         element.previousElementSibling.classList.toggle("open")
     },
-
-    select : function (event, close_others) {
+    closeTab: function (element)  {
+        element.classList.remove("open");
+        element.previousElementSibling.classList.remove("open")
+    },
+    select : function (accordion, target, close_others) {
         // Close all first
         if (close_others) {
-            var contents = event.parentElement.getElementsByClassName("cmsplus-accordion-body");
-            if (contents.length > 0) {
-                for (var content of contents) {
-                    if (content === event.nextElementSibling) {
-                        continue;
-                    }
-                    content.classList.remove("open");
-                    content.previousElementSibling.classList.remove("open");
-                    content.style.maxHeight = null;
-                }
+            // get all body elements in accordion
+            const contents = accordion.getElementsByClassName("cmsplus-accordion-body");
+            for (let content of contents) {
+                this.closeTab(content)
             }
         }
         // Open selected drawer
-        this.toggleTab(event.nextElementSibling);
+        this.toggleTab(target.nextElementSibling);
 
-        jsaccordion.openTabs();
+        jsaccordion.openTabs(accordion);
     },
 
 };
