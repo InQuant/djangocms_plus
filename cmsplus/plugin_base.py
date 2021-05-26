@@ -15,7 +15,7 @@ class PlusPluginBase(CMSPluginBase):
 
     @classmethod
     def get_glossary(cls, instance):
-        form = cls.form(instance.data)
+        form = cls.form(instance.data or {})
         return form.deserialize()
 
     def save_form(self, request, form, change):
