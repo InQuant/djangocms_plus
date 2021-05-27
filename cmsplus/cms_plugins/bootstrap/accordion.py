@@ -60,7 +60,7 @@ class BootstrapAccordionPlugin(StylePluginMixin, PlusPluginBase):
     def render(self, context, instance, placeholder):
         context = super().render(context, instance, placeholder)
         context.update({
-            'close_others': int(instance.glossary.get('close_others', True)),
+            'close_others': instance.glossary.get('close_others', True),
             'first_is_open': instance.glossary.get('first_is_open', True),
         })
         return context
