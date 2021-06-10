@@ -1,0 +1,22 @@
+{% load static %}
+<div id="cmsplus-ace_{{ widget.name }}" style="width: 100%; height: 50vh; font-size: 1rem; font-family: monospace, monospace">
+
+</div>
+<textarea style="display: none" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %}>
+  {% if widget.value %}{{ widget.value }}{% endif %}
+</textarea>
+
+{{ widget.attrs.editor | json_script:'ace-editor-opts' }}
+{{ widget.value | json_script:'ace-editor-content' }}
+
+<script type="application/javascript">
+    const opts = JSON.parse(document.getElementById('ace-editor-opts').innerText);
+    const editor = ace.edit("cmsplus-ace_{{ widget.name }}", opts);
+    const textArea = editor.container.nextElementSibling;
+    {% if widget.value %}
+        editor.session.setValue(JSON.parse(document.getElementById('ace-editor-content').innerText))
+    {% endif %}
+    editor.getSession().on('change', function(e) {
+        textArea.innerHTML = editor.getValue()
+    });
+</script>

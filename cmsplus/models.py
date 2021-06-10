@@ -1,6 +1,15 @@
+import os
+import uuid
+
 from cms.models import CMSPlugin
+from django.conf import settings
+from django.contrib.sites.models import Site
+from django.core.files.storage import FileSystemStorage
+from django.db import models
 from django.utils.functional import cached_property
 from django.utils.html import mark_safe, format_html_join
+from django.utils.text import slugify
+from django.utils.translation import ugettext_lazy as _
 from jsonfield import JSONField
 
 from cmsplus.app_settings import cmsplus_settings as cps
@@ -129,3 +138,47 @@ class LinkPluginMixin(object):
     @property
     def download_name(self):
         return self.plugin_class.get_download_name(self)
+
+
+class SCSSStorage(FileSystemStorage):
+    def __init__(self, file_permissions_mode=None, directory_permissions_mode=None):
+        location = os.path.join('cmsplus', 'static', cps.SITE_STYLES_DIR)
+        base_url = os.path.join(settings.STATIC_URL, cps.SITE_STYLES_DIR)
+        super().__init__(location, base_url, file_permissions_mode, directory_permissions_mode)
+
+
+scss_storage = SCSSStorage()
+
+
+class SiteStyle(models.Model):
+    name = models.CharField(_('Name'), max_length=255)
+    file = models.FileField(null=True, blank=True, editable=False, storage=scss_storage)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True, blank=True)
+    order = models.PositiveIntegerField(default=0, blank=False, null=False)
+
+    @property
+    def path_for_template(self):
+        return os.path.join(cps.SITE_STYLES_DIR, self.file.name)
+
+    def generate_file_name(self):
+        rand_str = str(uuid.uuid4().hex)
+        return f'{rand_str}_{slugify(self.name)}.scss'
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super(SiteStyle, self).save(force_insert, force_update, using, update_fields)
+
+    def delete(self, using=None, keep_parents=False):
+        scss_storage.delete(self.file.name)
+        return super().delete(using, keep_parents)
+
+    class Meta:
+        verbose_name = _('Site Style')
+        verbose_name_plural = _('Site Styles')
+        app_label = 'cmsplus'
+        ordering = ['order']
+
+    def __str__(self):
+        _add = "NO FILE"
+        if self.file:
+            _add = f'{self.file.name}'
+        return f'{self.name}  ({_add})'.strip()

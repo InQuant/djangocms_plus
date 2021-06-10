@@ -43,7 +43,16 @@ setup(
     zip_safe=False,
     include_package_data=True,
     package_data={'': ['README.md'], },
-    install_requires=['django-cms', 'jsonfield', 'django-filer', 'easy-thumbnails'],
+    install_requires=[
+        'django-cms',
+        'jsonfield',
+        'django-filer',
+        'easy-thumbnails',
+        'django-sass-processor',
+        'libsass',
+        'django-compressor',
+        'django-admin-sortable2'
+    ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',

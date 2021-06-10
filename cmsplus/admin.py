@@ -1,14 +1,20 @@
 import json
 from json import JSONDecodeError
 
+from adminsortable2.admin import SortableAdminMixin
 from cms.admin.pageadmin import PageAdmin
 from cms.models import Page, Placeholder, UserSettings
+from django import forms
 from django.contrib import admin
+from django.core.files.temp import NamedTemporaryFile
+from django.core.management import call_command
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import path
 from django.utils.translation import ugettext_lazy as _
 
+from cmsplus.fields import SCSSEditor
+from cmsplus.models import SiteStyle
 from cmsplus.utils import generate_plugin_tree
 from cmsplus.utils import plus_add_plugin
 
@@ -63,3 +69,50 @@ class CustomPageAdmin(PageAdmin):
 
 admin.site.unregister(Page)
 admin.site.register(Page, CustomPageAdmin)
+
+
+class SiteStyleForm(forms.ModelForm):
+    content = forms.CharField(widget=SCSSEditor)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.file:
+            self.fields['content'].initial = self.get_from_file()
+
+    def get_from_file(self):
+        self.instance.file.open('r')
+        content = self.instance.file.read()
+        self.instance.file.close()
+        return content
+
+    def save(self, commit=True):
+        data = str(self.data['content']).lstrip()
+        if not self.instance.file:
+            tmp_file = NamedTemporaryFile(delete=True)
+            self.instance.file.save(self.instance.generate_file_name(), tmp_file, save=False)
+            tmp_file.close()
+
+        with self.instance.file.open('w') as f:
+            f.write(data)
+
+        call_command('compilescss')
+        return super(SiteStyleForm, self).save(commit)
+
+    class Meta:
+        model = SiteStyle
+        fields = ['name', 'content', ]
+
+
+@admin.register(SiteStyle)
+class SiteStylesAdmin(SortableAdminMixin, admin.ModelAdmin):
+    readonly_fields = ['file', ]
+    form = SiteStyleForm
+    list_display = ['name', 'filename', 'file_url']
+
+    def filename(self, obj):
+        return obj.file.name if obj.file else None
+    filename.short_description = _('File name')
+
+    def file_url(self, obj):
+        return obj.file.url if obj.file else None
+    file_url.short_description = _('File url')

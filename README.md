@@ -12,10 +12,45 @@ IconPlugin:
 - Marks Plugins red if plugin form contains errors
 
 
-## TODO 
+## TODO
 - Clipboard: Refresh page when Clipboard import was successful
-    - modal on_close=REFRESH_PAGE is not working 
+  - modal on_close=REFRESH_PAGE is not working
 
 
-## Known Issuesb
-- Icon Plugin is not working in CKTextEditor-Preview. Fonts need to be included in ckeditor js files, but how?
+## Add to settings
+```python
+INSTALLED_APPS = [
+  ...
+  'sass_processor', # site styles
+  'adminsortable2', # site styles
+  ...
+]
+```
+
+## include html to your project
+```html
+{% include 'cmsplus/includes/assets.html' %}
+{% include 'cmsplus/includes/_site_styles.html' %}
+```
+
+##
+
+```python add to context_processors
+TEMPLATES = [
+    {
+        ...
+        'OPTIONS': {
+            'context_processors': [
+                ...
+                'cmsplus.context_processors.font_assets',
+                'cmsplus.context_processors.site_styles',
+                ...
+            ],
+        },
+        ...
+    },
+]
+```
+
+
+## Known Issues

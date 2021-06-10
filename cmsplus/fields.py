@@ -11,6 +11,7 @@ from django.contrib.admin.widgets import AdminSplitDateTime
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import ProhibitNullCharactersValidator, RegexValidator
 from django.db.models.fields.related import ManyToOneRel
+from django.forms import Textarea
 from django.forms.fields import Field
 from django.utils.datetime_safe import datetime
 from django.utils.deconstruct import deconstructible
@@ -271,3 +272,54 @@ class PlusDateTimeField(forms.DateTimeField, BaseFieldMixIn):
         if not value or value == "":
             return
         return value.isoformat()
+
+
+class AceEditor(Textarea):
+    template_name = 'cmsplus/forms/widgets/ace-editor.html'
+
+    def __init__(self, attrs=None, mode='ace/mode/html'):
+        # Use slightly better defaults than HTML's 20x2 box
+        default_attrs = {'editor': {
+            'enableBasicAutocompletion': True,
+            'enableSnippets': True,
+            'enableLiveAutocompletion': True,
+            'mode': mode,
+            'theme': 'ace/theme/dracula'
+        }}
+        super().__init__(default_attrs)
+
+    class Media:
+        js = [
+            'cmsplus/js/ace/ace.js',
+            'cmsplus/js/ace/ext-language_tools.js',
+        ]
+
+
+class SCSSEditor(AceEditor):
+    def __init__(self, attrs=None):
+        super().__init__(attrs, mode='ace/mode/scss')
+
+
+class HTMLEditor(AceEditor):
+    def __init__(self, attrs=None):
+        super().__init__(attrs, mode='ace/mode/html')
+
+
+class CSSEditor(AceEditor):
+    def __init__(self, attrs=None):
+        super().__init__(attrs, mode='ace/mode/css')
+
+
+class DjangoEditor(AceEditor):
+    def __init__(self, attrs=None):
+        super().__init__(attrs, mode='ace/mode/django')
+
+
+class PythonEditor(AceEditor):
+    def __init__(self, attrs=None):
+        super().__init__(attrs, mode='ace/mode/python')
+
+
+class JavascriptEditor(AceEditor):
+    def __init__(self, attrs=None):
+        super().__init__(attrs, mode='ace/mode/javascript')

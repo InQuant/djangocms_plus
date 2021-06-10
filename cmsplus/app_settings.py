@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 
 from cmsplus.utils import JSONEncoder
@@ -235,6 +237,8 @@ DEFAULTS = {
     'CARD_FOOTER_STYLES': (
         ('', 'Default'),
     ),
+
+    'SITE_STYLES_DIR': os.path.join('cmsplus', 'site_styles')
 }
 
 

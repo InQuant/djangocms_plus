@@ -1,4 +1,8 @@
+from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import Q
+
 from cmsplus.app_settings import cmsplus_settings
+from cmsplus.models import SiteStyle
 
 
 def font_assets(request):
@@ -20,3 +24,8 @@ def font_assets(request):
         'CMSPLUS_FONT_CSS': css,
         'CMSPLUS_FONT_JS': js,
     }
+
+
+def site_styles(request):
+    styles = SiteStyle.objects.filter(Q(site__isnull=True) | Q(site=get_current_site(request))).order_by('order')
+    return {'SITE_STYLES': styles}

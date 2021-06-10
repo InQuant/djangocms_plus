@@ -56,7 +56,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'djangocms_admin_style',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -64,6 +63,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
+    'sass_processor',
+    'adminsortable2',
 
     'debug_toolbar',
 
@@ -97,6 +99,7 @@ MIDDLEWARE = [
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
     'cms.middleware.utils.ApphookReloadMiddleware',
+
 ]
 
 TEMPLATES = [
@@ -107,19 +110,25 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'sekizai.context_processors.sekizai',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cms.context_processors.cms_settings',
-                'sekizai.context_processors.sekizai',
                 'django.template.context_processors.i18n',
                 'cmsplus.context_processors.font_assets',
+                'cmsplus.context_processors.site_styles',
             ],
         },
     },
 ]
 
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -129,8 +138,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/m/'
+MEDIA_URL = '/media/'
 
+STATIC_ROOT = 'static/'
 MEDIA_ROOT = 'media/'
 
 
