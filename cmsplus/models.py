@@ -95,11 +95,11 @@ class PlusPlugin(CMSPlugin):
             ('@media (min-width: 768px)', 'margin-bottom:3rem)'
         ]
         """
-        css = []
-        for media, css_lines in self.plugin_class.get_extra_css(self).items():
-            _css = ';'.join(['%s:%s' % (k, v) for k, v in css_lines])
-            css.append((media, _css))
-        return css
+        return self.glossary.get('extra_css')
+        # css = []
+        # for media, css_lines in self.plugin_class.get_extra_css(self).items():
+        #     _css = ';'.join(['%s:%s' % (k, v) for k, v in css_lines])
+        #     css.append((media, _css))
 
 
 class LinkPluginMixin(object):

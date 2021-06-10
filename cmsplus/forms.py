@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from cmsplus.app_settings import cmsplus_settings
-from cmsplus.fields import (PageSearchField, PlusFilerFileSearchField, PlusFilerImageSearchField, KeyValueField)
+from cmsplus.fields import (PageSearchField, PlusFilerFileSearchField, PlusFilerImageSearchField, CSSEditor)
 from cmsplus.models import PlusPlugin
 
 logger = logging.getLogger(__name__)
@@ -135,9 +135,11 @@ def get_style_form_fields(style_config_key=None, style_multiple=False):
         forms.CharField(
             label=_('Label'), required=False, initial='',
             help_text=_('Label to identify this plugin in page-structure.')),
-        KeyValueField(
-            label=_('Extra CSS'), required=False, initial='',
-            help_text=_('Add extra (device specific) css key, values, e.g: margin or margin:md or transform:xl')),
+        forms.CharField(
+            widget=CSSEditor,
+            label=_('Custom CSS'),
+            required=False
+        )
     )
 
 

@@ -184,58 +184,7 @@ class StylePluginMixin(object):
 
     @classmethod
     def get_extra_css(cls, instance):
-        """
-        gets the extra (device specific) css styles
-
-        extra_css is stored device specific in glossary like this:
-        extra_css : {
-            'margin-bottom': '7rem',
-            'margin-bottom:md': '13rem',
-            'margin-bottom:xl': '30rem',
-            'color': 'red',
-            'color:md': 'blue',
-        }
-
-        returns from example:
-            [
-                'default', [
-                    ('margin-bottom', '7rem'),
-                    ('color', 'red'),
-                ],
-                '@media (min-width: 768px)', [
-                    ('margin-bottom', '13rem'),
-                    ('color', 'blue'),
-                ],
-                '@media (min-width: 768px)', [
-                    ('margin-bottom', '30rem'),
-                ],
-            ]
-        """
-
-        def _get_media_and_css_key(key):
-            """
-            from e.g: margin-bottom:md ->  returns '@media (min-width: 768px)', margin-bottom
-            """
-            try:
-                # k e.g. md:margin-bottom
-                css_key, dev = key.split(':')
-                media = '@media (min-width: %spx)' % cps.DEVICE_MIN_WIDTH_MAP.get(dev, 'xs')
-            except ValueError:
-                css_key = key
-                media = 'default'
-            return media, css_key
-
-        css = super().get_extra_css(instance)
-
-        for key, val in instance.glossary.get('extra_css', {}).items():
-            media, css_key = _get_media_and_css_key(key)
-            if media in css:
-                _list = css[media]
-                _list.append((css_key, val))
-                css[media] = _list
-            else:
-                css[media] = [(css_key, val), ]
-        return css
+        return instance.glossary.get('extra_css')
 
 
 class LinkPluginBase(PlusPluginBase):
