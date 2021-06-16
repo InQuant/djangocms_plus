@@ -1,0 +1,25 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    {% for err in errors %}
+      <p class="errornote">
+        {{ err }}
+      </p>
+    {% endfor %}
+    <h1>{% trans 'Upload SCSS Files' %}</h1>
+
+    <form method="POST" action="" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div>
+        <input type="file" name="scss_files" id="scss_files" multiple accept=".scss">
+      </div>
+      <div style="padding-top: 2rem">
+        <input style="float: unset" type="submit" value="{% trans 'Upload' %}" class="default" name="_save">
+      </div>
+    </form>
+  </div>
+{% endblock %}

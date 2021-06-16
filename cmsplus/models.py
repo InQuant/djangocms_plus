@@ -1,5 +1,4 @@
 import os
-import uuid
 
 from cms.models import CMSPlugin
 from django.conf import settings
@@ -8,7 +7,6 @@ from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.html import mark_safe, format_html_join
-from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from jsonfield import JSONField
 
@@ -151,7 +149,7 @@ scss_storage = SCSSStorage()
 
 
 class SiteStyle(models.Model):
-    name = models.CharField(_('Name'), max_length=255)
+    name = models.SlugField(_('Name'), max_length=255, unique=True)
     file = models.FileField(null=True, blank=True, editable=False, storage=scss_storage)
     site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True, blank=True)
     order = models.PositiveIntegerField(default=0, blank=False, null=False)
@@ -161,8 +159,7 @@ class SiteStyle(models.Model):
         return os.path.join(cps.SITE_STYLES_DIR, self.file.name)
 
     def generate_file_name(self):
-        rand_str = str(uuid.uuid4().hex)
-        return f'{rand_str}_{slugify(self.name)}.scss'
+        return f'{self.name}.scss'
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         super(SiteStyle, self).save(force_insert, force_update, using, update_fields)

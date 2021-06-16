@@ -1,17 +1,25 @@
+import datetime
 import json
+import os
+import zipfile
+from io import StringIO, BytesIO
 from json import JSONDecodeError
 
 from adminsortable2.admin import SortableAdminMixin
 from cms.admin.pageadmin import PageAdmin
 from cms.models import Page, Placeholder, UserSettings
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.files.temp import NamedTemporaryFile
 from django.core.management import call_command
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import path
+from django.urls import path, reverse
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import TemplateView
+from sass import CompileError
+from sass_processor.processor import SassProcessor
 
 from cmsplus.fields import SCSSEditor
 from cmsplus.models import SiteStyle
@@ -86,16 +94,16 @@ class SiteStyleForm(forms.ModelForm):
         return content
 
     def save(self, commit=True):
-        data = str(self.data['content']).lstrip()
+        data = str(self.data['content']).strip()
         if not self.instance.file:
             tmp_file = NamedTemporaryFile(delete=True)
-            self.instance.file.save(self.instance.generate_file_name(), tmp_file, save=False)
+            self.instance.file.save(self.instance.generate_file_name(), tmp_file, save=True)
             tmp_file.close()
 
         with self.instance.file.open('w') as f:
             f.write(data)
 
-        call_command('compilescss')
+        call_command('compilescss', stdout=StringIO())
         return super(SiteStyleForm, self).save(commit)
 
     class Meta:
@@ -103,16 +111,119 @@ class SiteStyleForm(forms.ModelForm):
         fields = ['name', 'content', ]
 
 
+def export_styles(modeladmin, request, queryset):
+    if queryset.count() == 1:
+        file = queryset.first().file
+        resp = HttpResponse(file.read(), content_type="text/scss")
+        resp['Content-Disposition'] = 'attachment; filename=%s' % file.name
+
+        return resp
+    filenames = [s.file.path for s in queryset]
+    zip_filename = "scss_export_%s.zip" % datetime.datetime.now().timestamp()
+
+    zip_file = BytesIO()
+
+    # The zip compressor
+    zf = zipfile.ZipFile(zip_file, "w")
+
+    for fpath in filenames:
+        # Calculate path for file in zip
+        fdir, fname = os.path.split(fpath)
+        zip_path = os.path.join(fname)
+
+        # Add file, at correct path
+        zf.write(fpath, zip_path)
+
+    # Must close zip for all contents to be written
+    zf.close()
+
+    # Grab ZIP file from in-memory, make response with correct MIME-type
+    resp = HttpResponse(zip_file.getvalue(), content_type="application/x-zip-compressed")
+    # ..and correct content-disposition
+    resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
+
+    return resp
+
+
+export_styles.short_description = _('Export selected')
+
+
+class ImportView(TemplateView):
+    template_name = 'cmsplus/admin/site_styles/import_styles.html'
+
+    def get_context_data(self, **kwargs):
+        r = super(ImportView, self).get_context_data(**kwargs)
+        r.update({
+            'title': _('Site Style'),
+            'site_title': _('Import SCSS')
+        })
+        return r
+
+    def post(self, request, *args, **kwargs):
+        success = False
+        errors = []
+
+        for f in request.FILES.getlist('scss_files', []):
+            f_name = str(f.name).split('.')[:-1]
+            form = SiteStyleForm(data={
+                'content': f.read().decode("utf-8"),
+                'name': slugify(f_name),
+            })
+
+            if not form.is_valid():
+                errors.append(form.errors)
+            else:
+                form.save(commit=True)
+
+        if len(errors) < 1:
+            success = True
+
+        self.extra_context = self.extra_context if self.extra_context else {}
+        self.extra_context.update({'success': success, 'errors': errors})
+
+        if success:
+            messages.success(request, _('Successfully imported styles'))
+            url = reverse('admin:%s_%s_changelist' % (SiteStyle._meta.app_label,  SiteStyle._meta.model_name), )
+            return HttpResponseRedirect(url)
+        return self.get(request, *args, **kwargs)
+
+
 @admin.register(SiteStyle)
 class SiteStylesAdmin(SortableAdminMixin, admin.ModelAdmin):
     readonly_fields = ['file', ]
     form = SiteStyleForm
     list_display = ['name', 'filename', 'file_url']
+    actions = [export_styles, ]
+    change_list_template = 'cmsplus/admin/site_styles/change_list.html'
+
+    def get_readonly_fields(self, request, obj=None):
+        r = super().get_readonly_fields(request, obj)
+        if obj:
+            return ['name', ] + r
+        return r
 
     def filename(self, obj):
         return obj.file.name if obj.file else None
+
     filename.short_description = _('File name')
 
     def file_url(self, obj):
         return obj.file.url if obj.file else None
+
     file_url.short_description = _('File url')
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        obj = self.get_object(request, object_id)
+        try:
+            sass_processor = SassProcessor()
+            s = str(obj.path_for_template)
+            sass_processor(s)
+        except CompileError as e:
+            self.message_user(request, e, level=messages.ERROR)
+
+        return super().change_view(request, object_id, form_url, extra_context)
+
+    def get_urls(self):
+        return super(SiteStylesAdmin, self).get_urls() + [
+            path('site_styles/import', ImportView.as_view(), name="site_styles_import"),
+        ]

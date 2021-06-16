@@ -1,0 +1,9 @@
+{% extends 'admin/change_list.html' %}
+{% load i18n %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li>
+        <a class="addlink" href="{% url 'admin:site_styles_import' %}">{% trans 'Import SCSS Style' %}</a>
+    </li>
+{% endblock %}

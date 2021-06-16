@@ -1,4 +1,4 @@
-{% load sass_tags %}
+{% load sass_tags sekizai_tags %}
 {% for style in SITE_STYLES %}
-  <link href="{% sass_src style.path_for_template %}" rel="stylesheet" type="text/css" />
+    {% addtoblock 'css' %}<link href="{% sass_src style.path_for_template %}" rel="stylesheet" type="text/css" />{% endaddtoblock %}
 {% endfor %}
