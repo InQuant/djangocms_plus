@@ -142,6 +142,7 @@ class SCSSStorage(FileSystemStorage):
     def __init__(self, file_permissions_mode=None, directory_permissions_mode=None):
         location = os.path.join('cmsplus', 'static', cps.SITE_STYLES_DIR)
         base_url = os.path.join(settings.STATIC_URL, cps.SITE_STYLES_DIR)
+        os.makedirs(base_url)
         super().__init__(location, base_url, file_permissions_mode, directory_permissions_mode)
 
 
