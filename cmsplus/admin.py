@@ -108,7 +108,7 @@ class SiteStyleForm(forms.ModelForm):
 
     class Meta:
         model = SiteStyle
-        fields = ['name', 'content', ]
+        fields = ['name', 'content', 'site', ]
 
 
 def export_styles(modeladmin, request, queryset):
@@ -192,7 +192,7 @@ class ImportView(TemplateView):
 class SiteStylesAdmin(SortableAdminMixin, admin.ModelAdmin):
     readonly_fields = ['file', ]
     form = SiteStyleForm
-    list_display = ['name', 'filename', 'file_url']
+    list_display = ['name', 'filename', 'file_url', 'site']
     actions = [export_styles, ]
     change_list_template = 'cmsplus/admin/site_styles/change_list.html'
 
