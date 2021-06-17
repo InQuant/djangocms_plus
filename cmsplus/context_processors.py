@@ -1,8 +1,12 @@
+import logging
+
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 
 from cmsplus.app_settings import cmsplus_settings
-from cmsplus.models import SiteStyle
+from cmsplus.models import SiteStyle, scss_storage
+
+logger = logging.getLogger('django')
 
 
 def font_assets(request):
@@ -28,4 +32,11 @@ def font_assets(request):
 
 def site_styles(request):
     styles = SiteStyle.objects.filter(Q(site__isnull=True) | Q(site=get_current_site(request))).order_by('order')
-    return {'SITE_STYLES': styles}
+    r = []
+    for style in styles:
+        if not scss_storage.exists(style.file.name):
+            logger.error(f'{style} does not exist!')
+            continue
+        r.append(r)
+
+    return {'SITE_STYLES': r}
