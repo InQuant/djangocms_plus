@@ -23,7 +23,7 @@ class Command(BaseCommand):
             logger.debug('\n[Setting logger to DEBUG]')
 
         if dry_run:
-            logger.debug(f'--- dry run ---')
+            logger.info(f'--- dry run ---')
 
         existing_files = scss_storage.listdir('')[1]
         obj_files = SiteStyle.objects.values_list('file', flat=True)
