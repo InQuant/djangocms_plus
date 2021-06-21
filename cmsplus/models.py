@@ -140,7 +140,7 @@ class LinkPluginMixin(object):
 
 class SCSSStorage(FileSystemStorage):
     def __init__(self, file_permissions_mode=None, directory_permissions_mode=None):
-        location = os.path.join('cmsplus', 'static', cps.SITE_STYLES_DIR)
+        location = os.path.join('static', cps.SITE_STYLES_DIR)
         base_url = os.path.join(settings.STATIC_URL, cps.SITE_STYLES_DIR)
         if not os.path.exists(location):
             os.makedirs(location)

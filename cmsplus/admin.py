@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import os
 import zipfile
 from io import StringIO, BytesIO
@@ -25,6 +26,8 @@ from cmsplus.fields import SCSSEditor
 from cmsplus.models import SiteStyle
 from cmsplus.utils import generate_plugin_tree
 from cmsplus.utils import plus_add_plugin
+
+logger = logging.getLogger(__name__)
 
 
 class CustomPageAdmin(PageAdmin):
@@ -88,8 +91,13 @@ class SiteStyleForm(forms.ModelForm):
             self.fields['content'].initial = self.get_from_file()
 
     def get_from_file(self):
-        self.instance.file.open('r')
-        content = self.instance.file.read()
+        try:
+            self.instance.file.open('r')
+            content = self.instance.file.read()
+        except FileNotFoundError as e:
+            logger.exception(e)
+            content = ''
+
         self.instance.file.close()
         return content
 
@@ -219,6 +227,8 @@ class SiteStylesAdmin(SortableAdminMixin, admin.ModelAdmin):
             s = str(obj.path_for_template)
             sass_processor(s)
         except CompileError as e:
+            self.message_user(request, e, level=messages.ERROR)
+        except FileNotFoundError as e:
             self.message_user(request, e, level=messages.ERROR)
 
         return super().change_view(request, object_id, form_url, extra_context)
