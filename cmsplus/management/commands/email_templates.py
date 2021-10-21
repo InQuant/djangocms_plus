@@ -13,8 +13,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('command', type=str, choices=['import', 'export'])
-        parser.add_argument("-o", "--output", help="Output JSON file path")
-        parser.add_argument("-i", "--input", help="Input JSON file path")
+        parser.add_argument("-f", "--file", help="Output JSON file path")
         parser.add_argument("-u", "--update", type=bool, const=True, default=False, nargs='?', help="Update templates if existing")
 
     def handle(self, *args, **options):
@@ -27,8 +26,8 @@ class Command(BaseCommand):
             output = self.export_templates()
             output = json.dumps(output, ensure_ascii=False, indent=False)
 
-            if options.get('output'):
-                f_path = options.get('output')
+            if options.get('file'):
+                f_path = options.get('file')
                 with open(f_path, 'w') as f:
                     f.write(output)
                 self.stdout.write(self.style.SUCCESS(f'Export output written to "{f_path}"'))
@@ -37,8 +36,8 @@ class Command(BaseCommand):
 
         elif options['command'] == 'import':
             self.stdout.write('--- Importing EmailTemplates ---')
-            if options.get('input'):
-                f_path = options.get('input')
+            if options.get('file'):
+                f_path = options.get('file')
                 with open(f_path, 'r') as f:
                     data = json.loads(f.read())
 

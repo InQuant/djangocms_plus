@@ -1,3 +1,5 @@
+import logging
+
 from cms.plugin_base import CMSPluginBase
 from django.utils.safestring import mark_safe
 from filer.models.filemodels import File as FilerFileModel
@@ -5,6 +7,8 @@ from filer.models.filemodels import File as FilerFileModel
 from cmsplus.app_settings import cmsplus_settings as cps
 from cmsplus.forms import PlusPluginFormBase
 from cmsplus.models import PlusPlugin
+
+logger = logging.getLogger('cmsplus')
 
 
 class PlusPluginBase(CMSPluginBase):
@@ -227,14 +231,20 @@ class StylePluginMixin(object):
 
         css = super().get_extra_css(instance)
 
-        for key, val in instance.glossary.get('extra_css', {}).items():
-            media, css_key = _get_media_and_css_key(key)
-            if media in css:
-                _list = css[media]
-                _list.append((css_key, val))
-                css[media] = _list
-            else:
-                css[media] = [(css_key, val), ]
+        extra_css = instance.glossary.get('extra_css')
+
+        try:
+            for key, val in extra_css.items():
+                media, css_key = _get_media_and_css_key(key)
+                if media in css:
+                    _list = css[media]
+                    _list.append((css_key, val))
+                    css[media] = _list
+                else:
+                    css[media] = [(css_key, val), ]
+        except AttributeError as e:
+            logger.error(f'Error parsing extra_css for plugin {instance.id}')
+            logger.exception(e)
         return css
 
 
