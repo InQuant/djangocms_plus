@@ -4,13 +4,12 @@ import decimal
 import json
 import logging
 import uuid
+from html.parser import HTMLParser
+from io import StringIO
 from typing import List
 
-from io import StringIO
-from html.parser import HTMLParser
-
 from cms.api import create_page, create_title, add_plugin
-from cms.models import Page, Placeholder
+from cms.models import Page, Placeholder, PlaceholderReference
 from django.core.exceptions import FieldError
 from django.db.models.query import QuerySet
 from django.utils import timezone
@@ -203,12 +202,16 @@ class PageUtils:
 
 
 def generate_plugin_tree(placeholder, language=None):
+    _plugins = []
+
     if language:
         plugins = placeholder.get_plugins().filter(language=language)
     else:
         plugins = placeholder.get_plugins()
 
-    _plugins = []
+    # Check if whole placeholder is copied
+    if len(plugins) == 1 and plugins[0].plugin_type == 'PlaceholderPlugin':
+        plugins = PlaceholderReference.objects.get(id=plugins[0].id).placeholder_ref.get_plugins()
 
     # restructure data
     for plugin in plugins:
