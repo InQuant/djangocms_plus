@@ -1,6 +1,7 @@
 import logging
 import operator
 
+import cms.utils.placeholder
 from cms.utils.placeholder import get_placeholder_conf
 from django.apps import AppConfig
 from django.utils.html import strip_tags
@@ -9,7 +10,6 @@ from django.utils.translation import ugettext_lazy as _
 logger = logging.getLogger(__name__)
 
 
-# monkey patch 'cms.utils.placeholder.get_toolbar_plugin_struct'
 def get_toolbar_plugin_struct(plugins, slot=None, page=None):
     """
        Return the list of plugins to render in the toolbar.
@@ -47,13 +47,14 @@ def get_toolbar_plugin_struct(plugins, slot=None, page=None):
     return sorted(main_list, key=operator.itemgetter("module"))
 
 
+# monkey patch 'cms.utils.placeholder.get_toolbar_plugin_struct'
+cms.utils.placeholder.get_toolbar_plugin_struct = get_toolbar_plugin_struct
+logger.debug('Monkey Patched: "cms.utils.placeholder.get_toolbar_plugin_struct"')
+
+
 class DjangoCmsPlusConfig(AppConfig):
     name = 'cmsplus'
     verbose_name = _('DjangoCMS Plus')
 
     def ready(self):
         super().ready()
-
-        import cms.utils.placeholder
-        cms.utils.placeholder.get_toolbar_plugin_struct = get_toolbar_plugin_struct
-        logger.debug('Monkey Patched: "cms.utils.placeholder.get_toolbar_plugin_struct"')
