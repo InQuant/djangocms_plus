@@ -183,7 +183,7 @@ class IconPlugin(StylePluginMixin, LinkPluginBase):
     footnote_html = """
     Choose icon from font defined in the settings
     """
-    name = _('Icon')
+    name = 'Icon'
     model = IconPluginModel
     form = IconForm
     render_template = "cmsplus/generic/icon.html"

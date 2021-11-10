@@ -175,7 +175,7 @@ class MagicWrapperPlugin(BootstrapPluginBase):
     <ul>
     <p>You may set the label for cms structure view.</p>
     """
-    name = _('Wrapper')
+    name = 'Wrapper'
     allow_children = True
     render_template = 'cmsplus/bootstrap/wrapper.html'
     css_class_fields = StylePluginMixin.css_class_fields + WF_MARGIN_KEYS() + WF_PADDING_KEYS() + [
@@ -465,7 +465,7 @@ class BootstrapColPlugin(BootstrapPluginBase):
     footnote_html = """
     Renders a bootstrap column with variable offset and with.
     """
-    name = _('Column')
+    name = 'Column'
     form = BootstrapColumnForm
     allow_children = True
     parent_classes = None
@@ -1347,7 +1347,7 @@ class BootstrapButtonPlugin(StylePluginMixin, LinkPluginBase):
         internal or external page link, a download oder mailto link.
     """
     module = 'Bootstrap'
-    name = _('Button')
+    name = 'Button'
     parent_classes = None
     require_parent = False
     allow_children = False

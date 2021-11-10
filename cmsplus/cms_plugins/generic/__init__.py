@@ -113,7 +113,7 @@ class MultiColumnTextPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
     renders a wrapper for a multi column text.
     """
-    name = _('MultiColumnText')
+    name = 'MultiColumnText'
     form = MultiColTextForm
     render_template = "cmsplus/generic/multi-col-text.html"
     allow_children = True
@@ -141,7 +141,7 @@ class SnippetPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
     renders a given html snippet, can be used to include another site via iframe.
     """
-    name = _('Snippet')
+    name = 'Snippet'
     form = SnippetForm
     allow_children = False
     render_template = 'cmsplus/generic/snippet/snippet.html'
@@ -200,7 +200,7 @@ class SvgImagePlugin(StylePluginMixin, LinkPluginBase):
     footnote_html = """
     renders a svg in an image tag.
     """
-    name = _('SvgImage')
+    name = 'SvgImage'
     form = SvgImageForm
     model = SvgImagePluginModel
     allow_children = False
@@ -269,7 +269,7 @@ class VerticalRatioSpacerPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
     renders a vertical spacer (div), where a ratio depending height can be given.
     """
-    name = _('VerticalRatioSpacer')
+    name = 'VerticalRatioSpacer'
     form = VerticalRatioSpacerForm
     allow_children = True
     render_template = 'cmsplus/generic/vertical-ratio-spacer.html'
@@ -377,6 +377,6 @@ class AudioEmbedForm(PlusPluginFormBase):
 
 
 class AudioEmbedPlugin(StylePluginMixin, PlusPluginBase):
-    name = _('Embed Audio')
+    name = 'Embed Audio'
     form = AudioEmbedForm
     render_template = 'cmsplus/generic/audio-embed.html'
