@@ -23,7 +23,7 @@ class CardHeaderForm(CardChildBaseForm):
 
 
 class BootstrapCardHeaderPlugin(StylePluginMixin, CardChildBase):
-    name = _("Card Header")
+    name = "Card Header"
     form = CardHeaderForm
     default_css_class = 'card-header'
 
@@ -34,7 +34,7 @@ class CardBodyForm(CardChildBaseForm):
 
 
 class BootstrapCardBodyPlugin(StylePluginMixin, CardChildBase):
-    name = _("Card Body")
+    name = "Card Body"
     default_css_class = 'card-body'
     form = CardBodyForm
 
@@ -45,7 +45,7 @@ class CardFooterForm(CardChildBaseForm):
 
 
 class BootstrapCardFooterPlugin(StylePluginMixin, CardChildBase):
-    name = _("Card Footer")
+    name = "Card Footer"
     default_css_class = 'card-footer'
     form = CardFooterForm
 
@@ -60,7 +60,7 @@ class BootstrapCardPlugin(StylePluginMixin, PlusPluginBase):
     Use this plugin to display a card with optional card-header and card-footer.
     """
     module = "Bootstrap"
-    name = _("Card")
+    name = "Card"
     form = CardForm
     default_css_class = 'card'
     require_parent = False

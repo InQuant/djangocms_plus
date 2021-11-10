@@ -939,7 +939,7 @@ class BootstrapImagePlugin(StylePluginMixin, ImagePluginMixin, LinkPluginBase):
         try:
             name = str(instance.glossary.get('image_file'))
         except AttributeError:
-            name = _("No Image")
+            name = "No Image"
         return mark_safe(name)
 
     def render(self, context, instance, placeholder):
@@ -1063,7 +1063,7 @@ class BackgroundImagePlugin(BackgroundImagePropertiesMixin, BootstrapPluginBase)
         <br>
         if a filter is given, the image is put in the containers after tag, and placed below the filter.
     """
-    name = _("Background Img")
+    name = "Background Img"
     allow_children = True
     form = BackgroundImageForm
     render_template = 'cmsplus/bootstrap/background-image/background-image.html'
@@ -1152,7 +1152,7 @@ class HeadingPlugin(BootstrapPluginBase):
     footnote_html = """
         Renders a bootstrap heading (h1-h6) with the ability to display a background box.
     """
-    name = _("Heading")
+    name = "Heading"
     parent_classes = None
     allow_children = False
     form = HeadingForm
@@ -1190,7 +1190,7 @@ class BootstrapFigurePlugin(BootstrapPluginBase):
     footnote_html = """
     Renders a bootstrap figure plugin to display a figure caption.
     """
-    name = _("Figure")
+    name = "Figure"
     parent_classes = None
     allow_children = True
     form = FigureForm
@@ -1263,7 +1263,7 @@ class BootstrapEmbedPlugin(BootstrapPluginBase):
         <br>
         It can be used with a modal popup or direct.
     """
-    name = _("Embed Video")
+    name = "Embed Video"
     allow_children = False
     form = EmbedForm
     render_template = 'cmsplus/bootstrap/embed.html'

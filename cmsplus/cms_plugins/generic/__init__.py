@@ -38,7 +38,7 @@ class TextLinkForm(LinkFormBase):
 
 
 class TextLinkPlugin(LinkPluginBase):
-    name = _("Link")
+    name = "Link"
     model = TextLinkPluginModel
     form = TextLinkForm
     allow_children = True
@@ -239,7 +239,7 @@ class SvgImagePlugin(StylePluginMixin, LinkPluginBase):
         try:
             name = str(instance.glossary.get('image_file'))
         except AttributeError:
-            name = _("No Image")
+            name = "No Image"
         return mark_safe(name)
 
 
@@ -311,7 +311,7 @@ class BackgroundVideoForm(PlusPluginFormBase):
 
 
 class BackgroundVideoPlugin(StylePluginMixin, PlusPluginBase):
-    name = _("Background Video")
+    name = "Background Video"
     allow_children = True
     admin_preview = False
     form = BackgroundVideoForm

@@ -96,7 +96,7 @@ class SliderForm(PlusPluginFormBase):
 
 
 class SliderPlugin(StylePluginMixin, LinkPluginBase):
-    name = _("Slider")
+    name = "Slider"
     require_parent = False
     child_classes = ['SlidePlugin', ]
     allow_children = True
@@ -160,7 +160,7 @@ class SlidePluginModel(PlusPlugin, LinkPluginMixin):
 
 
 class SlidePlugin(StylePluginMixin, LinkPluginBase):
-    name = _("Slide")
+    name = "Slide"
     parent_classes = ['SliderPlugin', ]
     allow_children = True
     alien_child_classes = True

@@ -2,8 +2,8 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
-
 from djangocms_text_ckeditor.fields import HTMLFormField
+
 from cmsplus.forms import PlusPluginFormBase, get_style_form_fields
 from cmsplus.plugin_base import PlusPluginBase, StylePluginMixin
 from cmsplus.utils import strip_html_tags
@@ -32,7 +32,7 @@ class BootstrapAccordionPlugin(StylePluginMixin, PlusPluginBase):
     footnote_html = """
     Renders a bootstrap accordion.
     """
-    name = _("Accordion")
+    name = "Accordion"
     module = 'Bootstrap'
     direct_child_classes = ['BootstrapAccordionGroupPlugin']
     allow_children = True
