@@ -244,7 +244,7 @@ class BootstrapContainerForm(PlusPluginFormBase):
 
 class BootstrapContainerPlugin(BootstrapPluginBase):
     footnote_html = """
-    renders a bootstrap container fix or fluid for device classes of:
+    Renders a bootstrap container fix or fluid for device classes of:
      <ul>
      <li>XS: Portrait Phones (<576px)</li>
      <li>SM: Small Tablets  (≥576px and <768px)</li>
@@ -292,7 +292,7 @@ class BootstrapRowForm(PlusPluginFormBase):
 
 class BootstrapRowPlugin(BootstrapPluginBase):
     footnote_html = """
-    renders a bootstrap (grid) row.
+    Renders a bootstrap (grid) row.
     """
     name = 'Row'
     form = BootstrapRowForm
@@ -521,7 +521,7 @@ BootstrapCol10Form.extend_form_fields(ColDefHelper(col_range=11, col_base='10'))
 
 class BootstrapCol10Plugin(BootstrapColPlugin):
     footnote_html = """
-    renders a bootstrap 10 divided column with variable offset and with.
+    Renders a bootstrap 10 divided column with variable offset and with.
     """
     name = _('Column 1/10')
     form = BootstrapCol10Form
@@ -868,7 +868,7 @@ class ImagePluginMixin():
 
 class BootstrapImagePlugin(StylePluginMixin, ImagePluginMixin, LinkPluginBase):
     footnote_html = """
-        renders a bootstrap responsive (fluid) image.
+        Renders a bootstrap responsive (fluid) image.
     """
     name = 'Image'
     model = BootstrapImagePluginModel
@@ -1343,7 +1343,7 @@ class BootstrapButtonPluginModel(PlusPlugin, LinkPluginMixin):
 
 class BootstrapButtonPlugin(StylePluginMixin, LinkPluginBase):
     footnote_html = """
-        renders a bootstrap button with various styles. The button may trigger a
+        Renders a bootstrap button with various styles. The button may trigger a
         internal or external page link, a download oder mailto link.
     """
     module = 'Bootstrap'

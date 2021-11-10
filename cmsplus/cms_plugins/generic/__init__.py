@@ -45,6 +45,8 @@ class TextLinkPlugin(LinkPluginBase):
 
     text_enabled = True
     render_template = 'cmsplus/generic/text-link.html'
+
+    footnote_html = "Renders linked text to a specified page, url, mail address or file."
     # parent_classes = ['TextPlugin', ]
 
     # class Media:
@@ -380,3 +382,5 @@ class AudioEmbedPlugin(StylePluginMixin, PlusPluginBase):
     name = 'Embed Audio'
     form = AudioEmbedForm
     render_template = 'cmsplus/generic/audio-embed.html'
+    footnote_html = """Renders HTML Audioplayer from a playable file url. 
+"""
