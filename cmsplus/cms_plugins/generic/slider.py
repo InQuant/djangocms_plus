@@ -103,6 +103,7 @@ class SliderPlugin(StylePluginMixin, LinkPluginBase):
     alien_child_classes = False
     form = SliderForm
     render_template = 'cmsplus/generic/slider/slider.html'
+    footnote_html = "Base for a slider component."
 
     fieldsets = [
         (None, {

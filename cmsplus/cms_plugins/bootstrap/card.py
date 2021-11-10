@@ -15,6 +15,7 @@ class CardChildBase(PlusPluginBase):
     parent_classes = ['BootstrapCardPlugin']
     allow_children = True
     render_template = 'cmsplus/bootstrap/card/wrapper.html'
+    footnote_html = "Child plugin for the bootstrap card component."
 
 
 class CardHeaderForm(CardChildBaseForm):
@@ -66,3 +67,4 @@ class BootstrapCardPlugin(StylePluginMixin, PlusPluginBase):
     require_parent = False
     allow_children = True
     render_template = 'cmsplus/bootstrap/card/card.html'
+    footnote_html = "Base for a bootstrap card component"
