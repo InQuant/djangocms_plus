@@ -203,7 +203,7 @@ class PageUtils:
 
 def generate_plugin_tree(placeholder, language=None):
     _plugins = []
-
+    
     if language:
         plugins = placeholder.get_plugins().filter(language=language)
     else:
@@ -222,12 +222,13 @@ def generate_plugin_tree(placeholder, language=None):
             'language': plugin.language,
             'plugin_type': plugin.plugin_type,
             'parent_id': plugin.parent_id,
+            'path': plugin.path,
             'children': [],
             'depth': plugin.depth,
+            'position': plugin.position
         }
-
+        
         # handle PlusPlugins
-
         from cmsplus.plugin_base import PlusPluginBase
         if issubclass(p.__class__, PlusPluginBase):
             plugin_data['data'] = instance._json
@@ -245,7 +246,8 @@ def generate_plugin_tree(placeholder, language=None):
         _plugins.append(plugin_data)
 
     # generate plugin tree (set children)
-    _plugins = sorted(_plugins, key=lambda k: k['depth'], reverse=True)
+    _plugins = sorted(_plugins, key=lambda k: (k['depth'], k['parent_id'], k['position']), reverse=False)
+
     plugin_tree = []
     for current_plugin in _plugins:
         if not current_plugin.get('parent_id'):
