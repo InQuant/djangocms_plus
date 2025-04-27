@@ -1,3 +1,4 @@
+moved to [djangocms-plus](https://github.com/InQuant/djangocms-plus)!
 
 # DjangoCMS Plus
 
